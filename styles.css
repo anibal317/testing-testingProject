@@ -3,6 +3,7 @@ body {
     line-height: 1.6;
     margin: 0;
     padding: 0;
+    font-size: 16px; /* Intentional styling error: fixed font size */
 }
 
 header {
@@ -142,5 +143,56 @@ form button {
 
 .team-list li {
     margin-bottom: 1rem;
+}
+
+.tech-trends ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.tech-trends li {
+    margin-bottom: 0.5rem;
+}
+
+.search-form {
+    margin-top: 1rem;
+}
+
+.search-form input {
+    padding: 0.5rem;
+}
+
+.search-form button {
+    padding: 0.5rem 1rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.article-image {
+    max-width: 100%;
+    height: auto;
+}
+
+.low-contrast-button {
+    background-color: #f0f0f0;
+    color: #a0a0a0;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+}
+
+.overflow-content {
+    width: 200px;
+    white-space: nowrap;
+    overflow-x: auto;
+}
+
+/* Intentional styling error: non-responsive design for small screens */
+@media (max-width: 600px) {
+    .article-grid {
+        grid-template-columns: 1fr;
+    }
 }
 

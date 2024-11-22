@@ -69,5 +69,52 @@ document.addEventListener('DOMContentLoaded', function() {
     } catch (error) {
         console.error('Caught an error:', error);
     }
+
+    // New error-prone functionality
+    // Error 6: Incorrect form validation
+    const searchForm = document.getElementById('search-form');
+    if (searchForm) {
+        searchForm.onsubmit = function(e) {
+            e.preventDefault();
+            const searchInput = document.querySelector('#search-form input');
+            if (searchInput.value.length > 0) {
+                alert('Búsqueda realizada');
+            }
+            // Missing else statement for empty input
+        }
+    }
+
+    // Error 7: Inefficient event listener
+    document.addEventListener('scroll', function() {
+        console.log('Usuario desplazándose');
+        // This will log on every scroll event, which is inefficient
+    });
+
+    // Error 8: Memory leak
+    function createButton() {
+        const button = document.createElement('button');
+        button.textContent = 'Botón dinámico';
+        button.addEventListener('click', function() {
+            console.log('Botón clickeado');
+        });
+        document.body.appendChild(button);
+    }
+    setInterval(createButton, 5000); // Creates a new button every 5 seconds without removing old ones
+
+    // Error 9: Race condition with API call
+    function fetchData() {
+        setTimeout(() => {
+            console.log('Datos recibidos');
+        }, Math.random() * 1000);
+    }
+    fetchData();
+    console.log('Datos procesados'); // This might log before 'Datos recibidos'
+
+    // Error 10: Incorrect use of async/await
+    async function getData() {
+        return Promise.resolve('datos');
+    }
+    getData();
+    // Missing await, so the promise result is not used
 });
 
