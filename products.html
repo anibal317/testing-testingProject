@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - Products</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Our Products</h1>
+        <section class="product-grid">
+            <div class="product-card">
+                <img src="product1.jpg" alt="Product 1">
+                <h3>TechGadget Pro</h3>
+                <p>A revolutionary smart device for your home</p>
+                <button class="buy-button" onclick="addToCart('TechGadget Pro')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="product2.jpg" alt="Product 2">
+                <h3>DataSafe 3000</h3>
+                <p>Secure your data with military-grade encryption</p>
+                <button class="buy-button" onclick="addToCart('DataSafe 3000')">Add to Cart</button>
+            </div>
+            <div class="product-card">
+                <img src="product3.jpg" alt="Product 3">
+                <h3>AI Assistant</h3>
+                <p>Your personal AI-powered digital assistant</p>
+                <button class="buy-button" onclick="addToCart('AI Assistant')">Add to Cart</button>
+            </div>
+        </section>
+        <div id="cart-summary"></div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
+        <a href="#" id="contact-link">Contact Us</a>
+    </footer>
+
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

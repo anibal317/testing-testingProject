@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechInfo Hub - Articles</title>
+    <title>TechInfo Hub - Blog</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -11,44 +11,42 @@
         <nav>
             <ul>
                 <li><a href="index.html">Home</a></li>
-                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="articles.html">Articles</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="products.html">Products</a></li>
                 <li><a href="services.html">Services</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li><a href="blog.html" class="active">Blog</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <h1>Latest Articles</h1>
-        <section class="article-list">
-            <article>
-                <h2>The Future of Quantum Computing</h2>
-                <img src="tech-image.jpg" class="article-image">
-                <p>Delve into the potential of quantum computing and its impact on various industries...</p>
+        <h1>TechInfo Hub Blog</h1>
+        <section class="blog-posts">
+            <article class="blog-post">
+                <h2>The Future of Artificial Intelligence</h2>
+                <p class="post-meta">Posted on <time datetime="2023-05-15">May 15, 2023</time> by John Doe</p>
+                <p>Artificial Intelligence is rapidly evolving, transforming industries and our daily lives...</p>
                 <a href="#" class="read-more">Read More</a>
             </article>
-            <article>
-                <h2>Blockchain Beyond Cryptocurrency</h2>
-                <img src="tech-image.jpg" class="article-image">
-                <p>Explore the diverse applications of blockchain technology in different sectors...</p>
+            <article class="blog-post">
+                <h2>5G Technology: A Game Changer</h2>
+                <p class="post-meta">Posted on <time datetime="2023-05-10">May 10, 2023</time> by Jane Smith</p>
+                <p>5G is set to revolutionize mobile connectivity, offering unprecedented speeds and low latency...</p>
                 <a href="#" class="read-more">Read More</a>
             </article>
-            <article>
-                <h2>The Ethics of AI Development</h2>
-                <img src="tech-image.jpg" class="article-image">
-                <p>Examine the ethical considerations surrounding artificial intelligence and its advancement...</p>
-                <a href="#" class="read-more">Read More</a>
-            </article>
-            <article>
-                <h2>Sustainable Tech: Green Innovations</h2>
-                <img src="tech-image.jpg" class="article-image">
-                <p>Discover how technology is contributing to environmental sustainability...</p>
+            <article class="blog-post">
+                <h2>Cybersecurity in the Age of IoT</h2>
+                <p class="post-meta">Posted on <time datetime="2023-05-05">May 5, 2023</time> by Mike Johnson</p>
+                <p>As IoT devices become more prevalent, the need for robust cybersecurity measures increases...</p>
                 <a href="#" class="read-more">Read More</a>
             </article>
         </section>
-        <button class="low-contrast-button">Cargar más artículos</button>
+        <div class="blog-pagination">
+            <button id="prev-page" disabled>Previous</button>
+            <span id="current-page">Page 1</span>
+            <button id="next-page">Next</button>
+        </div>
     </main>
 
     <footer>

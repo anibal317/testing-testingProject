@@ -42,7 +42,60 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Intentional errors for bug reporting practice
+    // Products page functionality
+    const cart = [];
+    const cartSummary = document.getElementById('cart-summary');
+
+    window.addToCart = function(product) {
+        cart.push(product);
+        updateCartSummary();
+    }
+
+    function updateCartSummary() {
+        if (cartSummary) {
+            cartSummary.innerHTML = `Cart: ${cart.length} item(s)`;
+        }
+    }
+
+    // Services page functionality
+    const serviceInquiryForm = document.getElementById('service-inquiry');
+    if (serviceInquiryForm) {
+        serviceInquiryForm.onsubmit = function(e) {
+            e.preventDefault();
+            const service = document.getElementById('service-select').value;
+            const email = document.getElementById('inquiry-email').value;
+            // Intentional error: not validating email format
+            alert(`Thank you for your inquiry about ${service}. We'll contact you at ${email} soon.`);
+        }
+    }
+
+    // Blog page functionality
+    const prevPageBtn = document.getElementById('prev-page');
+    const nextPageBtn = document.getElementById('next-page');
+    const currentPageSpan = document.getElementById('current-page');
+    let currentPage = 1;
+
+    if (prevPageBtn && nextPageBtn && currentPageSpan) {
+        prevPageBtn.onclick = function() {
+            if (currentPage > 1) {
+                currentPage--;
+                updatePagination();
+            }
+        }
+
+        nextPageBtn.onclick = function() {
+            // Intentional error: no upper limit on pagination
+            currentPage++;
+            updatePagination();
+        }
+
+        function updatePagination() {
+            currentPageSpan.textContent = `Page ${currentPage}`;
+            prevPageBtn.disabled = (currentPage === 1);
+        }
+    }
+
+    // Existing errors
     // Error 1: Missing image
     const missingImg = document.createElement('img');
     missingImg.src = 'non-existent-image.jpg';
@@ -70,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Caught an error:', error);
     }
 
-    // New error-prone functionality
     // Error 6: Incorrect form validation
     const searchForm = document.getElementById('search-form');
     if (searchForm) {
@@ -116,5 +168,34 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     getData();
     // Missing await, so the promise result is not used
+
+    // New error: Incorrect array manipulation
+    const numbers = [1, 2, 3, 4, 5];
+    for (let i = 0; i < numbers.length; i++) {
+        if (numbers[i] % 2 === 0) {
+            numbers.splice(i, 1);
+            // This can skip elements when removing items from the array
+        }
+    }
+
+    // New error: Infinite loop potential
+    function processData(data) {
+        while (data.length > 0) {
+            console.log(data[0]);
+            // Intentional error: not removing processed item from data
+        }
+    }
+    // Uncomment the next line to test (caution: will cause an infinite loop)
+    // processData([1, 2, 3]);
+
+    // New error: Incorrect use of 'this' in arrow function
+    const user = {
+        name: 'John',
+        greet: () => {
+            console.log(`Hello, ${this.name}`);
+            // 'this' will not refer to the user object in an arrow function
+        }
+    };
+    user.greet();
 });
 
