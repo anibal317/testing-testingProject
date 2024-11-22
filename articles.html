@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - Articles</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="articles.html" class="active">Articles</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Latest Articles</h1>
+        <section class="article-list">
+            <article>
+                <h2>The Future of Quantum Computing</h2>
+                <p>Delve into the potential of quantum computing and its impact on various industries...</p>
+                <a href="#" class="read-more">Read More</a>
+            </article>
+            <article>
+                <h2>Blockchain Beyond Cryptocurrency</h2>
+                <p>Explore the diverse applications of blockchain technology in different sectors...</p>
+                <a href="#" class="read-more">Read More</a>
+            </article>
+            <article>
+                <h2>The Ethics of AI Development</h2>
+                <p>Examine the ethical considerations surrounding artificial intelligence and its advancement...</p>
+                <a href="#" class="read-more">Read More</a>
+            </article>
+            <article>
+                <h2>Sustainable Tech: Green Innovations</h2>
+                <p>Discover how technology is contributing to environmental sustainability...</p>
+                <a href="#" class="read-more">Read More</a>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
+        <a href="#" id="contact-link">Contact Us</a>
+    </footer>
+
+    <div id="contact-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
