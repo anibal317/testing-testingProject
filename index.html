@@ -62,15 +62,121 @@
         </section>
 
         <section class="backend-section">
-            <h2>Backend del Proyecto</h2>
+            <h2>Seccion de Peliculas</h2>
             <p>
-                Ya tenemos una version del backend desplegada. Puedes abrirla directamente
-                desde aqui para probar endpoints y validar la integracion.
+                Administra el catalogo y los alquileres del Video Club usando los endpoints del backend.
             </p>
-            <div class="backend-actions">
-                <a href="https://be-testing-project.vercel.app/" target="_blank" rel="noopener noreferrer" class="backend-link">
-                    Ir al Backend en Vercel
-                </a>
+
+            <div class="video-meta-grid">
+                <div><strong>Name:</strong> Video Club API</div>
+                <div><strong>Version:</strong> 1.0.0</div>
+                <div><strong>Database:</strong> PostgreSQL</div>
+            </div>
+
+            <div class="video-api-controls">
+                <label for="video-api-base-url">Base URL</label>
+                <input type="url" id="video-api-base-url" value="https://be-testing-project.vercel.app" required>
+
+                <div class="video-actions-row">
+                    <button type="button" id="load-movies-btn" class="video-action-btn">Ver Peliculas</button>
+                    <button type="button" id="load-active-rentals-btn" class="video-action-btn">Alquileres Activos</button>
+                </div>
+            </div>
+
+            <div id="movies-list" class="movies-list">
+                <p>Presiona "Ver Peliculas" para cargar el catalogo.</p>
+            </div>
+
+            <div class="customers-header-row">
+                <h3>Gestion de Clientes</h3>
+                <button type="button" id="load-customers-btn" class="video-action-btn">Ver Clientes</button>
+            </div>
+
+            <div class="customers-table-wrap">
+                <table class="customers-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Telefono</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customers-table-body">
+                        <tr>
+                            <td colspan="4">Presiona "Ver Clientes" para cargar los datos.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="video-forms-grid">
+                <form id="movie-by-id-form" class="video-form-card">
+                    <h3>Consultar o Eliminar por ID</h3>
+                    <input type="text" id="movie-id-input" placeholder="Movie ID" required>
+                    <div class="video-actions-row">
+                        <button type="submit" class="video-action-btn">Buscar</button>
+                        <button type="button" id="delete-movie-btn" class="video-danger-btn">Eliminar</button>
+                    </div>
+                </form>
+
+                <form id="create-movie-form" class="video-form-card">
+                    <h3>Crear Pelicula</h3>
+                    <textarea id="create-movie-body" rows="5" placeholder='{"title":"Matrix","genre":"Sci-Fi","stock":3}' required></textarea>
+                    <button type="submit" class="video-action-btn">Crear</button>
+                </form>
+
+                <form id="update-movie-form" class="video-form-card">
+                    <h3>Actualizar Pelicula</h3>
+                    <input type="text" id="update-movie-id" placeholder="Movie ID" required>
+                    <textarea id="update-movie-body" rows="5" placeholder='{"title":"Matrix Reloaded"}' required></textarea>
+                    <button type="submit" class="video-action-btn">Actualizar</button>
+                </form>
+
+                <form id="create-rental-form" class="video-form-card">
+                    <h3>Crear Alquiler</h3>
+                    <textarea id="create-rental-body" rows="5" placeholder='{"customer_id":1,"movie_id":2}' required></textarea>
+                    <button type="submit" class="video-action-btn">Alquilar</button>
+                </form>
+
+                <form id="return-rental-form" class="video-form-card">
+                    <h3>Devolver Alquiler</h3>
+                    <input type="text" id="return-rental-id" placeholder="Rental ID" required>
+                    <button type="submit" class="video-action-btn">Marcar Devolucion</button>
+                </form>
+
+                <form id="customer-rentals-form" class="video-form-card">
+                    <h3>Historial por Cliente</h3>
+                    <input type="text" id="customer-rentals-id" placeholder="Customer ID" required>
+                    <button type="submit" class="video-action-btn">Ver Historial</button>
+                </form>
+
+                <form id="customer-by-id-form" class="video-form-card">
+                    <h3>Consultar o Eliminar Cliente</h3>
+                    <input type="text" id="customer-id-input" placeholder="Customer ID" required>
+                    <div class="video-actions-row">
+                        <button type="submit" class="video-action-btn">Buscar</button>
+                        <button type="button" id="delete-customer-btn" class="video-danger-btn">Eliminar</button>
+                    </div>
+                </form>
+
+                <form id="create-customer-form" class="video-form-card">
+                    <h3>Crear Cliente</h3>
+                    <textarea id="create-customer-body" rows="5" placeholder='{"name":"Ana","email":"ana@mail.com"}' required></textarea>
+                    <button type="submit" class="video-action-btn">Crear Cliente</button>
+                </form>
+
+                <form id="update-customer-form" class="video-form-card">
+                    <h3>Actualizar Cliente</h3>
+                    <input type="text" id="update-customer-id" placeholder="Customer ID" required>
+                    <textarea id="update-customer-body" rows="5" placeholder='{"name":"Ana Maria"}' required></textarea>
+                    <button type="submit" class="video-action-btn">Actualizar Cliente</button>
+                </form>
+            </div>
+
+            <div class="api-response-block">
+                <h3>Respuesta del API</h3>
+                <pre id="movies-api-output">Aun no hay respuestas.</pre>
             </div>
         </section>
 

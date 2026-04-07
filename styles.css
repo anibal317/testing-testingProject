@@ -161,22 +161,120 @@ form button {
     background-color: #fafafa;
 }
 
-.backend-actions {
+.video-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.video-api-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.video-actions-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+
+.video-forms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
     margin-top: 1rem;
 }
 
-.backend-link {
-    display: inline-block;
-    background-color: #007bff;
-    color: #fff;
-    padding: 0.65rem 1rem;
-    text-decoration: none;
-    border-radius: 4px;
+.video-form-card {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 1rem;
 }
 
-.backend-link:hover,
-.backend-link:focus {
-    background-color: #005dc1;
+.video-action-btn {
+    background-color: #0f6f5c;
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+}
+
+.video-action-btn:hover,
+.video-action-btn:focus {
+    background-color: #0b5647;
+}
+
+.video-danger-btn {
+    background-color: #b42318;
+    color: #fff;
+    border: none;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+}
+
+.video-danger-btn:hover,
+.video-danger-btn:focus {
+    background-color: #8f1b13;
+}
+
+.movies-list {
+    margin-top: 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.customers-header-row {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.customers-table-wrap {
+    margin-top: 0.75rem;
+    overflow-x: auto;
+}
+
+.customers-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.customers-table th,
+.customers-table td {
+    border: 1px solid #ddd;
+    padding: 0.65rem;
+    text-align: left;
+}
+
+.customers-table th {
+    background-color: #f3f3f3;
+}
+
+.movie-item {
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 0.75rem;
+}
+
+.api-response-block {
+    margin-top: 1.25rem;
+}
+
+#movies-api-output {
+    margin: 0;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    background-color: #1f2430;
+    color: #f5f7ff;
+    max-height: 320px;
+    overflow: auto;
 }
 
 .search-form {
