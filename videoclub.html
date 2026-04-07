@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - Video Club</title>
+    <link rel="stylesheet" href="videoclub.css">
+</head>
+<body>
+    <header class="vc-header">
+        <nav class="vc-nav">
+            <a href="index.html" class="vc-logo">TechInfo Hub</a>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="videoclub.html" class="active">Video Club</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="vc-main">
+        <section class="vc-hero">
+            <p class="vc-kicker">Video Club API</p>
+            <h1>Tu videoclub en vivo</h1>
+            <p>
+                Esta pantalla usa la API por detras para mostrar catalogo, gestionar clientes,
+                crear alquileres y registrar devoluciones.
+            </p>
+            <div class="vc-hero-actions">
+                <button type="button" id="vc-refresh-all">Actualizar datos</button>
+                <span id="vc-selected-customer-pill" class="vc-pill">Cliente no seleccionado</span>
+            </div>
+        </section>
+
+        <section class="vc-layout vc-layout-main">
+            <article class="vc-card">
+                <h2>Cliente activo</h2>
+                <label for="vc-customer-select">Selecciona un cliente</label>
+                <select id="vc-customer-select">
+                    <option value="">Cargando clientes...</option>
+                </select>
+                <form id="vc-create-customer-form" class="vc-inline-form">
+                    <h3>Nuevo cliente</h3>
+                    <input id="vc-customer-name" type="text" placeholder="Nombre completo" required>
+                    <input id="vc-customer-email" type="email" placeholder="Correo" required>
+                    <button type="submit">Crear cliente</button>
+                </form>
+                <details class="vc-tech-details">
+                    <summary>Configuracion tecnica</summary>
+                    <label for="vc-base-url">Base URL</label>
+                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                </details>
+            </article>
+
+            <article class="vc-card">
+                <h2>Catalogo de Peliculas</h2>
+                <div class="vc-filter-row">
+                    <input id="vc-search" type="search" placeholder="Buscar por titulo o genero">
+                    <button type="button" id="vc-only-available" class="ghost">Solo disponibles</button>
+                </div>
+                <div id="vc-movies-grid" class="vc-movie-grid">
+                    <p class="vc-placeholder">Carga peliculas para ver el catalogo.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="vc-layout">
+            <article class="vc-card">
+                <h2>Alquileres activos</h2>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Pelicula</th>
+                                <th>Accion</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-rentals-body">
+                            <tr><td colspan="4">Sin alquileres activos.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="vc-card">
+                <h2>Historial del cliente</h2>
+                <button type="button" id="vc-load-history" class="ghost">Ver historial del cliente activo</button>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Pelicula</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-history-body">
+                            <tr><td colspan="3">Sin historial cargado.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
+        <section class="vc-card vc-response-card">
+            <h2>Actividad</h2>
+            <pre id="vc-output">Sin requests ejecutadas.</pre>
+        </section>
+    </main>
+
+    <script src="videoclub.js"></script>
+</body>
+</html>
