@@ -206,6 +206,18 @@
         }
     }
 
+    function unwrapArrayPayload(data) {
+        if (Array.isArray(data)) {
+            return data;
+        }
+
+        if (data && Array.isArray(data.data)) {
+            return data.data;
+        }
+
+        return null;
+    }
+
     function selectedCustomer() {
         return state.customers.find(function(customer) {
             return getId(customer, ['id', 'customer_id']) === state.selectedCustomerId;
@@ -551,8 +563,9 @@
 
     async function refreshMovies() {
         const result = await runRequest('Cargar catalogo', 'GET', '/api/movies');
-        if (result && result.ok && Array.isArray(result.data)) {
-            state.movies = result.data;
+        const movies = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (movies) {
+            state.movies = movies;
             renderMovies();
             renderMoviesTable();
             updateStats();
@@ -561,11 +574,12 @@
 
     async function refreshCustomers() {
         const result = await runRequest('Cargar clientes', 'GET', '/api/customers');
-        if (result && result.ok && Array.isArray(result.data)) {
-            state.customers = result.data;
+        const customers = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (customers) {
+            state.customers = customers;
 
             if (!state.selectedCustomerId) {
-                state.selectedCustomerId = getId(result.data[0] || {}, ['id', 'customer_id']);
+                state.selectedCustomerId = getId(customers[0] || {}, ['id', 'customer_id']);
             }
 
             renderCustomerSelect();
@@ -576,8 +590,9 @@
 
     async function refreshActiveRentals() {
         const result = await runRequest('Cargar alquileres activos', 'GET', '/api/rentals/active');
-        if (result && result.ok && Array.isArray(result.data)) {
-            state.rentals = result.data;
+        const rentals = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (rentals) {
+            state.rentals = rentals;
             renderRentals();
             updateStats();
         }
@@ -628,8 +643,9 @@
             `/api/customers/${encodeURIComponent(state.selectedCustomerId)}/rentals`
         );
 
-        if (result && result.ok && Array.isArray(result.data)) {
-            renderHistoryRows(result.data);
+        const rentals = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (rentals) {
+            renderHistoryRows(rentals);
         }
     }
 
