@@ -25,10 +25,10 @@
     <main class="vc-main">
         <section class="vc-hero">
             <p class="vc-kicker">Video Club API</p>
-            <h1>Tu videoclub en vivo</h1>
+            <h1>Panel de administracion del videoclub</h1>
             <p>
-                Esta pantalla usa la API por detras para mostrar catalogo, gestionar clientes,
-                crear alquileres y registrar devoluciones.
+                Administra peliculas, clientes y alquileres desde una sola vista, con formularios
+                de alta, edicion, baja y monitoreo operativo en tiempo real.
             </p>
             <div class="vc-hero-actions">
                 <button type="button" id="vc-refresh-all">Actualizar datos</button>
@@ -36,28 +36,64 @@
             </div>
         </section>
 
+        <section class="vc-stats-grid">
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Peliculas</span>
+                <strong id="vc-stat-movies">0</strong>
+                <small>catalogadas en el sistema</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Clientes</span>
+                <strong id="vc-stat-customers">0</strong>
+                <small>registrados para alquiler</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Alquileres activos</span>
+                <strong id="vc-stat-rentals">0</strong>
+                <small>pendientes de devolucion</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Stock disponible</span>
+                <strong id="vc-stat-stock">0</strong>
+                <small>copias listas para prestar</small>
+            </article>
+        </section>
+
         <section class="vc-layout vc-layout-main">
-            <article class="vc-card">
-                <h2>Cliente activo</h2>
-                <label for="vc-customer-select">Selecciona un cliente</label>
-                <select id="vc-customer-select">
-                    <option value="">Cargando clientes...</option>
-                </select>
-                <form id="vc-create-customer-form" class="vc-inline-form">
-                    <h3>Nuevo cliente</h3>
-                    <input id="vc-customer-name" type="text" placeholder="Nombre completo" required>
-                    <input id="vc-customer-email" type="email" placeholder="Correo" required>
-                    <button type="submit">Crear cliente</button>
-                </form>
-                <details class="vc-tech-details">
-                    <summary>Configuracion tecnica</summary>
-                    <label for="vc-base-url">Base URL</label>
-                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
-                </details>
+            <article class="vc-card vc-control-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>Centro de control</h2>
+                        <p class="vc-subtitle">Define el cliente activo, ajusta la API y sincroniza la vista.</p>
+                    </div>
+                    <span class="vc-section-chip">Operativo</span>
+                </div>
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-customer-select">Cliente activo</label>
+                        <select id="vc-customer-select">
+                            <option value="">Cargando clientes...</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="vc-base-url">Base URL</label>
+                        <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                    </div>
+                </div>
+                <div class="vc-button-row">
+                    <button type="button" id="vc-load-history" class="ghost">Ver historial del cliente activo</button>
+                    <button type="button" id="vc-clear-history" class="ghost">Limpiar historial</button>
+                </div>
             </article>
 
             <article class="vc-card">
-                <h2>Catalogo de Peliculas</h2>
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>Catalogo visual</h2>
+                        <p class="vc-subtitle">Vista rapida para alquilar y revisar disponibilidad.</p>
+                    </div>
+                    <span class="vc-section-chip">Peliculas</span>
+                </div>
                 <div class="vc-filter-row">
                     <input id="vc-search" type="search" placeholder="Buscar por titulo o genero">
                     <button type="button" id="vc-only-available" class="ghost">Solo disponibles</button>
@@ -68,9 +104,172 @@
             </article>
         </section>
 
+        <section class="vc-admin-grid">
+            <article class="vc-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>CRUD de peliculas</h2>
+                        <p class="vc-subtitle">Crea, edita o elimina peliculas del videoclub.</p>
+                    </div>
+                    <span id="vc-movie-form-mode" class="vc-section-chip">Alta</span>
+                </div>
+                <form id="vc-movie-form" class="vc-stack-form">
+                    <input id="vc-movie-id" type="hidden">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-movie-title">Titulo</label>
+                            <input id="vc-movie-title" type="text" placeholder="Ej. Blade Runner" required>
+                        </div>
+                        <div>
+                            <label for="vc-movie-director">Director</label>
+                            <input id="vc-movie-director" type="text" placeholder="Ej. Ridley Scott">
+                        </div>
+                    </div>
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-movie-genre">Genero</label>
+                            <input id="vc-movie-genre" type="text" placeholder="Sci-Fi">
+                        </div>
+                        <div>
+                            <label for="vc-movie-release-year">Ano de estreno</label>
+                            <input id="vc-movie-release-year" type="number" min="1888" step="1" placeholder="1982">
+                        </div>
+                    </div>
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-movie-rental-price">Precio de alquiler</label>
+                            <input id="vc-movie-rental-price" type="number" min="0" step="0.01" placeholder="4.99" required>
+                        </div>
+                        <div>
+                            <label for="vc-movie-duration">Duracion en minutos</label>
+                            <input id="vc-movie-duration" type="number" min="1" step="1" placeholder="120">
+                        </div>
+                    </div>
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-movie-total-copies">Copias totales</label>
+                            <input id="vc-movie-total-copies" type="number" min="1" step="1" placeholder="1" required>
+                        </div>
+                        <div>
+                            <label for="vc-movie-available-copies">Copias disponibles</label>
+                            <input id="vc-movie-available-copies" type="number" min="0" step="1" placeholder="1" required>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="vc-movie-description">Descripcion</label>
+                        <textarea id="vc-movie-description" placeholder="Sinopsis o notas para operacion"></textarea>
+                    </div>
+                    <div class="vc-button-row">
+                        <button type="submit" id="vc-movie-save">Guardar pelicula</button>
+                        <button type="button" id="vc-movie-reset" class="ghost">Limpiar formulario</button>
+                    </div>
+                </form>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Titulo</th>
+                                <th>Genero</th>
+                                <th>Copias</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-movies-body">
+                            <tr><td colspan="6">Sin peliculas cargadas.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="vc-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>CRUD de clientes</h2>
+                        <p class="vc-subtitle">Mantiene actualizada la base de clientes del videoclub.</p>
+                    </div>
+                    <span id="vc-customer-form-mode" class="vc-section-chip">Alta</span>
+                </div>
+                <form id="vc-customer-form" class="vc-stack-form">
+                    <input id="vc-customer-id" type="hidden">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-customer-name">Nombre completo</label>
+                            <input id="vc-customer-name" type="text" placeholder="Nombre del cliente" required>
+                        </div>
+                        <div>
+                            <label for="vc-customer-email">Correo</label>
+                            <input id="vc-customer-email" type="email" placeholder="correo@dominio.com" required>
+                        </div>
+                    </div>
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-customer-phone">Telefono</label>
+                            <input id="vc-customer-phone" type="tel" placeholder="Opcional">
+                        </div>
+                        <div>
+                            <label for="vc-customer-address">Direccion</label>
+                            <input id="vc-customer-address" type="text" placeholder="Calle, numero, ciudad">
+                        </div>
+                    </div>
+                    <div class="vc-button-row">
+                        <button type="submit" id="vc-customer-save">Guardar cliente</button>
+                        <button type="button" id="vc-customer-reset" class="ghost">Limpiar formulario</button>
+                    </div>
+                </form>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Correo</th>
+                                <th>Telefono</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-customers-body">
+                            <tr><td colspan="5">Sin clientes cargados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+        </section>
+
         <section class="vc-layout">
             <article class="vc-card">
-                <h2>Alquileres activos</h2>
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>Gestion de alquileres</h2>
+                        <p class="vc-subtitle">Crea alquileres y registra devoluciones desde la operacion diaria.</p>
+                    </div>
+                    <span class="vc-section-chip">Rentals</span>
+                </div>
+                <form id="vc-rental-form" class="vc-stack-form vc-inline-form">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-rental-customer">Cliente</label>
+                            <select id="vc-rental-customer">
+                                <option value="">Selecciona un cliente</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="vc-rental-movie">Pelicula</label>
+                            <select id="vc-rental-movie">
+                                <option value="">Selecciona una pelicula</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="vc-rental-due-date">Fecha de devolucion</label>
+                        <input id="vc-rental-due-date" type="date" required>
+                    </div>
+                    <div class="vc-button-row">
+                        <button type="submit">Crear alquiler</button>
+                        <button type="button" id="vc-rental-fill-active" class="ghost">Usar cliente activo</button>
+                    </div>
+                </form>
                 <div class="vc-table-wrap">
                     <table>
                         <thead>
@@ -78,19 +277,25 @@
                                 <th>ID</th>
                                 <th>Cliente</th>
                                 <th>Pelicula</th>
+                                <th>Vence</th>
                                 <th>Accion</th>
                             </tr>
                         </thead>
                         <tbody id="vc-rentals-body">
-                            <tr><td colspan="4">Sin alquileres activos.</td></tr>
+                            <tr><td colspan="5">Sin alquileres activos.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </article>
 
             <article class="vc-card">
-                <h2>Historial del cliente</h2>
-                <button type="button" id="vc-load-history" class="ghost">Ver historial del cliente activo</button>
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>Historial del cliente</h2>
+                        <p class="vc-subtitle">Consulta rapido la trazabilidad de un cliente seleccionado.</p>
+                    </div>
+                    <span class="vc-section-chip">Tracking</span>
+                </div>
                 <div class="vc-table-wrap">
                     <table>
                         <thead>
@@ -109,7 +314,13 @@
         </section>
 
         <section class="vc-card vc-response-card">
-            <h2>Actividad</h2>
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Actividad</h2>
+                    <p class="vc-subtitle">Respuesta cruda de la API para soporte, depuracion y pruebas.</p>
+                </div>
+                <span class="vc-section-chip">API Log</span>
+            </div>
             <pre id="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>

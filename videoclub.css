@@ -79,6 +79,12 @@ body {
     padding: 2rem 1rem 3rem;
 }
 
+.vc-subtitle {
+    margin: 0.2rem 0 0;
+    color: #45606b;
+    font-size: 0.94rem;
+}
+
 .vc-hero {
     background: linear-gradient(120deg, #0d4452 0%, #1c7988 55%, #e38c27 100%);
     color: var(--text-light);
@@ -124,8 +130,20 @@ body {
     gap: 1rem;
 }
 
+.vc-stats-grid,
+.vc-admin-grid {
+    margin-top: 1.1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
 .vc-layout-main {
     grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 2fr);
+}
+
+.vc-admin-grid {
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
 }
 
 .vc-card {
@@ -141,9 +159,60 @@ body {
     grid-column: 1 / -1;
 }
 
+.vc-stat-card {
+    border-radius: 16px;
+    padding: 1.1rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 241, 244, 0.92));
+    border: 1px solid rgba(15, 58, 69, 0.1);
+    box-shadow: var(--shadow);
+    animation: rise 620ms ease both;
+}
+
+.vc-stat-card strong {
+    display: block;
+    margin-top: 0.45rem;
+    font-size: 2rem;
+    line-height: 1;
+    color: #0d4452;
+}
+
+.vc-stat-card small {
+    display: block;
+    margin-top: 0.35rem;
+    color: #57717c;
+}
+
+.vc-stat-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.72rem;
+    color: #40606b;
+}
+
 .vc-card h2,
 .vc-card h3 {
     margin-top: 0;
+}
+
+.vc-card-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+.vc-section-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    background: rgba(21, 109, 127, 0.12);
+    color: #0d4452;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 label {
@@ -196,6 +265,17 @@ button.danger {
     gap: 0.6rem;
 }
 
+.vc-two-column-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.8rem;
+}
+
+.vc-stack-form {
+    display: grid;
+    gap: 0.8rem;
+}
+
 .vc-inline-form {
     margin-top: 1rem;
     padding-top: 0.8rem;
@@ -233,7 +313,7 @@ button.danger {
 .vc-movie-item {
     border: 1px solid var(--line);
     border-radius: 10px;
-    background: #fff;
+    background: linear-gradient(180deg, #ffffff 0%, #f5fafb 100%);
     padding: 0.7rem;
 }
 
@@ -265,6 +345,18 @@ button.danger {
     margin-top: 0.45rem;
 }
 
+.vc-card-actions {
+    margin-top: 0.7rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+}
+
+.vc-card-actions button {
+    width: auto;
+    flex: 1 1 120px;
+}
+
 .vc-placeholder {
     margin: 0;
     color: #4f6570;
@@ -285,6 +377,11 @@ td {
     border-bottom: 1px solid var(--line);
     text-align: left;
     padding: 0.55rem;
+    vertical-align: top;
+}
+
+tbody tr:hover {
+    background: rgba(21, 109, 127, 0.05);
 }
 
 .vc-response-card {
@@ -321,11 +418,19 @@ td {
         align-items: flex-start;
     }
 
+    .vc-card-heading {
+        flex-direction: column;
+    }
+
     .vc-layout-main {
         grid-template-columns: 1fr;
     }
 
     .vc-filter-row {
+        grid-template-columns: 1fr;
+    }
+
+    .vc-admin-grid {
         grid-template-columns: 1fr;
     }
 }
