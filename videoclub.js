@@ -13,7 +13,7 @@
     const clearHistoryBtn = document.getElementById('vc-clear-history');
 
     const customerSelect = document.getElementById('vc-customer-select');
-    const customerForm = document.getElementById('vc-customer-form');
+    const customerForm = document.getElementById('vc-customer-form') || document.getElementById('vc-create-customer-form');
     const customerFormMode = document.getElementById('vc-customer-form-mode');
     const customerResetBtn = document.getElementById('vc-customer-reset');
     const customerIdInput = document.getElementById('vc-customer-id');
@@ -47,6 +47,12 @@
     const movieTotalCopiesInput = document.getElementById('vc-movie-total-copies');
     const movieAvailableCopiesInput = document.getElementById('vc-movie-available-copies');
     const movieDescriptionInput = document.getElementById('vc-movie-description');
+
+    function bindEvent(element, eventName, handler) {
+        if (element) {
+            element.addEventListener(eventName, handler);
+        }
+    }
 
     const state = {
         movies: [],
@@ -372,22 +378,42 @@
 
     function clearHistory() {
         state.history = [];
-        historyBody.innerHTML = '<tr><td colspan="3">Sin historial cargado.</td></tr>';
+        if (historyBody) {
+            historyBody.innerHTML = '<tr><td colspan="3">Sin historial cargado.</td></tr>';
+        }
     }
 
     function resetMovieForm() {
-        movieForm.reset();
-        movieIdInput.value = '';
-        movieFormMode.textContent = 'Alta';
-        movieRentalPriceInput.value = '';
-        movieTotalCopiesInput.value = '1';
-        movieAvailableCopiesInput.value = '1';
+        if (movieForm) {
+            movieForm.reset();
+        }
+        if (movieIdInput) {
+            movieIdInput.value = '';
+        }
+        if (movieFormMode) {
+            movieFormMode.textContent = 'Alta';
+        }
+        if (movieRentalPriceInput) {
+            movieRentalPriceInput.value = '';
+        }
+        if (movieTotalCopiesInput) {
+            movieTotalCopiesInput.value = '1';
+        }
+        if (movieAvailableCopiesInput) {
+            movieAvailableCopiesInput.value = '1';
+        }
     }
 
     function resetCustomerForm() {
-        customerForm.reset();
-        customerIdInput.value = '';
-        customerFormMode.textContent = 'Alta';
+        if (customerForm) {
+            customerForm.reset();
+        }
+        if (customerIdInput) {
+            customerIdInput.value = '';
+        }
+        if (customerFormMode) {
+            customerFormMode.textContent = 'Alta';
+        }
     }
 
     function fillMovieForm(movieId) {
@@ -426,13 +452,25 @@
         }
 
         const normalized = normalizeCustomer(customer);
-        customerIdInput.value = normalized.id;
-        customerNameInput.value = normalized.name;
-        customerEmailInput.value = normalized.email;
-        customerPhoneInput.value = normalized.phone;
-        customerAddressInput.value = normalized.address;
-        customerFormMode.textContent = `Edicion #${normalized.id}`;
-        customerNameInput.focus();
+        if (customerIdInput) {
+            customerIdInput.value = normalized.id;
+        }
+        if (customerNameInput) {
+            customerNameInput.value = normalized.name;
+            customerNameInput.focus();
+        }
+        if (customerEmailInput) {
+            customerEmailInput.value = normalized.email;
+        }
+        if (customerPhoneInput) {
+            customerPhoneInput.value = normalized.phone;
+        }
+        if (customerAddressInput) {
+            customerAddressInput.value = normalized.address;
+        }
+        if (customerFormMode) {
+            customerFormMode.textContent = `Edicion #${normalized.id}`;
+        }
     }
 
     function buildMoviePayload() {
@@ -486,10 +524,10 @@
     }
 
     function buildCustomerPayload() {
-        const name = customerNameInput.value.trim();
-        const email = customerEmailInput.value.trim();
-        const phone = customerPhoneInput.value.trim();
-        const address = customerAddressInput.value.trim();
+        const name = customerNameInput ? customerNameInput.value.trim() : '';
+        const email = customerEmailInput ? customerEmailInput.value.trim() : '';
+        const phone = customerPhoneInput ? customerPhoneInput.value.trim() : '';
+        const address = customerAddressInput ? customerAddressInput.value.trim() : '';
 
         if (!name || !email) {
             return null;
@@ -616,7 +654,7 @@
 
     async function submitCustomerForm() {
         const payload = buildCustomerPayload();
-        const customerId = customerIdInput.value.trim();
+        const customerId = customerIdInput ? customerIdInput.value.trim() : '';
 
         if (!payload) {
             showError('Completa nombre y correo para guardar el cliente.');
@@ -696,46 +734,50 @@
         }
     }
 
-    refreshAllBtn.addEventListener('click', refreshAll);
+    bindEvent(refreshAllBtn, 'click', refreshAll);
 
-    customerSelect.addEventListener('change', function() {
+    bindEvent(customerSelect, 'change', function() {
         state.selectedCustomerId = customerSelect.value;
-        rentalCustomerSelect.value = state.selectedCustomerId;
+        if (rentalCustomerSelect) {
+            rentalCustomerSelect.value = state.selectedCustomerId;
+        }
         renderCustomerPill();
     });
 
-    customerForm.addEventListener('submit', async function(e) {
+    bindEvent(customerForm, 'submit', async function(e) {
         e.preventDefault();
         await submitCustomerForm();
     });
 
-    customerResetBtn.addEventListener('click', resetCustomerForm);
+    bindEvent(customerResetBtn, 'click', resetCustomerForm);
 
-    movieForm.addEventListener('submit', async function(event) {
+    bindEvent(movieForm, 'submit', async function(event) {
         event.preventDefault();
         await submitMovieForm();
     });
 
-    movieResetBtn.addEventListener('click', resetMovieForm);
+    bindEvent(movieResetBtn, 'click', resetMovieForm);
 
-    rentalForm.addEventListener('submit', async function(event) {
+    bindEvent(rentalForm, 'submit', async function(event) {
         event.preventDefault();
         await submitRentalForm();
     });
 
-    rentalFillActiveBtn.addEventListener('click', function() {
-        rentalCustomerSelect.value = state.selectedCustomerId;
+    bindEvent(rentalFillActiveBtn, 'click', function() {
+        if (rentalCustomerSelect) {
+            rentalCustomerSelect.value = state.selectedCustomerId;
+        }
     });
 
-    searchInput.addEventListener('input', renderMovies);
+    bindEvent(searchInput, 'input', renderMovies);
 
-    onlyAvailableBtn.addEventListener('click', function() {
+    bindEvent(onlyAvailableBtn, 'click', function() {
         state.onlyAvailable = !state.onlyAvailable;
         onlyAvailableBtn.textContent = state.onlyAvailable ? 'Mostrando disponibles' : 'Solo disponibles';
         renderMovies();
     });
 
-    moviesGrid.addEventListener('click', function(event) {
+    bindEvent(moviesGrid, 'click', function(event) {
         const rentButton = event.target.closest('[data-movie-id]');
         if (rentButton) {
             const movieId = rentButton.getAttribute('data-movie-id');
@@ -754,7 +796,7 @@
         }
     });
 
-    moviesBody.addEventListener('click', function(event) {
+    bindEvent(moviesBody, 'click', function(event) {
         const editButton = event.target.closest('[data-edit-movie]');
         if (editButton) {
             const movieId = editButton.getAttribute('data-edit-movie');
@@ -773,7 +815,7 @@
         }
     });
 
-    customersBody.addEventListener('click', function(event) {
+    bindEvent(customersBody, 'click', function(event) {
         const editButton = event.target.closest('[data-edit-customer]');
         if (editButton) {
             const customerId = editButton.getAttribute('data-edit-customer');
@@ -792,7 +834,7 @@
         }
     });
 
-    rentalsBody.addEventListener('click', function(event) {
+    bindEvent(rentalsBody, 'click', function(event) {
         const button = event.target.closest('[data-return-id]');
         if (!button) {
             return;
@@ -804,12 +846,14 @@
         }
     });
 
-    loadHistoryBtn.addEventListener('click', loadCustomerHistory);
-    clearHistoryBtn.addEventListener('click', clearHistory);
+    bindEvent(loadHistoryBtn, 'click', loadCustomerHistory);
+    bindEvent(clearHistoryBtn, 'click', clearHistory);
 
     resetMovieForm();
     resetCustomerForm();
-    rentalDueDateInput.value = getDefaultDueDate();
+    if (rentalDueDateInput) {
+        rentalDueDateInput.value = getDefaultDueDate();
+    }
     clearHistory();
     refreshAll();
 });
