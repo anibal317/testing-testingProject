@@ -79,6 +79,48 @@ body {
     padding: 2rem 1rem 3rem;
 }
 
+.vc-module-nav {
+    margin-top: 1.1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.vc-module-nav a {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.42rem 0.82rem;
+    border: 1px solid #97b7c1;
+    color: #0f3a45;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.75);
+    font-size: 0.9rem;
+}
+
+.vc-module-nav a.active,
+.vc-module-nav a:hover {
+    background: #0f3a45;
+    color: #f7fdff;
+    border-color: #0f3a45;
+}
+
+.vc-link-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.8rem;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    background: var(--bg-accent);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.vc-link-button:hover {
+    background: var(--bg-accent-soft);
+}
+
 .vc-subtitle {
     margin: 0.2rem 0 0;
     color: #45606b;
@@ -445,6 +487,10 @@ tbody tr:hover {
 
     .vc-filter-row {
         grid-template-columns: 1fr;
+    }
+
+    .vc-module-nav {
+        gap: 0.45rem;
     }
 
     .vc-admin-grid {

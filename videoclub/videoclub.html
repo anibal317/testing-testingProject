@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - Video Club</title>
+    <link rel="stylesheet" href="videoclub.css">
+</head>
+<body>
+    <header class="vc-header">
+        <nav class="vc-nav">
+            <a href="../index.html" class="vc-logo">TechInfo Hub</a>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../articles.html">Articles</a></li>
+                <li><a href="../about.html">About</a></li>
+                <li><a href="../products.html">Products</a></li>
+                <li><a href="../services.html">Services</a></li>
+                <li><a href="videoclub.html" class="active">Video Club</a></li>
+                <li><a href="../blog.html">Blog</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="vc-main">
+        <section class="vc-hero">
+            <p class="vc-kicker">Video Club API</p>
+            <h1>Panel modular del videoclub</h1>
+            <p>La gestion se divide en pantallas independientes para operar cada dominio por separado.</p>
+            <div class="vc-hero-actions">
+                <button type="button" id="vc-refresh-all">Actualizar resumen</button>
+                <span id="vc-auth-role" class="vc-pill">Sin sesion</span>
+            </div>
+        </section>
+
+        <section class="vc-module-nav">
+            <a href="videoclub.html" class="active">Resumen</a>
+            <a href="videoclub-movies.html">Peliculas</a>
+            <a href="videoclub-customers.html">Clientes</a>
+            <a href="videoclub-rentals.html">Alquileres</a>
+            <a href="videoclub-users.html">Usuarios</a>
+            <a href="videoclub-candybar.html">Candy Bar</a>
+        </section>
+
+        <section class="vc-card vc-auth-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Acceso</h2>
+                    <p class="vc-subtitle">Autenticacion central para todas las paginas del videoclub.</p>
+                </div>
+                <span class="vc-section-chip">Sesion</span>
+            </div>
+            <form id="vc-auth-form" class="vc-stack-form">
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-auth-email">Correo</label>
+                        <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" required>
+                    </div>
+                    <div>
+                        <label for="vc-auth-password">Contrasena</label>
+                        <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" required>
+                    </div>
+                </div>
+                <div class="vc-button-row">
+                    <button type="submit">Iniciar sesion</button>
+                    <button type="button" id="vc-register-btn" class="ghost">Registrar y entrar</button>
+                    <button type="button" id="vc-logout-btn" class="danger">Cerrar sesion</button>
+                </div>
+            </form>
+            <p id="vc-auth-status" class="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
+        </section>
+
+        <section class="vc-card vc-control-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Centro de control</h2>
+                    <p class="vc-subtitle">Configura base URL y ejecuta verificaciones publicas de la API.</p>
+                </div>
+                <span class="vc-section-chip">Operativo</span>
+            </div>
+            <div class="vc-two-column-form">
+                <div>
+                    <label for="vc-base-url">Base URL</label>
+                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                </div>
+            </div>
+            <div class="vc-button-row">
+                <button type="button" id="vc-health-check" class="ghost">Health check</button>
+                <button type="button" id="vc-api-info" class="ghost">Info API</button>
+            </div>
+        </section>
+
+        <section class="vc-stats-grid">
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Peliculas</span>
+                <strong id="vc-stat-movies">0</strong>
+                <small>catalogadas</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Clientes</span>
+                <strong id="vc-stat-customers">0</strong>
+                <small>registrados</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Alquileres activos</span>
+                <strong id="vc-stat-rentals">0</strong>
+                <small>pendientes</small>
+            </article>
+            <article class="vc-stat-card">
+                <span class="vc-stat-label">Stock disponible</span>
+                <strong id="vc-stat-stock">0</strong>
+                <small>copias</small>
+            </article>
+        </section>
+
+        <section class="vc-admin-grid">
+            <article class="vc-card">
+                <h3>Peliculas</h3>
+                <p class="vc-subtitle">Catalogo visual y CRUD de peliculas.</p>
+                <a class="vc-link-button" href="videoclub-movies.html">Abrir modulo</a>
+            </article>
+            <article class="vc-card">
+                <h3>Clientes</h3>
+                <p class="vc-subtitle">Gestion de clientes e historial.</p>
+                <a class="vc-link-button" href="videoclub-customers.html">Abrir modulo</a>
+            </article>
+            <article class="vc-card">
+                <h3>Alquileres</h3>
+                <p class="vc-subtitle">Altas de alquiler y devoluciones.</p>
+                <a class="vc-link-button" href="videoclub-rentals.html">Abrir modulo</a>
+            </article>
+            <article class="vc-card">
+                <h3>Usuarios</h3>
+                <p class="vc-subtitle">Administracion de cuentas y roles.</p>
+                <a class="vc-link-button" href="videoclub-users.html">Abrir modulo</a>
+            </article>
+            <article class="vc-card">
+                <h3>Candy Bar</h3>
+                <p class="vc-subtitle">Inventario y precios de productos.</p>
+                <a class="vc-link-button" href="videoclub-candybar.html">Abrir modulo</a>
+            </article>
+        </section>
+
+        <section class="vc-card vc-response-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Actividad</h2>
+                    <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
+                </div>
+                <span class="vc-section-chip">API Log</span>
+            </div>
+            <pre id="vc-output">Sin requests ejecutadas.</pre>
+        </section>
+    </main>
+
+    <script src="videoclub.js"></script>
+</body>
+</html>
+

@@ -176,11 +176,16 @@
     }
 
     function getBaseUrl() {
+        if (!baseUrlInput) {
+            return 'https://be-testing-project.vercel.app';
+        }
         return baseUrlInput.value.trim().replace(/\/$/, '');
     }
 
     function showOutput(payload) {
-        output.textContent = JSON.stringify(payload, null, 2);
+        if (output) {
+            output.textContent = JSON.stringify(payload, null, 2);
+        }
     }
 
     function showError(message) {
@@ -294,10 +299,18 @@
             return sum + normalized.availableCopies;
         }, 0);
 
-        statMovies.textContent = String(state.movies.length);
-        statCustomers.textContent = String(state.customers.length);
-        statRentals.textContent = String(state.rentals.length);
-        statStock.textContent = String(totalStock);
+        if (statMovies) {
+            statMovies.textContent = String(state.movies.length);
+        }
+        if (statCustomers) {
+            statCustomers.textContent = String(state.customers.length);
+        }
+        if (statRentals) {
+            statRentals.textContent = String(state.rentals.length);
+        }
+        if (statStock) {
+            statStock.textContent = String(totalStock);
+        }
     }
 
     async function apiRequest(method, path, body) {
@@ -361,6 +374,10 @@
     }
 
     function renderCustomerPill() {
+        if (!selectedCustomerPill) {
+            return;
+        }
+
         const current = selectedCustomer();
         if (!current) {
             selectedCustomerPill.textContent = 'Cliente no seleccionado';
@@ -373,6 +390,11 @@
     }
 
     function renderCustomerSelect() {
+        if (!customerSelect || !rentalCustomerSelect) {
+            renderCustomerPill();
+            return;
+        }
+
         if (!state.customers.length) {
             customerSelect.innerHTML = '<option value="">Sin clientes disponibles</option>';
             rentalCustomerSelect.innerHTML = '<option value="">Sin clientes disponibles</option>';
@@ -390,21 +412,19 @@
             return `<option value="${id}"${selected}>${name} - ${email}</option>`;
         }).join('');
 
-        customerSelect.innerHTML = options;
-        rentalCustomerSelect.innerHTML = `<option value="">Selecciona un cliente</option>${options}`;
+        const defaultSelected = !state.selectedCustomerId ? ' selected' : '';
 
-        if (!state.selectedCustomerId) {
-            state.selectedCustomerId = getId(state.customers[0], ['id', 'customer_id']);
-            customerSelect.value = state.selectedCustomerId;
-        }
+        customerSelect.innerHTML = `<option value=""${defaultSelected}>Selecciona un cliente</option>${options}`;
+        rentalCustomerSelect.innerHTML = `<option value=""${defaultSelected}>Selecciona un cliente</option>${options}`;
 
+        customerSelect.value = state.selectedCustomerId || '';
         rentalCustomerSelect.value = state.selectedCustomerId || '';
 
         renderCustomerPill();
     }
 
     function movieMatchesFilter(movie) {
-        const search = searchInput.value.trim().toLowerCase();
+        const search = searchInput ? searchInput.value.trim().toLowerCase() : '';
         const normalized = normalizeMovie(movie);
         const title = String(normalized.title).toLowerCase();
         const genre = String(normalized.genre).toLowerCase();
@@ -417,6 +437,10 @@
     }
 
     function renderMovies() {
+        if (!moviesGrid) {
+            return;
+        }
+
         const visibleMovies = state.movies.filter(movieMatchesFilter);
 
         if (!visibleMovies.length) {
@@ -445,9 +469,17 @@
     }
 
     function renderMoviesTable() {
+        if (!moviesBody && !rentalMovieSelect) {
+            return;
+        }
+
         if (!state.movies.length) {
-            moviesBody.innerHTML = '<tr><td colspan="6">Sin peliculas cargadas.</td></tr>';
-            rentalMovieSelect.innerHTML = '<option value="">Sin peliculas disponibles</option>';
+            if (moviesBody) {
+                moviesBody.innerHTML = '<tr><td colspan="6">Sin peliculas cargadas.</td></tr>';
+            }
+            if (rentalMovieSelect) {
+                rentalMovieSelect.innerHTML = '<option value="">Sin peliculas disponibles</option>';
+            }
             return;
         }
 
@@ -455,11 +487,17 @@
             return normalizeMovie(a).title.localeCompare(normalizeMovie(b).title);
         });
 
-        rentalMovieSelect.innerHTML = '<option value="">Selecciona una pelicula</option>' + sortedMovies.map(function(movie) {
-            const normalized = normalizeMovie(movie);
-            const stockSuffix = normalized.availableCopies > 0 ? ` (${normalized.availableCopies})` : ' (sin stock)';
-            return `<option value="${escapeHtml(normalized.id)}">${escapeHtml(normalized.title)}${stockSuffix}</option>`;
-        }).join('');
+        if (rentalMovieSelect) {
+            rentalMovieSelect.innerHTML = '<option value="">Selecciona una pelicula</option>' + sortedMovies.map(function(movie) {
+                const normalized = normalizeMovie(movie);
+                const stockSuffix = normalized.availableCopies > 0 ? ` (${normalized.availableCopies})` : ' (sin stock)';
+                return `<option value="${escapeHtml(normalized.id)}">${escapeHtml(normalized.title)}${stockSuffix}</option>`;
+            }).join('');
+        }
+
+        if (!moviesBody) {
+            return;
+        }
 
         moviesBody.innerHTML = sortedMovies.map(function(movie) {
             const normalized = normalizeMovie(movie);
@@ -473,6 +511,10 @@
     }
 
     function renderCustomersTable() {
+        if (!customersBody) {
+            return;
+        }
+
         if (!state.customers.length) {
             customersBody.innerHTML = '<tr><td colspan="5">Sin clientes cargados.</td></tr>';
             return;
@@ -538,6 +580,10 @@
     }
 
     function renderRentals() {
+        if (!rentalsBody) {
+            return;
+        }
+
         if (!state.rentals.length) {
             rentalsBody.innerHTML = '<tr><td colspan="5">Sin alquileres activos.</td></tr>';
             return;
@@ -565,6 +611,10 @@
     }
 
     function renderHistoryRows(rentals) {
+        if (!historyBody) {
+            return;
+        }
+
         state.history = rentals.slice();
         if (!rentals.length) {
             historyBody.innerHTML = '<tr><td colspan="3">Este cliente aun no tiene historial.</td></tr>';
@@ -919,10 +969,6 @@
         if (customers) {
             state.customers = customers;
 
-            if (!state.selectedCustomerId) {
-                state.selectedCustomerId = getId(customers[0] || {}, ['id', 'customer_id']);
-            }
-
             renderCustomerSelect();
             renderCustomersTable();
             updateStats();
@@ -971,7 +1017,33 @@
             showOutput({ info: 'Inicia sesion para cargar datos de la API.' });
             return;
         }
-        await Promise.all([refreshCustomers(), refreshMovies(), refreshActiveRentals(), refreshUsers(), refreshCandyBar()]);
+
+        const shouldLoadCustomers = Boolean(customerSelect || rentalCustomerSelect || customersBody || historyBody || selectedCustomerPill || statCustomers);
+        const shouldLoadMovies = Boolean(moviesGrid || moviesBody || rentalMovieSelect || statMovies || statStock);
+        const shouldLoadRentals = Boolean(rentalsBody || rentalForm || historyBody || statRentals);
+        const shouldLoadUsers = Boolean(usersBody || userForm);
+        const shouldLoadCandyBar = Boolean(candyBody || candyForm);
+
+        const tasks = [];
+        if (shouldLoadCustomers) {
+            tasks.push(refreshCustomers());
+        }
+        if (shouldLoadMovies) {
+            tasks.push(refreshMovies());
+        }
+        if (shouldLoadRentals) {
+            tasks.push(refreshActiveRentals());
+        }
+        if (shouldLoadUsers) {
+            tasks.push(refreshUsers());
+        }
+        if (shouldLoadCandyBar) {
+            tasks.push(refreshCandyBar());
+        }
+
+        if (tasks.length) {
+            await Promise.all(tasks);
+        }
     }
 
     async function runHealthCheck() {
@@ -1040,7 +1112,7 @@
             return;
         }
         const payload = buildMoviePayload();
-        const movieId = movieIdInput.value.trim();
+        const movieId = movieIdInput ? movieIdInput.value.trim() : '';
 
         if (!payload) {
             showError('Completa titulo, precio de alquiler y copias para guardar la pelicula.');
@@ -1135,7 +1207,7 @@
 
         const result = await runRequest('Eliminar pelicula', 'DELETE', `/api/movies/${encodeURIComponent(movieId)}`);
         if (result && result.ok) {
-            if (movieIdInput.value === String(movieId)) {
+            if (movieIdInput && movieIdInput.value === String(movieId)) {
                 resetMovieForm();
             }
             await refreshMovies();
@@ -1153,7 +1225,7 @@
 
         const result = await runRequest('Eliminar cliente', 'DELETE', `/api/customers/${encodeURIComponent(customerId)}`);
         if (result && result.ok) {
-            if (customerIdInput.value === String(customerId)) {
+            if (customerIdInput && customerIdInput.value === String(customerId)) {
                 resetCustomerForm();
             }
             if (state.selectedCustomerId === String(customerId)) {
@@ -1203,6 +1275,10 @@
         if (!requireAdminAction()) {
             return;
         }
+        if (!rentalCustomerSelect || !rentalMovieSelect || !rentalDueDateInput) {
+            showError('Esta vista no incluye el formulario de alquileres.');
+            return;
+        }
         const customerId = rentalCustomerSelect.value || state.selectedCustomerId;
         const movieId = rentalMovieSelect.value;
         const dueDate = rentalDueDateInput.value;
@@ -1223,7 +1299,9 @@
             rentalMovieSelect.value = '';
             rentalDueDateInput.value = getDefaultDueDate();
             state.selectedCustomerId = String(customerId);
-            customerSelect.value = state.selectedCustomerId;
+            if (customerSelect) {
+                customerSelect.value = state.selectedCustomerId;
+            }
             renderCustomerPill();
             await refreshMovies();
             await refreshActiveRentals();

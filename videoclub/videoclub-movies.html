@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Club - Peliculas</title>
+    <link rel="stylesheet" href="videoclub.css">
+</head>
+<body>
+    <header class="vc-header">
+        <nav class="vc-nav">
+            <a href="../index.html" class="vc-logo">TechInfo Hub</a>
+            <ul>
+                <li><a href="videoclub.html">Video Club</a></li>
+                <li><a href="videoclub-movies.html" class="active">Peliculas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="vc-main">
+        <section class="vc-module-nav">
+            <a href="videoclub.html">Resumen</a>
+            <a href="videoclub-movies.html" class="active">Peliculas</a>
+            <a href="videoclub-customers.html">Clientes</a>
+            <a href="videoclub-rentals.html">Alquileres</a>
+            <a href="videoclub-users.html">Usuarios</a>
+            <a href="videoclub-candybar.html">Candy Bar</a>
+        </section>
+
+        <section class="vc-card vc-control-card">
+            <div class="vc-two-column-form">
+                <div>
+                    <label for="vc-base-url">Base URL</label>
+                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                </div>
+            </div>
+            <div class="vc-button-row">
+                <button type="button" id="vc-refresh-all">Actualizar datos</button>
+                <button type="button" id="vc-health-check" class="ghost">Health check</button>
+                <button type="button" id="vc-api-info" class="ghost">Info API</button>
+            </div>
+        </section>
+
+        <section class="vc-layout vc-layout-main">
+            <article class="vc-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>Catalogo visual</h2>
+                        <p class="vc-subtitle">Filtra y revisa disponibilidad.</p>
+                    </div>
+                </div>
+                <div class="vc-filter-row">
+                    <input id="vc-search" type="search" placeholder="Buscar por titulo o genero">
+                    <button type="button" id="vc-only-available" class="ghost">Solo disponibles</button>
+                </div>
+                <div id="vc-movies-grid" class="vc-movie-grid">
+                    <p class="vc-placeholder">Carga peliculas para ver el catalogo.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="vc-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>CRUD de peliculas</h2>
+                </div>
+                <span id="vc-movie-form-mode" class="vc-section-chip">Alta</span>
+            </div>
+            <form id="vc-movie-form" class="vc-stack-form">
+                <input id="vc-movie-id" type="hidden">
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-movie-title">Titulo</label>
+                        <input id="vc-movie-title" type="text" required>
+                    </div>
+                    <div>
+                        <label for="vc-movie-director">Director</label>
+                        <input id="vc-movie-director" type="text">
+                    </div>
+                </div>
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-movie-genre">Genero</label>
+                        <input id="vc-movie-genre" type="text">
+                    </div>
+                    <div>
+                        <label for="vc-movie-release-year">Ano de estreno</label>
+                        <input id="vc-movie-release-year" type="number" min="1888" step="1">
+                    </div>
+                </div>
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-movie-rental-price">Precio</label>
+                        <input id="vc-movie-rental-price" type="number" min="0" step="0.01" required>
+                    </div>
+                    <div>
+                        <label for="vc-movie-duration">Duracion</label>
+                        <input id="vc-movie-duration" type="number" min="1" step="1">
+                    </div>
+                </div>
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-movie-total-copies">Copias totales</label>
+                        <input id="vc-movie-total-copies" type="number" min="1" step="1" required>
+                    </div>
+                    <div>
+                        <label for="vc-movie-available-copies">Copias disponibles</label>
+                        <input id="vc-movie-available-copies" type="number" min="0" step="1" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="vc-movie-description">Descripcion</label>
+                    <textarea id="vc-movie-description"></textarea>
+                </div>
+                <div class="vc-button-row">
+                    <button type="submit">Guardar pelicula</button>
+                    <button type="button" id="vc-movie-reset" class="ghost">Limpiar</button>
+                </div>
+            </form>
+            <div class="vc-table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Titulo</th>
+                            <th>Genero</th>
+                            <th>Copias</th>
+                            <th>Precio</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vc-movies-body">
+                        <tr><td colspan="6">Sin peliculas cargadas.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="vc-card vc-response-card">
+            <pre id="vc-output">Sin requests ejecutadas.</pre>
+        </section>
+    </main>
+
+    <script src="videoclub.js"></script>
+</body>
+</html>
+
