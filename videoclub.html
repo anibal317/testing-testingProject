@@ -36,6 +36,34 @@
             </div>
         </section>
 
+        <section class="vc-card vc-auth-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Acceso al panel</h2>
+                    <p class="vc-subtitle">Inicia sesion contra la API para habilitar las secciones protegidas.</p>
+                </div>
+                <span id="vc-auth-role" class="vc-section-chip">Sin sesion</span>
+            </div>
+            <form id="vc-auth-form" class="vc-stack-form">
+                <div class="vc-two-column-form">
+                    <div>
+                        <label for="vc-auth-email">Correo</label>
+                        <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" required>
+                    </div>
+                    <div>
+                        <label for="vc-auth-password">Contrasena</label>
+                        <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" required>
+                    </div>
+                </div>
+                <div class="vc-button-row">
+                    <button type="submit" id="vc-login-btn">Iniciar sesion</button>
+                    <button type="button" id="vc-register-btn" class="ghost">Registrar y entrar</button>
+                    <button type="button" id="vc-logout-btn" class="danger">Cerrar sesion</button>
+                </div>
+            </form>
+            <p id="vc-auth-status" class="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
+        </section>
+
         <section class="vc-stats-grid">
             <article class="vc-stat-card">
                 <span class="vc-stat-label">Peliculas</span>
@@ -83,6 +111,8 @@
                 <div class="vc-button-row">
                     <button type="button" id="vc-load-history" class="ghost">Ver historial del cliente activo</button>
                     <button type="button" id="vc-clear-history" class="ghost">Limpiar historial</button>
+                    <button type="button" id="vc-health-check" class="ghost">Health check</button>
+                    <button type="button" id="vc-api-info" class="ghost">Info API</button>
                 </div>
             </article>
 
@@ -231,6 +261,109 @@
                         </thead>
                         <tbody id="vc-customers-body">
                             <tr><td colspan="5">Sin clientes cargados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="vc-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>CRUD de usuarios</h2>
+                        <p class="vc-subtitle">Gestiona cuentas internas y roles del sistema.</p>
+                    </div>
+                    <span id="vc-user-form-mode" class="vc-section-chip">Alta</span>
+                </div>
+                <form id="vc-user-form" class="vc-stack-form">
+                    <input id="vc-user-id" type="hidden">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-user-email">Correo</label>
+                            <input id="vc-user-email" type="email" placeholder="usuario@dominio.com" required>
+                        </div>
+                        <div>
+                            <label for="vc-user-role">Rol</label>
+                            <select id="vc-user-role">
+                                <option value="client">client</option>
+                                <option value="admin">admin</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="vc-user-password">Contrasena</label>
+                        <input id="vc-user-password" type="password" placeholder="Opcional en edicion, requerida en alta">
+                    </div>
+                    <div class="vc-button-row">
+                        <button type="submit">Guardar usuario</button>
+                        <button type="button" id="vc-user-reset" class="ghost">Limpiar formulario</button>
+                    </div>
+                </form>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Correo</th>
+                                <th>Rol</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-users-body">
+                            <tr><td colspan="4">Sin usuarios cargados.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="vc-card">
+                <div class="vc-card-heading">
+                    <div>
+                        <h2>CRUD de candy bar</h2>
+                        <p class="vc-subtitle">Controla snacks y productos complementarios.</p>
+                    </div>
+                    <span id="vc-candy-form-mode" class="vc-section-chip">Alta</span>
+                </div>
+                <form id="vc-candy-form" class="vc-stack-form">
+                    <input id="vc-candy-id" type="hidden">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-candy-name">Nombre</label>
+                            <input id="vc-candy-name" type="text" placeholder="Ej. Palomitas" required>
+                        </div>
+                        <div>
+                            <label for="vc-candy-category">Categoria</label>
+                            <input id="vc-candy-category" type="text" placeholder="Ej. snack">
+                        </div>
+                    </div>
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-candy-price">Precio</label>
+                            <input id="vc-candy-price" type="number" min="0" step="0.01" placeholder="3.50" required>
+                        </div>
+                        <div>
+                            <label for="vc-candy-stock">Stock</label>
+                            <input id="vc-candy-stock" type="number" min="0" step="1" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="vc-button-row">
+                        <button type="submit">Guardar producto</button>
+                        <button type="button" id="vc-candy-reset" class="ghost">Limpiar formulario</button>
+                    </div>
+                </form>
+                <div class="vc-table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Categoria</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vc-candy-body">
+                            <tr><td colspan="6">Sin productos cargados.</td></tr>
                         </tbody>
                     </table>
                 </div>

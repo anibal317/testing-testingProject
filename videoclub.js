@@ -1,6 +1,15 @@
 ﻿document.addEventListener('DOMContentLoaded', function() {
+    const AUTH_STORAGE_KEY = 'vc_auth_session';
+
     const baseUrlInput = document.getElementById('vc-base-url');
     const output = document.getElementById('vc-output');
+    const authForm = document.getElementById('vc-auth-form');
+    const authEmailInput = document.getElementById('vc-auth-email');
+    const authPasswordInput = document.getElementById('vc-auth-password');
+    const registerBtn = document.getElementById('vc-register-btn');
+    const logoutBtn = document.getElementById('vc-logout-btn');
+    const authStatus = document.getElementById('vc-auth-status');
+    const authRoleChip = document.getElementById('vc-auth-role');
     const selectedCustomerPill = document.getElementById('vc-selected-customer-pill');
     const statMovies = document.getElementById('vc-stat-movies');
     const statCustomers = document.getElementById('vc-stat-customers');
@@ -8,6 +17,8 @@
     const statStock = document.getElementById('vc-stat-stock');
 
     const refreshAllBtn = document.getElementById('vc-refresh-all');
+    const healthCheckBtn = document.getElementById('vc-health-check');
+    const apiInfoBtn = document.getElementById('vc-api-info');
     const searchInput = document.getElementById('vc-search');
     const onlyAvailableBtn = document.getElementById('vc-only-available');
     const clearHistoryBtn = document.getElementById('vc-clear-history');
@@ -22,6 +33,25 @@
     const customerPhoneInput = document.getElementById('vc-customer-phone');
     const customerAddressInput = document.getElementById('vc-customer-address');
     const customersBody = document.getElementById('vc-customers-body');
+
+    const userForm = document.getElementById('vc-user-form');
+    const userFormMode = document.getElementById('vc-user-form-mode');
+    const userResetBtn = document.getElementById('vc-user-reset');
+    const userIdInput = document.getElementById('vc-user-id');
+    const userEmailInput = document.getElementById('vc-user-email');
+    const userRoleInput = document.getElementById('vc-user-role');
+    const userPasswordInput = document.getElementById('vc-user-password');
+    const usersBody = document.getElementById('vc-users-body');
+
+    const candyForm = document.getElementById('vc-candy-form');
+    const candyFormMode = document.getElementById('vc-candy-form-mode');
+    const candyResetBtn = document.getElementById('vc-candy-reset');
+    const candyIdInput = document.getElementById('vc-candy-id');
+    const candyNameInput = document.getElementById('vc-candy-name');
+    const candyCategoryInput = document.getElementById('vc-candy-category');
+    const candyPriceInput = document.getElementById('vc-candy-price');
+    const candyStockInput = document.getElementById('vc-candy-stock');
+    const candyBody = document.getElementById('vc-candy-body');
 
     const loadHistoryBtn = document.getElementById('vc-load-history');
     const rentalForm = document.getElementById('vc-rental-form');
@@ -57,11 +87,93 @@
     const state = {
         movies: [],
         customers: [],
+        users: [],
+        candyProducts: [],
         rentals: [],
         onlyAvailable: false,
         selectedCustomerId: '',
-        history: []
+        history: [],
+        auth: {
+            token: '',
+            user: null
+        }
     };
+
+    function hasSession() {
+        return Boolean(state.auth.token);
+    }
+
+    function isAdmin() {
+        return Boolean(state.auth.user && state.auth.user.role === 'admin');
+    }
+
+    function setAuthStatus(message) {
+        if (authStatus) {
+            authStatus.textContent = message;
+        }
+    }
+
+    function saveSession() {
+        const payload = {
+            token: state.auth.token,
+            user: state.auth.user
+        };
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(payload));
+    }
+
+    function clearSession() {
+        state.auth.token = '';
+        state.auth.user = null;
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+    }
+
+    function loadSession() {
+        const raw = localStorage.getItem(AUTH_STORAGE_KEY);
+        if (!raw) {
+            return;
+        }
+
+        const parsed = parseJsonSafe(raw);
+        if (!parsed || !parsed.token || !parsed.user) {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+            return;
+        }
+
+        state.auth.token = parsed.token;
+        state.auth.user = parsed.user;
+    }
+
+    function updateAuthUi() {
+        const loggedIn = hasSession();
+        const role = state.auth.user && state.auth.user.role ? state.auth.user.role : '';
+        document.body.classList.toggle('vc-locked', !loggedIn);
+
+        if (authRoleChip) {
+            authRoleChip.textContent = loggedIn
+                ? `${role.toUpperCase()} activo`
+                : 'Sin sesion';
+        }
+
+        if (!loggedIn) {
+            setAuthStatus('Debes iniciar sesion para consultar y operar el videoclub.');
+            return;
+        }
+
+        const email = state.auth.user && state.auth.user.email ? state.auth.user.email : 'usuario';
+        if (isAdmin()) {
+            setAuthStatus(`Sesion iniciada como admin: ${email}. CRUD y alquileres habilitados.`);
+        } else {
+            setAuthStatus(`Sesion iniciada como client: ${email}. Acceso de solo lectura habilitado.`);
+        }
+    }
+
+    function requireAdminAction() {
+        if (isAdmin()) {
+            return true;
+        }
+        showError('Accion permitida solo para usuarios con rol admin.');
+        return false;
+    }
 
     function getBaseUrl() {
         return baseUrlInput.value.trim().replace(/\/$/, '');
@@ -133,6 +245,26 @@
         };
     }
 
+    function normalizeUser(user) {
+        return {
+            raw: user,
+            id: getId(user, ['id', 'user_id']),
+            email: user.email || '',
+            role: user.role || 'client'
+        };
+    }
+
+    function normalizeCandyProduct(product) {
+        return {
+            raw: product,
+            id: getId(product, ['id', 'product_id']),
+            name: product.name || 'Sin nombre',
+            category: product.category || '',
+            price: product.price !== undefined ? Number(product.price) : 0,
+            stock: product.stock !== undefined ? Number(product.stock) : 0
+        };
+    }
+
     function formatDateInputValue(date) {
         return date.toISOString().slice(0, 10);
     }
@@ -176,6 +308,10 @@
                 'Content-Type': 'application/json'
             }
         };
+
+        if (state.auth.token) {
+            options.headers.Authorization = `Bearer ${state.auth.token}`;
+        }
 
         if (body) {
             options.body = JSON.stringify(body);
@@ -296,11 +432,15 @@
             const stock = normalized.availableCopies;
             const stockLabel = stock > 0 ? `${stock} disponibles` : 'Sin stock';
             const stockClass = stock > 0 ? 'vc-stock-badge' : 'vc-stock-badge out';
-            const disabled = stock > 0 ? '' : ' disabled';
+            const canOperate = isAdmin();
+            const disabled = stock > 0 && canOperate ? '' : ' disabled';
             const director = normalized.director ? `Dir. ${escapeHtml(normalized.director)}` : 'Director no informado';
             const price = normalized.rentalPrice ? `USD ${escapeHtml(String(normalized.rentalPrice))}` : 'Precio pendiente';
+            const actions = canOperate
+                ? `<div class="vc-card-actions"><button type="button" class="vc-rent-button" data-movie-id="${id}"${disabled}>Alquilar</button><button type="button" class="ghost" data-edit-movie="${id}">Editar</button></div>`
+                : '<p class="vc-movie-meta">Sesion client: solo lectura</p>';
 
-            return `<article class="vc-movie-item"><h4>${title}</h4><p class="vc-movie-meta">${director}</p><p class="vc-movie-meta">Genero: ${genre} · ${price}</p><span class="${stockClass}">${stockLabel}</span><div class="vc-card-actions"><button type="button" class="vc-rent-button" data-movie-id="${id}"${disabled}>Alquilar</button><button type="button" class="ghost" data-edit-movie="${id}">Editar</button></div></article>`;
+            return `<article class="vc-movie-item"><h4>${title}</h4><p class="vc-movie-meta">${director}</p><p class="vc-movie-meta">Genero: ${genre} · ${price}</p><span class="${stockClass}">${stockLabel}</span>${actions}</article>`;
         }).join('');
     }
 
@@ -325,7 +465,10 @@
             const normalized = normalizeMovie(movie);
             const copiesLabel = `${normalized.availableCopies}/${normalized.totalCopies}`;
             const priceLabel = normalized.rentalPrice ? `USD ${normalized.rentalPrice}` : '-';
-            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.title)}</td><td>${escapeHtml(normalized.genre)}</td><td>${escapeHtml(copiesLabel)}</td><td>${escapeHtml(priceLabel)}</td><td><div class="vc-card-actions"><button type="button" class="ghost" data-edit-movie="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-movie="${escapeHtml(normalized.id)}">Eliminar</button></div></td></tr>`;
+            const actionCol = isAdmin()
+                ? `<div class="vc-card-actions"><button type="button" class="ghost" data-edit-movie="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-movie="${escapeHtml(normalized.id)}">Eliminar</button></div>`
+                : '<span>Solo lectura</span>';
+            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.title)}</td><td>${escapeHtml(normalized.genre)}</td><td>${escapeHtml(copiesLabel)}</td><td>${escapeHtml(priceLabel)}</td><td>${actionCol}</td></tr>`;
         }).join('');
     }
 
@@ -341,7 +484,56 @@
 
         customersBody.innerHTML = sortedCustomers.map(function(customer) {
             const normalized = normalizeCustomer(customer);
-            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.name)}</td><td>${escapeHtml(normalized.email || 'Sin email')}</td><td>${escapeHtml(normalized.phone || normalized.address || 'Sin telefono')}</td><td><div class="vc-card-actions"><button type="button" class="ghost" data-edit-customer="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-customer="${escapeHtml(normalized.id)}">Eliminar</button></div></td></tr>`;
+            const actionCol = isAdmin()
+                ? `<div class="vc-card-actions"><button type="button" class="ghost" data-edit-customer="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-customer="${escapeHtml(normalized.id)}">Eliminar</button></div>`
+                : '<span>Solo lectura</span>';
+            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.name)}</td><td>${escapeHtml(normalized.email || 'Sin email')}</td><td>${escapeHtml(normalized.phone || normalized.address || 'Sin telefono')}</td><td>${actionCol}</td></tr>`;
+        }).join('');
+    }
+
+    function renderUsersTable() {
+        if (!usersBody) {
+            return;
+        }
+
+        if (!state.users.length) {
+            usersBody.innerHTML = '<tr><td colspan="4">Sin usuarios cargados.</td></tr>';
+            return;
+        }
+
+        const sortedUsers = state.users.slice().sort(function(a, b) {
+            return normalizeUser(a).email.localeCompare(normalizeUser(b).email);
+        });
+
+        usersBody.innerHTML = sortedUsers.map(function(user) {
+            const normalized = normalizeUser(user);
+            const actionCol = isAdmin()
+                ? `<div class="vc-card-actions"><button type="button" class="ghost" data-edit-user="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-user="${escapeHtml(normalized.id)}">Eliminar</button></div>`
+                : '<span>Solo lectura</span>';
+            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.email)}</td><td>${escapeHtml(normalized.role)}</td><td>${actionCol}</td></tr>`;
+        }).join('');
+    }
+
+    function renderCandyTable() {
+        if (!candyBody) {
+            return;
+        }
+
+        if (!state.candyProducts.length) {
+            candyBody.innerHTML = '<tr><td colspan="6">Sin productos cargados.</td></tr>';
+            return;
+        }
+
+        const sortedProducts = state.candyProducts.slice().sort(function(a, b) {
+            return normalizeCandyProduct(a).name.localeCompare(normalizeCandyProduct(b).name);
+        });
+
+        candyBody.innerHTML = sortedProducts.map(function(product) {
+            const normalized = normalizeCandyProduct(product);
+            const actionCol = isAdmin()
+                ? `<div class="vc-card-actions"><button type="button" class="ghost" data-edit-candy="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-candy="${escapeHtml(normalized.id)}">Eliminar</button></div>`
+                : '<span>Solo lectura</span>';
+            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.name)}</td><td>${escapeHtml(normalized.category || '-')}</td><td>${escapeHtml(String(normalized.price))}</td><td>${escapeHtml(String(normalized.stock))}</td><td>${actionCol}</td></tr>`;
         }).join('');
     }
 
@@ -365,7 +557,10 @@
             const movieLabel = movie ? normalizeMovie(movie).title : movieId;
             const dueDate = formatDisplayDate(rental.due_date);
 
-            return `<tr><td>${escapeHtml(id)}</td><td>${escapeHtml(String(customerLabel))}</td><td>${escapeHtml(String(movieLabel))}</td><td>${escapeHtml(dueDate)}</td><td><button type="button" class="danger" data-return-id="${escapeHtml(id)}">Marcar devuelto</button></td></tr>`;
+            const action = isAdmin()
+                ? `<button type="button" class="danger" data-return-id="${escapeHtml(id)}">Marcar devuelto</button>`
+                : '<span>Solo lectura</span>';
+            return `<tr><td>${escapeHtml(id)}</td><td>${escapeHtml(String(customerLabel))}</td><td>${escapeHtml(String(movieLabel))}</td><td>${escapeHtml(dueDate)}</td><td>${action}</td></tr>`;
         }).join('');
     }
 
@@ -428,6 +623,36 @@
         }
     }
 
+    function resetUserForm() {
+        if (userForm) {
+            userForm.reset();
+        }
+        if (userIdInput) {
+            userIdInput.value = '';
+        }
+        if (userFormMode) {
+            userFormMode.textContent = 'Alta';
+        }
+        if (userRoleInput) {
+            userRoleInput.value = 'client';
+        }
+    }
+
+    function resetCandyForm() {
+        if (candyForm) {
+            candyForm.reset();
+        }
+        if (candyIdInput) {
+            candyIdInput.value = '';
+        }
+        if (candyFormMode) {
+            candyFormMode.textContent = 'Alta';
+        }
+        if (candyStockInput) {
+            candyStockInput.value = '0';
+        }
+    }
+
     function fillMovieForm(movieId) {
         const movie = state.movies.find(function(item) {
             return getId(item, ['id', 'movie_id']) === String(movieId);
@@ -482,6 +707,67 @@
         }
         if (customerFormMode) {
             customerFormMode.textContent = `Edicion #${normalized.id}`;
+        }
+    }
+
+    function fillUserForm(userId) {
+        const user = state.users.find(function(item) {
+            return getId(item, ['id', 'user_id']) === String(userId);
+        });
+
+        if (!user) {
+            showError('No se encontro el usuario seleccionado.');
+            return;
+        }
+
+        const normalized = normalizeUser(user);
+        if (userIdInput) {
+            userIdInput.value = normalized.id;
+        }
+        if (userEmailInput) {
+            userEmailInput.value = normalized.email;
+            userEmailInput.focus();
+        }
+        if (userRoleInput) {
+            userRoleInput.value = normalized.role;
+        }
+        if (userPasswordInput) {
+            userPasswordInput.value = '';
+        }
+        if (userFormMode) {
+            userFormMode.textContent = `Edicion #${normalized.id}`;
+        }
+    }
+
+    function fillCandyForm(productId) {
+        const product = state.candyProducts.find(function(item) {
+            return getId(item, ['id', 'product_id']) === String(productId);
+        });
+
+        if (!product) {
+            showError('No se encontro el producto seleccionado.');
+            return;
+        }
+
+        const normalized = normalizeCandyProduct(product);
+        if (candyIdInput) {
+            candyIdInput.value = normalized.id;
+        }
+        if (candyNameInput) {
+            candyNameInput.value = normalized.name;
+            candyNameInput.focus();
+        }
+        if (candyCategoryInput) {
+            candyCategoryInput.value = normalized.category;
+        }
+        if (candyPriceInput) {
+            candyPriceInput.value = String(normalized.price);
+        }
+        if (candyStockInput) {
+            candyStockInput.value = String(normalized.stock);
+        }
+        if (candyFormMode) {
+            candyFormMode.textContent = `Edicion #${normalized.id}`;
         }
     }
 
@@ -561,7 +847,59 @@
         return payload;
     }
 
+    function buildUserPayload() {
+        const email = userEmailInput ? userEmailInput.value.trim() : '';
+        const role = userRoleInput ? userRoleInput.value : 'client';
+        const password = userPasswordInput ? userPasswordInput.value.trim() : '';
+        const userId = userIdInput ? userIdInput.value.trim() : '';
+
+        if (!email) {
+            return null;
+        }
+
+        const payload = {
+            email,
+            role
+        };
+
+        if (!userId && !password) {
+            return null;
+        }
+
+        if (password) {
+            payload.password = password;
+        }
+
+        return payload;
+    }
+
+    function buildCandyPayload() {
+        const name = candyNameInput ? candyNameInput.value.trim() : '';
+        const category = candyCategoryInput ? candyCategoryInput.value.trim() : '';
+        const price = candyPriceInput ? candyPriceInput.value.trim() : '';
+        const stock = candyStockInput ? candyStockInput.value.trim() : '0';
+
+        if (!name || !price) {
+            return null;
+        }
+
+        const payload = {
+            name,
+            price: Number(price),
+            stock: stock === '' ? 0 : Number(stock)
+        };
+
+        if (category) {
+            payload.category = category;
+        }
+
+        return payload;
+    }
+
     async function refreshMovies() {
+        if (!hasSession()) {
+            return;
+        }
         const result = await runRequest('Cargar catalogo', 'GET', '/api/movies');
         const movies = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (movies) {
@@ -573,6 +911,9 @@
     }
 
     async function refreshCustomers() {
+        if (!hasSession()) {
+            return;
+        }
         const result = await runRequest('Cargar clientes', 'GET', '/api/customers');
         const customers = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (customers) {
@@ -588,7 +929,34 @@
         }
     }
 
+    async function refreshUsers() {
+        if (!hasSession()) {
+            return;
+        }
+        const result = await runRequest('Cargar usuarios', 'GET', '/api/users');
+        const users = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (users) {
+            state.users = users;
+            renderUsersTable();
+        }
+    }
+
+    async function refreshCandyBar() {
+        if (!hasSession()) {
+            return;
+        }
+        const result = await runRequest('Cargar candy bar', 'GET', '/api/candy-bar');
+        const products = result && result.ok ? unwrapArrayPayload(result.data) : null;
+        if (products) {
+            state.candyProducts = products;
+            renderCandyTable();
+        }
+    }
+
     async function refreshActiveRentals() {
+        if (!hasSession()) {
+            return;
+        }
         const result = await runRequest('Cargar alquileres activos', 'GET', '/api/rentals/active');
         const rentals = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (rentals) {
@@ -599,10 +967,25 @@
     }
 
     async function refreshAll() {
-        await Promise.all([refreshCustomers(), refreshMovies(), refreshActiveRentals()]);
+        if (!hasSession()) {
+            showOutput({ info: 'Inicia sesion para cargar datos de la API.' });
+            return;
+        }
+        await Promise.all([refreshCustomers(), refreshMovies(), refreshActiveRentals(), refreshUsers(), refreshCandyBar()]);
+    }
+
+    async function runHealthCheck() {
+        await runRequest('Health check', 'GET', '/health');
+    }
+
+    async function runApiInfo() {
+        await runRequest('Info de la API', 'GET', '/api');
     }
 
     async function createRentalForMovie(movieId) {
+        if (!requireAdminAction()) {
+            return;
+        }
         if (!state.selectedCustomerId) {
             showError('Selecciona un cliente antes de alquilar.');
             return;
@@ -624,6 +1007,9 @@
     }
 
     async function returnRental(rentalId) {
+        if (!requireAdminAction()) {
+            return;
+        }
         const result = await runRequest('Registrar devolucion', 'PUT', `/api/rentals/${encodeURIComponent(rentalId)}/return`);
         if (result && result.ok) {
             await refreshMovies();
@@ -650,6 +1036,9 @@
     }
 
     async function submitMovieForm() {
+        if (!requireAdminAction()) {
+            return;
+        }
         const payload = buildMoviePayload();
         const movieId = movieIdInput.value.trim();
 
@@ -669,6 +1058,9 @@
     }
 
     async function submitCustomerForm() {
+        if (!requireAdminAction()) {
+            return;
+        }
         const payload = buildCustomerPayload();
         const customerId = customerIdInput ? customerIdInput.value.trim() : '';
 
@@ -687,7 +1079,56 @@
         }
     }
 
+    async function submitUserForm() {
+        if (!requireAdminAction()) {
+            return;
+        }
+
+        const payload = buildUserPayload();
+        const userId = userIdInput ? userIdInput.value.trim() : '';
+
+        if (!payload) {
+            showError('Para usuarios debes completar email y password al crear.');
+            return;
+        }
+
+        const result = userId
+            ? await runRequest('Actualizar usuario', 'PUT', `/api/users/${encodeURIComponent(userId)}`, payload)
+            : await runRequest('Crear usuario', 'POST', '/api/users', payload);
+
+        if (result && result.ok) {
+            resetUserForm();
+            await refreshUsers();
+        }
+    }
+
+    async function submitCandyForm() {
+        if (!requireAdminAction()) {
+            return;
+        }
+
+        const payload = buildCandyPayload();
+        const productId = candyIdInput ? candyIdInput.value.trim() : '';
+
+        if (!payload) {
+            showError('Completa nombre y precio para guardar el producto.');
+            return;
+        }
+
+        const result = productId
+            ? await runRequest('Actualizar producto', 'PUT', `/api/candy-bar/${encodeURIComponent(productId)}`, payload)
+            : await runRequest('Crear producto', 'POST', '/api/candy-bar', payload);
+
+        if (result && result.ok) {
+            resetCandyForm();
+            await refreshCandyBar();
+        }
+    }
+
     async function deleteMovie(movieId) {
+        if (!requireAdminAction()) {
+            return;
+        }
         if (!window.confirm(`Eliminar la pelicula ${movieId}?`)) {
             return;
         }
@@ -703,6 +1144,9 @@
     }
 
     async function deleteCustomer(customerId) {
+        if (!requireAdminAction()) {
+            return;
+        }
         if (!window.confirm(`Eliminar el cliente ${customerId}?`)) {
             return;
         }
@@ -721,7 +1165,44 @@
         }
     }
 
+    async function deleteUser(userId) {
+        if (!requireAdminAction()) {
+            return;
+        }
+        if (!window.confirm(`Eliminar el usuario ${userId}?`)) {
+            return;
+        }
+
+        const result = await runRequest('Eliminar usuario', 'DELETE', `/api/users/${encodeURIComponent(userId)}`);
+        if (result && result.ok) {
+            if (userIdInput && userIdInput.value === String(userId)) {
+                resetUserForm();
+            }
+            await refreshUsers();
+        }
+    }
+
+    async function deleteCandyProduct(productId) {
+        if (!requireAdminAction()) {
+            return;
+        }
+        if (!window.confirm(`Eliminar el producto ${productId}?`)) {
+            return;
+        }
+
+        const result = await runRequest('Eliminar producto', 'DELETE', `/api/candy-bar/${encodeURIComponent(productId)}`);
+        if (result && result.ok) {
+            if (candyIdInput && candyIdInput.value === String(productId)) {
+                resetCandyForm();
+            }
+            await refreshCandyBar();
+        }
+    }
+
     async function submitRentalForm() {
+        if (!requireAdminAction()) {
+            return;
+        }
         const customerId = rentalCustomerSelect.value || state.selectedCustomerId;
         const movieId = rentalMovieSelect.value;
         const dueDate = rentalDueDateInput.value;
@@ -750,7 +1231,83 @@
         }
     }
 
+    async function loginWithCredentials(email, password) {
+        const result = await runRequest('Iniciar sesion', 'POST', '/api/auth/login', {
+            email,
+            password
+        });
+
+        if (!result || !result.ok || !result.data || !result.data.token || !result.data.user) {
+            return false;
+        }
+
+        state.auth.token = result.data.token;
+        state.auth.user = result.data.user;
+        saveSession();
+        updateAuthUi();
+        await refreshAll();
+        return true;
+    }
+
+    async function registerAndLogin() {
+        const email = authEmailInput ? authEmailInput.value.trim() : '';
+        const password = authPasswordInput ? authPasswordInput.value : '';
+
+        if (!email || !password) {
+            showError('Completa correo y contrasena para registrarte.');
+            return;
+        }
+
+        const registerResult = await runRequest('Registrar usuario', 'POST', '/api/auth/register', {
+            email,
+            password,
+            role: 'client'
+        });
+
+        if (!registerResult || !registerResult.ok) {
+            return;
+        }
+
+        await loginWithCredentials(email, password);
+    }
+
+    async function submitLogin(event) {
+        event.preventDefault();
+
+        const email = authEmailInput ? authEmailInput.value.trim() : '';
+        const password = authPasswordInput ? authPasswordInput.value : '';
+
+        if (!email || !password) {
+            showError('Completa correo y contrasena para iniciar sesion.');
+            return;
+        }
+
+        await loginWithCredentials(email, password);
+    }
+
+    function logout() {
+        clearSession();
+        state.movies = [];
+        state.customers = [];
+        state.users = [];
+        state.candyProducts = [];
+        state.rentals = [];
+        state.selectedCustomerId = '';
+        clearHistory();
+        renderMovies();
+        renderMoviesTable();
+        renderCustomersTable();
+        renderUsersTable();
+        renderCandyTable();
+        renderRentals();
+        updateStats();
+        updateAuthUi();
+        showOutput({ info: 'Sesion cerrada.' });
+    }
+
     bindEvent(refreshAllBtn, 'click', refreshAll);
+    bindEvent(healthCheckBtn, 'click', runHealthCheck);
+    bindEvent(apiInfoBtn, 'click', runApiInfo);
 
     bindEvent(customerSelect, 'change', function() {
         state.selectedCustomerId = customerSelect.value;
@@ -766,6 +1323,20 @@
     });
 
     bindEvent(customerResetBtn, 'click', resetCustomerForm);
+
+    bindEvent(userForm, 'submit', async function(event) {
+        event.preventDefault();
+        await submitUserForm();
+    });
+
+    bindEvent(userResetBtn, 'click', resetUserForm);
+
+    bindEvent(candyForm, 'submit', async function(event) {
+        event.preventDefault();
+        await submitCandyForm();
+    });
+
+    bindEvent(candyResetBtn, 'click', resetCandyForm);
 
     bindEvent(movieForm, 'submit', async function(event) {
         event.preventDefault();
@@ -850,6 +1421,44 @@
         }
     });
 
+    bindEvent(usersBody, 'click', function(event) {
+        const editButton = event.target.closest('[data-edit-user]');
+        if (editButton) {
+            const userId = editButton.getAttribute('data-edit-user');
+            if (userId) {
+                fillUserForm(userId);
+            }
+            return;
+        }
+
+        const deleteButton = event.target.closest('[data-delete-user]');
+        if (deleteButton) {
+            const userId = deleteButton.getAttribute('data-delete-user');
+            if (userId) {
+                deleteUser(userId);
+            }
+        }
+    });
+
+    bindEvent(candyBody, 'click', function(event) {
+        const editButton = event.target.closest('[data-edit-candy]');
+        if (editButton) {
+            const productId = editButton.getAttribute('data-edit-candy');
+            if (productId) {
+                fillCandyForm(productId);
+            }
+            return;
+        }
+
+        const deleteButton = event.target.closest('[data-delete-candy]');
+        if (deleteButton) {
+            const productId = deleteButton.getAttribute('data-delete-candy');
+            if (productId) {
+                deleteCandyProduct(productId);
+            }
+        }
+    });
+
     bindEvent(rentalsBody, 'click', function(event) {
         const button = event.target.closest('[data-return-id]');
         if (!button) {
@@ -864,12 +1473,25 @@
 
     bindEvent(loadHistoryBtn, 'click', loadCustomerHistory);
     bindEvent(clearHistoryBtn, 'click', clearHistory);
+    bindEvent(authForm, 'submit', submitLogin);
+    bindEvent(registerBtn, 'click', registerAndLogin);
+    bindEvent(logoutBtn, 'click', logout);
 
     resetMovieForm();
     resetCustomerForm();
+    resetUserForm();
+    resetCandyForm();
     if (rentalDueDateInput) {
         rentalDueDateInput.value = getDefaultDueDate();
     }
     clearHistory();
-    refreshAll();
+    renderUsersTable();
+    renderCandyTable();
+    loadSession();
+    updateAuthUi();
+    if (hasSession()) {
+        refreshAll();
+    } else {
+        showOutput({ info: 'Inicia sesion para cargar datos de la API.' });
+    }
 });
