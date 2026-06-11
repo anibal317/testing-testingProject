@@ -1014,7 +1014,18 @@
 
     async function refreshAll() {
         if (!hasSession()) {
-            showOutput({ info: 'Inicia sesion para cargar datos de la API.' });
+            const publicChecks = await Promise.all([
+                apiRequest('GET', '/health'),
+                apiRequest('GET', '/api')
+            ]);
+
+            showOutput({
+                info: 'Sin sesion: se muestran endpoints publicos.',
+                checks: {
+                    health: publicChecks[0],
+                    api: publicChecks[1]
+                }
+            });
             return;
         }
 
