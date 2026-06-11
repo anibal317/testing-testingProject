@@ -1013,17 +1013,29 @@
     }
 
     async function refreshAll() {
+        console.info('[VideoClub] Click en Actualizar datos');
+
         if (!hasSession()) {
-            const publicChecks = await Promise.all([
+            showOutput({ loading: 'GET /health + GET /api', info: 'Sin sesion: ejecutando checks publicos.' });
+
+            const publicChecks = await Promise.allSettled([
                 apiRequest('GET', '/health'),
                 apiRequest('GET', '/api')
             ]);
 
+            const healthResult = publicChecks[0].status === 'fulfilled'
+                ? publicChecks[0].value
+                : { ok: false, error: publicChecks[0].reason ? publicChecks[0].reason.message : 'Error en /health' };
+
+            const apiResult = publicChecks[1].status === 'fulfilled'
+                ? publicChecks[1].value
+                : { ok: false, error: publicChecks[1].reason ? publicChecks[1].reason.message : 'Error en /api' };
+
             showOutput({
-                info: 'Sin sesion: se muestran endpoints publicos.',
+                info: 'Sin sesion: resultado de endpoints publicos.',
                 checks: {
-                    health: publicChecks[0],
-                    api: publicChecks[1]
+                    health: healthResult,
+                    api: apiResult
                 }
             });
             return;
@@ -1053,7 +1065,14 @@
         }
 
         if (tasks.length) {
-            await Promise.all(tasks);
+            try {
+                await Promise.all(tasks);
+                console.info('[VideoClub] Actualizacion completada');
+            } catch (error) {
+                showOutput({ error: error.message || 'Error durante la actualizacion.' });
+            }
+        } else {
+            showOutput({ info: 'No hay modulos para actualizar en esta vista.' });
         }
     }
 
