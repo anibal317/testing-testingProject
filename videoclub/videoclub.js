@@ -1,5 +1,6 @@
 ﻿document.addEventListener('DOMContentLoaded', function() {
     const AUTH_STORAGE_KEY = 'vc_auth_session';
+    const HUB_PAGE = 'videoclub.html';
 
     const baseUrlInput = document.getElementById('vc-base-url');
     const output = document.getElementById('vc-output');
@@ -101,6 +102,47 @@
 
     function hasSession() {
         return Boolean(state.auth.token);
+    }
+
+    function getCurrentPageName() {
+        const path = window.location.pathname || '';
+        const parts = path.split('/').filter(Boolean);
+        return parts.length ? parts[parts.length - 1] : HUB_PAGE;
+    }
+
+    function sanitizeNextPage(nextPage) {
+        if (!nextPage) {
+            return '';
+        }
+
+        const validPages = [
+            'videoclub.html',
+            'videoclub-movies.html',
+            'videoclub-customers.html',
+            'videoclub-rentals.html',
+            'videoclub-users.html',
+            'videoclub-candybar.html'
+        ];
+
+        return validPages.includes(nextPage) ? nextPage : '';
+    }
+
+    function getNextPageFromQuery() {
+        const params = new URLSearchParams(window.location.search);
+        return sanitizeNextPage(params.get('next') || '');
+    }
+
+    function enforceProtectedRoute() {
+        const currentPage = getCurrentPageName();
+        const isHub = currentPage === HUB_PAGE;
+
+        if (!hasSession() && !isHub) {
+            const loginUrl = `./${HUB_PAGE}?next=${encodeURIComponent(currentPage)}`;
+            window.location.replace(loginUrl);
+            return true;
+        }
+
+        return false;
     }
 
     function isAdmin() {
@@ -1354,6 +1396,13 @@
         saveSession();
         updateAuthUi();
         await refreshAll();
+
+        const nextPage = getNextPageFromQuery();
+        if (nextPage && nextPage !== HUB_PAGE) {
+            window.location.replace(`./${nextPage}`);
+            return true;
+        }
+
         return true;
     }
 
@@ -1596,6 +1645,11 @@
     renderUsersTable();
     renderCandyTable();
     loadSession();
+
+    if (enforceProtectedRoute()) {
+        return;
+    }
+
     updateAuthUi();
     if (hasSession()) {
         refreshAll();
