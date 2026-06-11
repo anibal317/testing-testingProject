@@ -3,13 +3,18 @@
 :root {
     --bg-main: #f4f8fb;
     --bg-surface: rgba(255, 255, 255, 0.88);
+    --bg-surface-solid: #ffffff;
     --bg-accent: #0f3a45;
     --bg-accent-soft: #156d7f;
     --bg-danger: #a2261d;
     --text-main: #132732;
+    --text-muted: #4b6671;
     --text-light: #f7fdff;
     --line: #c8dbe1;
+    --line-strong: #9bb9c2;
     --shadow: 0 18px 45px rgba(19, 39, 50, 0.14);
+    --shadow-soft: 0 8px 20px rgba(19, 39, 50, 0.1);
+    --ring: 0 0 0 3px rgba(21, 109, 127, 0.18);
 }
 
 * {
@@ -76,7 +81,7 @@ body {
 .vc-main {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem 1rem 3rem;
+    padding: 2.2rem 1rem 3.2rem;
 }
 
 .vc-module-nav {
@@ -91,11 +96,13 @@ body {
     align-items: center;
     border-radius: 999px;
     padding: 0.42rem 0.82rem;
-    border: 1px solid #97b7c1;
+    border: 1px solid var(--line-strong);
     color: #0f3a45;
     text-decoration: none;
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.82);
     font-size: 0.9rem;
+    font-weight: 500;
+    transition: transform 140ms ease, background 140ms ease, color 140ms ease;
 }
 
 .vc-module-nav a.active,
@@ -103,6 +110,7 @@ body {
     background: #0f3a45;
     color: #f7fdff;
     border-color: #0f3a45;
+    transform: translateY(-1px);
 }
 
 .vc-link-button {
@@ -115,23 +123,27 @@ body {
     background: var(--bg-accent);
     color: var(--text-light);
     text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    transition: background 140ms ease, transform 140ms ease;
 }
 
 .vc-link-button:hover {
     background: var(--bg-accent-soft);
+    transform: translateY(-1px);
 }
 
 .vc-subtitle {
     margin: 0.2rem 0 0;
-    color: #45606b;
+    color: var(--text-muted);
     font-size: 0.94rem;
+    line-height: 1.5;
 }
 
 .vc-hero {
     background: linear-gradient(120deg, #0d4452 0%, #1c7988 55%, #e38c27 100%);
     color: var(--text-light);
-    border-radius: 18px;
-    padding: 1.6rem;
+    border-radius: 20px;
+    padding: 1.8rem;
     box-shadow: var(--shadow);
     animation: rise 650ms ease both;
 }
@@ -145,6 +157,7 @@ body {
 
 .vc-hero h1 {
     margin: 0.35rem 0 0.6rem;
+    letter-spacing: 0.01em;
 }
 
 .vc-hero-actions {
@@ -160,8 +173,9 @@ body {
     align-items: center;
     border-radius: 999px;
     padding: 0.45rem 0.8rem;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.24);
     font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .vc-layout,
@@ -190,15 +204,17 @@ body {
 
 .vc-card {
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     background: var(--bg-surface);
     box-shadow: var(--shadow);
-    padding: 1rem;
+    padding: 1.1rem;
     animation: rise 700ms ease both;
+    backdrop-filter: blur(3px);
 }
 
 .vc-control-card {
     grid-column: 1 / -1;
+    border-left: 4px solid #1a7888;
 }
 
 .vc-auth-card {
@@ -207,8 +223,9 @@ body {
 
 .vc-auth-status {
     margin: 0.8rem 0 0;
-    color: #355562;
+    color: var(--text-muted);
     font-size: 0.93rem;
+    line-height: 1.45;
 }
 
 body.vc-locked .vc-stats-grid,
@@ -220,7 +237,7 @@ body.vc-locked .vc-response-card {
 
 .vc-stat-card {
     border-radius: 16px;
-    padding: 1.1rem;
+    padding: 1.2rem;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(229, 241, 244, 0.92));
     border: 1px solid rgba(15, 58, 69, 0.1);
     box-shadow: var(--shadow);
@@ -258,7 +275,7 @@ body.vc-locked .vc-response-card {
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
-    margin-bottom: 0.9rem;
+    margin-bottom: 1rem;
 }
 
 .vc-section-chip {
@@ -272,6 +289,7 @@ body.vc-locked .vc-response-card {
     font-size: 0.8rem;
     font-weight: 600;
     white-space: nowrap;
+    border: 1px solid rgba(21, 109, 127, 0.2);
 }
 
 label {
@@ -286,9 +304,24 @@ textarea,
 button {
     width: 100%;
     border-radius: 10px;
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-strong);
     padding: 0.65rem 0.7rem;
     font: inherit;
+}
+
+input,
+select,
+textarea {
+    background: var(--bg-surface-solid);
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--bg-accent-soft);
+    box-shadow: var(--ring);
 }
 
 textarea {
@@ -301,7 +334,9 @@ button {
     background: var(--bg-accent);
     color: var(--text-light);
     cursor: pointer;
-    transition: transform 150ms ease, background 150ms ease;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: transform 150ms ease, background 150ms ease, opacity 150ms ease;
 }
 
 button:hover {
@@ -315,6 +350,12 @@ button.ghost {
 
 button.danger {
     background: var(--bg-danger);
+}
+
+button:disabled {
+    opacity: 0.58;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .vc-button-row {
@@ -332,7 +373,7 @@ button.danger {
 
 .vc-stack-form {
     display: grid;
-    gap: 0.8rem;
+    gap: 0.9rem;
 }
 
 .vc-inline-form {
@@ -360,7 +401,7 @@ button.danger {
     display: grid;
     grid-template-columns: 1fr auto;
     gap: 0.55rem;
-    margin-bottom: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 .vc-movie-grid {
@@ -371,9 +412,10 @@ button.danger {
 
 .vc-movie-item {
     border: 1px solid var(--line);
-    border-radius: 10px;
+    border-radius: 12px;
     background: linear-gradient(180deg, #ffffff 0%, #f5fafb 100%);
-    padding: 0.7rem;
+    padding: 0.85rem;
+    box-shadow: var(--shadow-soft);
 }
 
 .vc-movie-item h4 {
@@ -382,7 +424,7 @@ button.danger {
 
 .vc-movie-meta {
     font-size: 0.9rem;
-    color: #325361;
+    color: var(--text-muted);
     margin-bottom: 0.7rem;
 }
 
@@ -418,7 +460,7 @@ button.danger {
 
 .vc-placeholder {
     margin: 0;
-    color: #4f6570;
+    color: var(--text-muted);
 }
 
 .vc-table-wrap {
@@ -429,18 +471,32 @@ table {
     width: 100%;
     border-collapse: collapse;
     font-size: 0.95rem;
+    background: rgba(255, 255, 255, 0.68);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+thead {
+    background: rgba(15, 58, 69, 0.08);
 }
 
 th,
 td {
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid rgba(155, 185, 194, 0.55);
     text-align: left;
-    padding: 0.55rem;
+    padding: 0.68rem;
     vertical-align: top;
 }
 
+th {
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #214550;
+}
+
 tbody tr:hover {
-    background: rgba(21, 109, 127, 0.05);
+    background: rgba(21, 109, 127, 0.08);
 }
 
 .vc-response-card {
@@ -449,14 +505,14 @@ tbody tr:hover {
 
 #vc-output {
     margin: 0;
-    border-radius: 10px;
+    border-radius: 12px;
     background: #10181f;
     color: #ebf5ff;
-    border: 1px solid #27343f;
+    border: 1px solid #2e404d;
     font-family: 'IBM Plex Mono', Consolas, monospace;
     font-size: 0.86rem;
     padding: 1rem;
-    max-height: 320px;
+    max-height: 360px;
     overflow: auto;
 }
 
