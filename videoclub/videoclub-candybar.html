@@ -6,10 +6,10 @@
     <title>Video Club - Candy Bar</title>
     <link rel="stylesheet" href="videoclub.css">
 </head>
-<body>
-    <header class="vc-header">
-        <nav class="vc-nav">
-            <a href="../index.html" class="vc-logo">TechInfo Hub</a>
+<body data-page="videoclub-candybar" data-testid="page-videoclub-candybar">
+    <header class="vc-header" data-testid="vc-header">
+        <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
+            <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
             <ul>
                 <li><a href="videoclub.html">Video Club</a></li>
                 <li><a href="videoclub-candybar.html" class="active">Candy Bar</a></li>
@@ -17,8 +17,8 @@
         </nav>
     </header>
 
-    <main class="vc-main">
-        <section class="vc-module-nav">
+    <main class="vc-main" data-testid="vc-main-content">
+        <section class="vc-module-nav" data-testid="vc-module-nav">
             <a href="videoclub.html">Resumen</a>
             <a href="videoclub-movies.html">Peliculas</a>
             <a href="videoclub-customers.html">Clientes</a>
@@ -27,15 +27,15 @@
             <a href="videoclub-candybar.html" class="active">Candy Bar</a>
         </section>
 
-        <section class="vc-card vc-control-card">
+        <section class="vc-card vc-control-card" data-testid="vc-control-card">
             <div class="vc-two-column-form">
                 <div>
                     <label for="vc-base-url">Base URL</label>
-                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
             </div>
             <div class="vc-button-row">
-                <button type="button" id="vc-refresh-all">Actualizar datos</button>
+                <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
             </div>
         </section>
 

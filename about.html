@@ -6,11 +6,11 @@
     <title>TechInfo Hub - About</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
+<body data-page="about" data-testid="page-about">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
                 <li><a href="articles.html">Articles</a></li>
                 <li><a href="about.html" class="active">About</a></li>
                 <li><a href="products.html">Products</a></li>
@@ -21,29 +21,29 @@
         </nav>
     </header>
 
-    <main>
-        <h1>About TechInfo Hub</h1>
-        <section class="about-content">
-            <p>TechInfo Hub is your go-to source for the latest technology news, insights, and analysis. Our team of expert writers and researchers are dedicated to bringing you accurate and up-to-date information on the ever-evolving world of technology.</p>
+    <main data-testid="main-content">
+        <h1 data-testid="page-title">About TechInfo Hub</h1>
+        <section class="about-content" data-testid="about-content">
+            <p data-testid="about-intro">TechInfo Hub is your go-to source for the latest technology news, insights, and analysis. Our team of expert writers and researchers are dedicated to bringing you accurate and up-to-date information on the ever-evolving world of technology.</p>
             <p>Founded in 2020, we strive to make complex technological concepts accessible to everyone, from tech enthusiasts to casual readers. Our mission is to educate, inform, and inspire our audience about the latest advancements in the tech industry.</p>
-            <h2>Our Team</h2>
-            <ul class="team-list">
-                <li>
+            <h2 data-testid="team-heading">Our Team</h2>
+            <ul class="team-list" data-testid="team-list">
+                <li data-testid="team-member-jane">
                     <h3>Jane Doe</h3>
                     <p>Founder & Editor-in-Chief</p>
                 </li>
-                <li>
+                <li data-testid="team-member-john">
                     <h3>John Smith</h3>
                     <p>Senior Tech Writer</p>
                 </li>
-                <li>
+                <li data-testid="team-member-emily">
                     <h3>Emily Johnson</h3>
                     <p>AI & Machine Learning Specialist</p>
                 </li>
             </ul>
         </section>
         
-        <div class="overflow-content">
+        <div class="overflow-content" data-testid="overflow-content">
             <p>Este es un texto muy largo que no se ajusta correctamente al contenedor y puede causar problemas de diseño en dispositivos móviles. Debería tener un desbordamiento horizontal en pantallas pequeñas.</p>
         </div>
     </main>

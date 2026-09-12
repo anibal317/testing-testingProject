@@ -6,11 +6,11 @@
     <title>TechInfo Hub - Blog</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
+<body data-page="blog" data-testid="page-blog">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
                 <li><a href="articles.html">Articles</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="products.html">Products</a></li>
@@ -21,32 +21,32 @@
         </nav>
     </header>
 
-    <main>
-        <h1>TechInfo Hub Blog</h1>
-        <section class="blog-posts">
-            <article class="blog-post">
+    <main data-testid="main-content">
+        <h1 data-testid="page-title">TechInfo Hub Blog</h1>
+        <section class="blog-posts" data-testid="blog-posts">
+            <article class="blog-post" data-testid="blog-post-ai">
                 <h2>The Future of Artificial Intelligence</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-15">May 15, 2023</time> by John Doe</p>
                 <p>Artificial Intelligence is rapidly evolving, transforming industries and our daily lives...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-ai-post">Read More</a>
             </article>
-            <article class="blog-post">
+            <article class="blog-post" data-testid="blog-post-5g">
                 <h2>5G Technology: A Game Changer</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-10">May 10, 2023</time> by Jane Smith</p>
                 <p>5G is set to revolutionize mobile connectivity, offering unprecedented speeds and low latency...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-5g-post">Read More</a>
             </article>
-            <article class="blog-post">
+            <article class="blog-post" data-testid="blog-post-cybersecurity">
                 <h2>Cybersecurity in the Age of IoT</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-05">May 5, 2023</time> by Mike Johnson</p>
                 <p>As IoT devices become more prevalent, the need for robust cybersecurity measures increases...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-cybersecurity-post">Read More</a>
             </article>
         </section>
-        <div class="blog-pagination">
-            <button id="prev-page" disabled>Previous</button>
-            <span id="current-page">Page 1</span>
-            <button id="next-page">Next</button>
+        <div class="blog-pagination" data-testid="blog-pagination">
+            <button id="prev-page" disabled data-testid="prev-page-button">Previous</button>
+            <span id="current-page" data-testid="current-page">Page 1</span>
+            <button id="next-page" data-testid="next-page-button">Next</button>
         </div>
     </main>
 

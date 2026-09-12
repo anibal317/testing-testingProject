@@ -6,11 +6,11 @@
     <title>TechInfo Hub - Home</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html" class="active">Home</a></li>
+<body data-page="home" data-testid="page-home">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" class="active" data-testid="nav-home-link">Home</a></li>
                 <li><a href="articles.html">Articles</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="products.html">Products</a></li>
@@ -18,41 +18,41 @@
                 <li><a href="videoclub/videoclub.html">Video Club</a></li>
                 <li><a href="blog.html">Blog</a></li>
             </ul>
-            <form id="search-form" class="search-form">
-                <input type="text" placeholder="Buscar...">
-                <button type="submit">Buscar</button>
+            <form id="search-form" class="search-form" data-testid="search-form" data-qa="search-form">
+                <input type="text" placeholder="Buscar..." data-testid="search-input" aria-label="Buscar">
+                <button type="submit" data-testid="search-submit">Buscar</button>
             </form>
         </nav>
     </header>
 
-    <main>
-        <section class="hero">
-            <h1>Welcome to TechInfo Hub</h1>
-            <p>Your source for the latest in technology news and insights</p>
+    <main data-testid="main-content">
+        <section class="hero" data-testid="hero-section" data-qa="home-hero">
+            <h1 data-testid="page-title">Welcome to TechInfo Hub</h1>
+            <p data-testid="hero-subtitle">Your source for the latest in technology news and insights</p>
         </section>
 
-        <section class="featured-articles">
+        <section class="featured-articles" data-testid="featured-articles-section">
             <h2>Featured Articles</h2>
-            <div class="article-grid">
-                <article>
+            <div class="article-grid" data-testid="article-grid">
+                <article data-testid="article-card-ai">
                     <h3>The Rise of AI in Everyday Life</h3>
                     <p>Explore how artificial intelligence is changing our daily routines...</p>
-                    <a href="#" class="read-more">Read More</a>
+                    <a href="#" class="read-more" data-testid="read-more-ai">Read More</a>
                 </article>
-                <article>
+                <article data-testid="article-card-5g">
                     <h3>5G Revolution: What You Need to Know</h3>
                     <p>Discover the impact of 5G technology on communication and beyond...</p>
-                    <a href="#" class="read-more">Read More</a>
+                    <a href="#" class="read-more" data-testid="read-more-5g">Read More</a>
                 </article>
-                <article>
+                <article data-testid="article-card-cybersecurity">
                     <h3>Cybersecurity in the Age of Remote Work</h3>
                     <p>Learn about the challenges and solutions in securing remote workforces...</p>
-                    <a href="#" class="read-more">Read More</a>
+                    <a href="#" class="read-more" data-testid="read-more-cybersecurity">Read More</a>
                 </article>
             </div>
         </section>
 
-        <section class="tech-trends">
+        <section class="tech-trends" data-testid="tech-trends-section">
             <h2>Tendencias Tecnológicas</h2>
             <ul>
                 <li>Inteligencia Artificial</li>
@@ -62,28 +62,28 @@
             </ul>
         </section>
 
-        <section class="backend-section">
+        <section class="backend-section" data-testid="videoclub-cta">
             <h2>Video Club</h2>
             <p>La gestion de peliculas, clientes y alquileres ahora vive en su propia pantalla dedicada.</p>
-            <a href="videoclub/videoclub.html" class="read-more">Abrir Seccion Video Club</a>
+            <a href="videoclub/videoclub.html" class="read-more" data-testid="videoclub-link">Abrir Seccion Video Club</a>
         </section>
 
-        <section class="newsletter">
+        <section class="newsletter" data-testid="newsletter-section">
             <h2>Subscribe to Our Newsletter</h2>
-            <form id="newsletter-form">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
+            <form id="newsletter-form" data-testid="newsletter-form" data-qa="newsletter-form">
+                <input type="email" placeholder="Enter your email" required data-testid="newsletter-email" aria-label="Email para newsletter">
+                <button type="submit" data-testid="newsletter-submit">Subscribe</button>
             </form>
         </section>
     </main>
 
-    <footer>
+    <footer data-testid="footer-main">
         <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
-        <a href="#" id="broken-link">Política de Privacidad</a>
-        <a href="#" id="contact-link">Contact Us</a>
+        <a href="#" id="broken-link" data-testid="privacy-link">Política de Privacidad</a>
+        <a href="#" id="contact-link" data-testid="contact-link">Contact Us</a>
     </footer>
 
-    <div id="contact-modal" class="modal">
+    <div id="contact-modal" class="modal" data-testid="contact-modal" data-qa="contact-modal">
         <div class="modal-content">
             <span class="close">&times;</span>
             <h2>Contact Us</h2>

@@ -6,11 +6,11 @@
     <title>TechInfo Hub - Articles</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
+<body data-page="articles" data-testid="page-articles">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
                 <li><a href="articles.html" class="active">Articles</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="products.html">Products</a></li>
@@ -21,35 +21,35 @@
         </nav>
     </header>
 
-    <main>
-        <h1>Latest Articles</h1>
-        <section class="article-list">
-            <article>
+    <main data-testid="main-content">
+        <h1 data-testid="page-title">Latest Articles</h1>
+        <section class="article-list" data-testid="article-list">
+            <article data-testid="article-item-quantum">
                 <h2>The Future of Quantum Computing</h2>
-                <img src="tech-image.jpg" class="article-image">
+                <img src="tech-image.jpg" class="article-image" data-testid="article-image-quantum">
                 <p>Delve into the potential of quantum computing and its impact on various industries...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-quantum">Read More</a>
             </article>
-            <article>
+            <article data-testid="article-item-blockchain">
                 <h2>Blockchain Beyond Cryptocurrency</h2>
-                <img src="tech-image.jpg" class="article-image">
+                <img src="tech-image.jpg" class="article-image" data-testid="article-image-blockchain">
                 <p>Explore the diverse applications of blockchain technology in different sectors...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-blockchain">Read More</a>
             </article>
-            <article>
+            <article data-testid="article-item-ai-ethics">
                 <h2>The Ethics of AI Development</h2>
-                <img src="tech-image.jpg" class="article-image">
+                <img src="tech-image.jpg" class="article-image" data-testid="article-image-ai-ethics">
                 <p>Examine the ethical considerations surrounding artificial intelligence and its advancement...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-ai-ethics">Read More</a>
             </article>
-            <article>
+            <article data-testid="article-item-sustainable-tech">
                 <h2>Sustainable Tech: Green Innovations</h2>
-                <img src="tech-image.jpg" class="article-image">
+                <img src="tech-image.jpg" class="article-image" data-testid="article-image-sustainable-tech">
                 <p>Discover how technology is contributing to environmental sustainability...</p>
-                <a href="#" class="read-more">Read More</a>
+                <a href="#" class="read-more" data-testid="read-more-sustainable-tech">Read More</a>
             </article>
         </section>
-        <button class="low-contrast-button">Cargar más artículos</button>
+        <button class="low-contrast-button" data-testid="load-more-articles">Cargar más artículos</button>
     </main>
 
     <footer>

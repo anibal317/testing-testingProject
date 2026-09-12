@@ -6,10 +6,10 @@
     <title>TechInfo Hub - Video Club</title>
     <link rel="stylesheet" href="videoclub.css">
 </head>
-<body>
-    <header class="vc-header">
-        <nav class="vc-nav">
-            <a href="../index.html" class="vc-logo">TechInfo Hub</a>
+<body data-page="videoclub-home" data-testid="page-videoclub-home">
+    <header class="vc-header" data-testid="vc-header">
+        <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
+            <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
             <ul>
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../articles.html">Articles</a></li>
@@ -22,18 +22,18 @@
         </nav>
     </header>
 
-    <main class="vc-main">
-        <section class="vc-hero">
-            <p class="vc-kicker">Video Club API</p>
-            <h1>Panel modular del videoclub</h1>
+    <main class="vc-main" data-testid="vc-main-content">
+        <section class="vc-hero" data-testid="vc-hero">
+            <p class="vc-kicker" data-testid="vc-kicker">Video Club API</p>
+            <h1 data-testid="vc-page-title">Panel modular del videoclub</h1>
             <p>La gestion se divide en pantallas independientes para operar cada dominio por separado.</p>
-            <div class="vc-hero-actions">
-                <button type="button" id="vc-refresh-all">Actualizar resumen</button>
-                <span id="vc-auth-role" class="vc-pill">Sin sesion</span>
+            <div class="vc-hero-actions" data-testid="vc-hero-actions">
+                <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar resumen</button>
+                <span id="vc-auth-role" class="vc-pill" data-testid="vc-auth-role">Sin sesion</span>
             </div>
         </section>
 
-        <section class="vc-module-nav">
+        <section class="vc-module-nav" data-testid="vc-module-nav">
             <a href="videoclub.html" class="active">Resumen</a>
             <a href="videoclub-movies.html">Peliculas</a>
             <a href="videoclub-customers.html">Clientes</a>
@@ -42,32 +42,32 @@
             <a href="videoclub-candybar.html">Candy Bar</a>
         </section>
 
-        <section class="vc-card vc-auth-card">
+        <section class="vc-card vc-auth-card" data-testid="vc-auth-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>Acceso</h2>
-                    <p class="vc-subtitle">Autenticacion central para todas las paginas del videoclub.</p>
+                    <h2 data-testid="vc-auth-title">Acceso</h2>
+                    <p class="vc-subtitle" data-testid="vc-auth-subtitle">Autenticacion central para todas las paginas del videoclub.</p>
                 </div>
-                <span class="vc-section-chip">Sesion</span>
+                <span class="vc-section-chip" data-testid="vc-auth-chip">Sesion</span>
             </div>
-            <form id="vc-auth-form" class="vc-stack-form">
+            <form id="vc-auth-form" class="vc-stack-form" data-testid="vc-auth-form">
                 <div class="vc-two-column-form">
                     <div>
                         <label for="vc-auth-email">Correo</label>
-                        <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" required>
+                        <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" required data-testid="vc-auth-email">
                     </div>
                     <div>
                         <label for="vc-auth-password">Contrasena</label>
-                        <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" required>
+                        <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" required data-testid="vc-auth-password">
                     </div>
                 </div>
                 <div class="vc-button-row">
-                    <button type="submit">Iniciar sesion</button>
-                    <button type="button" id="vc-register-btn" class="ghost">Registrar y entrar</button>
-                    <button type="button" id="vc-logout-btn" class="danger">Cerrar sesion</button>
+                    <button type="submit" data-testid="vc-auth-submit">Iniciar sesion</button>
+                    <button type="button" id="vc-register-btn" class="ghost" data-testid="vc-register-btn">Registrar y entrar</button>
+                    <button type="button" id="vc-logout-btn" class="danger" data-testid="vc-logout-btn">Cerrar sesion</button>
                 </div>
             </form>
-            <p id="vc-auth-status" class="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
+            <p id="vc-auth-status" class="vc-auth-status" data-testid="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
         </section>
 
         <section class="vc-card vc-control-card">

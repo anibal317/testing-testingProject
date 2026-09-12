@@ -6,11 +6,11 @@
     <title>TechInfo Hub - Services</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
+<body data-page="services" data-testid="page-services">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
                 <li><a href="articles.html">Articles</a></li>
                 <li><a href="about.html">About</a></li>
                 <li><a href="products.html">Products</a></li>
@@ -21,37 +21,37 @@
         </nav>
     </header>
 
-    <main>
-        <h1>Our Services</h1>
-        <section class="services-list">
-            <div class="service-item">
+    <main data-testid="main-content">
+        <h1 data-testid="page-title">Our Services</h1>
+        <section class="services-list" data-testid="services-list">
+            <div class="service-item" data-testid="service-item-it-consulting">
                 <h2>IT Consulting</h2>
                 <p>Expert advice on your technology infrastructure</p>
-                <a href="#" class="service-link">Learn More</a>
+                <a href="#" class="service-link" data-testid="service-link-it-consulting">Learn More</a>
             </div>
-            <div class="service-item">
+            <div class="service-item" data-testid="service-item-cloud-solutions">
                 <h2>Cloud Solutions</h2>
                 <p>Scalable cloud services for your business needs</p>
-                <a href="#" class="service-link">Learn More</a>
+                <a href="#" class="service-link" data-testid="service-link-cloud-solutions">Learn More</a>
             </div>
-            <div class="service-item">
+            <div class="service-item" data-testid="service-item-cybersecurity">
                 <h2>Cybersecurity</h2>
                 <p>Protect your digital assets with our security solutions</p>
-                <a href="#" class="service-link">Learn More</a>
+                <a href="#" class="service-link" data-testid="service-link-cybersecurity">Learn More</a>
             </div>
         </section>
-        <form id="service-inquiry">
+        <form id="service-inquiry" data-testid="service-inquiry-form" data-qa="service-inquiry-form">
             <h3>Inquire About Our Services</h3>
             <label for="service-select">Select a Service:</label>
-            <select id="service-select" name="service" required>
+            <select id="service-select" name="service" required data-testid="service-select">
                 <option value="">Choose a service</option>
                 <option value="it-consulting">IT Consulting</option>
                 <option value="cloud-solutions">Cloud Solutions</option>
                 <option value="cybersecurity">Cybersecurity</option>
             </select>
             <label for="inquiry-email">Your Email:</label>
-            <input type="email" id="inquiry-email" name="email" required>
-            <button type="submit">Send Inquiry</button>
+            <input type="email" id="inquiry-email" name="email" required data-testid="inquiry-email">
+            <button type="submit" data-testid="service-submit-button">Send Inquiry</button>
         </form>
     </main>
 
