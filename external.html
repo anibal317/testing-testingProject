@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - External</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="external" data-testid="page-external">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
+                <li><a href="articles.html">Articles</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="videoclub/videoclub.html">Video Club</a></li>
+                <li><a href="blog.html">Blog</a></li>
+            </ul>
+            <form id="search-form" class="search-form" data-testid="search-form" data-qa="search-form">
+                <input type="text" placeholder="Buscar..." data-testid="search-input" aria-label="Buscar">
+                <button type="submit" data-testid="search-submit">Buscar</button>
+            </form>
+        </nav>
+    </header>
+
+    <main data-testid="main-content">
+        <section class="hero" data-testid="external-hero">
+            <h1 data-testid="page-title">External Section</h1>
+            <p data-testid="hero-subtitle">This page opens in a separate tab and keeps the same visual identity as the rest of the site.</p>
+        </section>
+
+        <section class="backend-section" data-testid="external-content">
+            <h2>Open in a new tab</h2>
+            <p>This section has been created to demonstrate an external page that can be accessed from the home without leaving the current tab.</p>
+            <div class="video-meta-grid">
+                <div>
+                    <strong>Item</strong>
+                    <p>External page</p>
+                </div>
+                <div>
+                    <strong>Behavior</strong>
+                    <p>Opens in another tab</p>
+                </div>
+                <div>
+                    <strong>Style</strong>
+                    <p>Matches the project design</p>
+                </div>
+            </div>
+            <div class="video-actions-row">
+                <a href="index.html" class="read-more" data-testid="external-back-link">Back to Home</a>
+            </div>
+        </section>
+
+        <section class="newsletter" data-testid="newsletter-section">
+            <h2>Stay Updated</h2>
+            <form id="newsletter-form" data-testid="newsletter-form" data-qa="newsletter-form">
+                <input type="email" placeholder="Enter your email" required data-testid="newsletter-email" aria-label="Email para newsletter">
+                <button type="submit" data-testid="newsletter-submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <footer data-testid="footer-main">
+        <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
+        <a href="#" id="contact-link" data-testid="contact-link">Contact Us</a>
+    </footer>
+
+    <div id="contact-modal" class="modal" data-testid="contact-modal" data-qa="contact-modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Contact Us</h2>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="message">Message:</label>
+                <textarea id="message" name="message" required></textarea>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.12.4.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
