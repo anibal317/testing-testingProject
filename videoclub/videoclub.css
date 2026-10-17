@@ -195,11 +195,103 @@ body {
 }
 
 .vc-layout-main {
-    grid-template-columns: minmax(280px, 0.9fr) minmax(420px, 2fr);
+    grid-template-columns: minmax(320px, 0.85fr) minmax(480px, 1.6fr);
+    align-items: start;
+}
+
+.vc-layout-side {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.vc-layout-main > .vc-card,
+.vc-layout-side > .vc-card {
+    min-width: 0;
 }
 
 .vc-admin-grid {
     grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+}
+
+.vc-nav-list {
+    min-width: 0;
+}
+
+.vc-control-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 0.8rem;
+    align-items: end;
+}
+
+.vc-control-field {
+    min-width: 0;
+}
+
+.vc-control-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    align-items: center;
+}
+
+.vc-control-actions button {
+    width: auto;
+    white-space: nowrap;
+}
+
+.vc-card-footer {
+    margin-top: 0.9rem;
+    padding-top: 0.85rem;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.vc-empty-state {
+    margin-top: 1.1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 14px;
+    border: 1px dashed var(--line-strong);
+    background: rgba(255, 153, 0, 0.08);
+}
+
+.vc-empty-state p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+}
+
+.vc-empty-state p + p {
+    margin-top: 0.3rem;
+}
+
+.vc-empty-state strong {
+    color: var(--text-main);
+}
+
+.vc-readonly-notice {
+    margin: 0 0 1rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    background: rgba(255, 153, 0, 0.1);
+    border: 1px solid rgba(227, 140, 39, 0.4);
+    color: var(--text-main);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.vc-table-caption {
+    caption-side: top;
+    text-align: left;
+    padding: 0 0 0.6rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
 }
 
 .vc-card {
@@ -228,10 +320,119 @@ body {
     line-height: 1.45;
 }
 
+.vc-auth-error {
+    margin: 0;
+    padding: 0.6rem 0.75rem;
+    border-radius: 10px;
+    background: #fde2e0;
+    border: 1px solid #e6a9a4;
+    color: #7c2218;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.vc-auth-footer {
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px dashed var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.vc-auth-footer .vc-auth-status {
+    margin: 0;
+    flex: 1 1 220px;
+}
+
+.vc-auth-session {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.8rem 0.9rem;
+    border-radius: 12px;
+    background: rgba(21, 109, 127, 0.08);
+    border: 1px solid rgba(21, 109, 127, 0.22);
+}
+
+.vc-auth-session-email {
+    font-weight: 600;
+    color: #0d4452;
+    word-break: break-all;
+}
+
+.vc-password-field {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.4rem;
+    align-items: stretch;
+}
+
+.vc-password-field input {
+    min-width: 0;
+}
+
+.vc-password-toggle {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.6rem;
+    line-height: 1;
+    color: #f7fdff;
+}
+
+.vc-password-toggle:hover {
+    color: #f7fdff;
+}
+
+.vc-eye-icon {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Por defecto la contrasena esta oculta: se ve el ojo abierto, sin tachadura. */
+.vc-eye-icon .vc-eye-slash {
+    display: none;
+}
+
+/* Con la contrasena visible se dibuja la linea que tacha el ojo. */
+.vc-password-toggle.is-visible .vc-eye-icon .vc-eye-slash {
+    display: block;
+}
+
+.vc-password-toggle:focus-visible {
+    outline: none;
+    box-shadow: var(--ring);
+}
+
+[hidden] {
+    display: none !important;
+}
+
 body.vc-locked .vc-stats-grid,
 body.vc-locked .vc-layout,
 body.vc-locked .vc-admin-grid,
 body.vc-locked .vc-response-card {
+    opacity: 0.45;
+}
+
+/* En la pagina de peliculas el catalogo es publico: no se atenua.
+   Solo el CRUD (vc-layout-side) queda marcado como bloqueado. */
+body[data-page="videoclub-movies"].vc-locked .vc-layout {
+    opacity: 1;
+}
+
+body.vc-locked .vc-layout-side {
     opacity: 0.45;
 }
 
@@ -256,6 +457,7 @@ body.vc-locked .vc-response-card {
     display: block;
     margin-top: 0.35rem;
     color: #57717c;
+    font-variant-numeric: tabular-nums;
 }
 
 .vc-stat-label {
@@ -539,6 +741,19 @@ tbody tr:hover {
 
     .vc-layout-main {
         grid-template-columns: 1fr;
+    }
+
+    .vc-control-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .vc-control-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .vc-control-actions button {
+        width: 100%;
     }
 
     .vc-filter-row {

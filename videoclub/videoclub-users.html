@@ -10,7 +10,7 @@
     <header class="vc-header" data-testid="vc-header">
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
-            <ul>
+            <ul class="vc-nav-list">
                 <li><a href="videoclub.html">Video Club</a></li>
                 <li><a href="videoclub-users.html" class="active">Usuarios</a></li>
             </ul>
@@ -28,14 +28,22 @@
         </section>
 
         <section class="vc-card vc-control-card" data-testid="vc-control-card">
-            <div class="vc-two-column-form">
+            <div class="vc-card-heading">
                 <div>
+                    <h2 data-testid="vc-page-title">Modulo de usuarios</h2>
+                    <p class="vc-subtitle">Administracion de cuentas y roles. Requiere rol admin.</p>
+                </div>
+                <span class="vc-section-chip">Usuarios</span>
+            </div>
+            <div class="vc-control-grid">
+                <div class="vc-control-field">
                     <label for="vc-base-url">Base URL</label>
                     <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
-            </div>
-            <div class="vc-button-row">
-                <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
+                <div class="vc-control-actions">
+                    <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
+                    <button type="button" id="vc-health-check" class="ghost" data-testid="vc-health-check">Health check</button>
+                </div>
             </div>
         </section>
 
@@ -43,6 +51,7 @@
             <div class="vc-card-heading">
                 <div>
                     <h2>CRUD de usuarios</h2>
+                    <p class="vc-subtitle">Completa los campos y guarda el registro.</p>
                 </div>
                 <span id="vc-user-form-mode" class="vc-section-chip">Alta</span>
             </div>
@@ -66,18 +75,19 @@
                     <input id="vc-user-password" type="password" placeholder="Opcional en edicion">
                 </div>
                 <div class="vc-button-row">
-                    <button type="submit">Guardar usuario</button>
-                    <button type="button" id="vc-user-reset" class="ghost">Limpiar</button>
+                    <button type="submit" data-testid="vc-user-submit">Guardar usuario</button>
+                    <button type="button" id="vc-user-reset" class="ghost" data-testid="vc-user-reset">Limpiar</button>
                 </div>
             </form>
             <div class="vc-table-wrap">
-                <table>
+                <table data-testid="vc-users-table">
+                    <caption class="vc-table-caption">Listado de usuarios</caption>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Correo</th>
-                            <th>Rol</th>
-                            <th>Acciones</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Correo</th>
+                            <th scope="col">Rol</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="vc-users-body">
@@ -88,6 +98,13 @@
         </section>
 
         <section class="vc-card vc-response-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Actividad</h2>
+                    <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
+                </div>
+                <span class="vc-section-chip">API Log</span>
+            </div>
             <pre id="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>

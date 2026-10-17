@@ -10,7 +10,7 @@
     <header class="vc-header" data-testid="vc-header">
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
-            <ul>
+            <ul class="vc-nav-list">
                 <li><a href="videoclub.html">Video Club</a></li>
                 <li><a href="videoclub-movies.html" class="active">Peliculas</a></li>
             </ul>
@@ -28,21 +28,28 @@
         </section>
 
         <section class="vc-card vc-control-card" data-testid="vc-control-card">
-            <div class="vc-two-column-form">
+            <div class="vc-card-heading">
                 <div>
+                    <h2 data-testid="vc-page-title">Modulo de peliculas</h2>
+                    <p class="vc-subtitle">Catalogo disponible y altas, bajas y modificaciones.</p>
+                </div>
+                <span class="vc-section-chip">Peliculas</span>
+            </div>
+            <div class="vc-control-grid">
+                <div class="vc-control-field">
                     <label for="vc-base-url">Base URL</label>
                     <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
-            </div>
-            <div class="vc-button-row">
-                <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
-                <button type="button" id="vc-health-check" class="ghost" data-testid="vc-health-check">Health check</button>
-                <button type="button" id="vc-api-info" class="ghost" data-testid="vc-api-info">Info API</button>
+                <div class="vc-control-actions">
+                    <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
+                    <button type="button" id="vc-health-check" class="ghost" data-testid="vc-health-check">Health check</button>
+                    <button type="button" id="vc-api-info" class="ghost" data-testid="vc-api-info">Info API</button>
+                </div>
             </div>
         </section>
 
         <section class="vc-layout vc-layout-main">
-            <article class="vc-card">
+            <article class="vc-card vc-catalog-card">
                 <div class="vc-card-heading">
                     <div>
                         <h2>Catalogo visual</h2>
@@ -50,23 +57,27 @@
                     </div>
                 </div>
                 <div class="vc-filter-row">
-                    <input id="vc-search" type="search" placeholder="Buscar por titulo o genero">
-                    <button type="button" id="vc-only-available" class="ghost">Solo disponibles</button>
+                    <input id="vc-search" type="search" placeholder="Buscar por titulo o genero" aria-label="Buscar peliculas">
+                    <button type="button" id="vc-only-available" class="ghost" aria-pressed="false">Solo disponibles</button>
                 </div>
                 <div id="vc-movies-grid" class="vc-movie-grid">
                     <p class="vc-placeholder">Carga peliculas para ver el catalogo.</p>
                 </div>
             </article>
-        </section>
 
-        <section class="vc-card">
-            <div class="vc-card-heading">
-                <div>
-                    <h2>CRUD de peliculas</h2>
-                </div>
-                <span id="vc-movie-form-mode" class="vc-section-chip">Alta</span>
-            </div>
-            <form id="vc-movie-form" class="vc-stack-form">
+            <div class="vc-layout-side">
+                <section class="vc-card">
+                    <div class="vc-card-heading">
+                        <div>
+                            <h2>CRUD de peliculas</h2>
+                            <p class="vc-subtitle">Completa los campos y guarda el registro.</p>
+                        </div>
+                        <span id="vc-movie-form-mode" class="vc-section-chip">Alta</span>
+                    </div>
+                    <p id="vc-movie-crud-notice" class="vc-readonly-notice" data-testid="vc-movie-crud-notice" hidden>
+                        Catalogo publico: puedes consultarlo sin sesion. Para dar de alta, editar o eliminar peliculas inicia sesion con rol admin.
+                    </p>
+                    <form id="vc-movie-form" class="vc-stack-form">
                 <input id="vc-movie-id" type="hidden">
                 <div class="vc-two-column-form">
                     <div>
@@ -101,11 +112,11 @@
                 <div class="vc-two-column-form">
                     <div>
                         <label for="vc-movie-total-copies">Copias totales</label>
-                        <input id="vc-movie-total-copies" type="number" min="1" step="1" required>
+                        <input id="vc-movie-total-copies" type="number" min="1" step="1" placeholder="1">
                     </div>
                     <div>
                         <label for="vc-movie-available-copies">Copias disponibles</label>
-                        <input id="vc-movie-available-copies" type="number" min="0" step="1" required>
+                        <input id="vc-movie-available-copies" type="number" min="0" step="1" placeholder="Igual a las totales">
                     </div>
                 </div>
                 <div>
@@ -113,20 +124,21 @@
                     <textarea id="vc-movie-description"></textarea>
                 </div>
                 <div class="vc-button-row">
-                    <button type="submit">Guardar pelicula</button>
-                    <button type="button" id="vc-movie-reset" class="ghost">Limpiar</button>
+                    <button type="submit" data-testid="vc-movie-submit">Guardar pelicula</button>
+                    <button type="button" id="vc-movie-reset" class="ghost" data-testid="vc-movie-reset">Limpiar</button>
                 </div>
             </form>
             <div class="vc-table-wrap">
-                <table>
+                <table data-testid="vc-movies-table">
+                    <caption class="vc-table-caption">Listado de peliculas</caption>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Titulo</th>
-                            <th>Genero</th>
-                            <th>Copias</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Titulo</th>
+                            <th scope="col">Genero</th>
+                            <th scope="col">Copias</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="vc-movies-body">
@@ -134,9 +146,18 @@
                     </tbody>
                 </table>
             </div>
+                </section>
+            </div>
         </section>
 
         <section class="vc-card vc-response-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Actividad</h2>
+                    <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
+                </div>
+                <span class="vc-section-chip">API Log</span>
+            </div>
             <pre id="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>

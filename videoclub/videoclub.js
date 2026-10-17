@@ -1,12 +1,20 @@
 ﻿document.addEventListener('DOMContentLoaded', function() {
     const AUTH_STORAGE_KEY = 'vc_auth_session';
     const HUB_PAGE = 'videoclub.html';
+    // El backend pagina todas las listas con limit por defecto (10) y tope 100.
+    // Sin esto la UI muestra solo la primera pagina y los contadores mienten.
+    const LIST_LIMIT = 100;
 
     const baseUrlInput = document.getElementById('vc-base-url');
     const output = document.getElementById('vc-output');
     const authForm = document.getElementById('vc-auth-form');
+    const authFormWrap = document.getElementById('vc-auth-form-wrap');
+    const authSessionPanel = document.getElementById('vc-auth-session');
+    const authSessionEmail = document.getElementById('vc-auth-session-email');
+    const authError = document.getElementById('vc-auth-error');
     const authEmailInput = document.getElementById('vc-auth-email');
     const authPasswordInput = document.getElementById('vc-auth-password');
+    const authTogglePasswordBtn = document.getElementById('vc-auth-toggle-password');
     const registerBtn = document.getElementById('vc-register-btn');
     const logoutBtn = document.getElementById('vc-logout-btn');
     const authStatus = document.getElementById('vc-auth-status');
@@ -16,6 +24,11 @@
     const statCustomers = document.getElementById('vc-stat-customers');
     const statRentals = document.getElementById('vc-stat-rentals');
     const statStock = document.getElementById('vc-stat-stock');
+    const statMoviesTotal = document.getElementById('vc-stat-movies-total');
+    const statCustomersTotal = document.getElementById('vc-stat-customers-total');
+    const statRentalsTotal = document.getElementById('vc-stat-rentals-total');
+    const statStockTotal = document.getElementById('vc-stat-stock-total');
+    const statsEmptyNotice = document.getElementById('vc-stats-empty');
 
     const refreshAllBtn = document.getElementById('vc-refresh-all');
     const healthCheckBtn = document.getElementById('vc-health-check');
@@ -66,6 +79,7 @@
     const rentalsBody = document.getElementById('vc-rentals-body');
     const historyBody = document.getElementById('vc-history-body');
     const movieForm = document.getElementById('vc-movie-form');
+    const movieCrudNotice = document.getElementById('vc-movie-crud-notice');
     const movieFormMode = document.getElementById('vc-movie-form-mode');
     const movieResetBtn = document.getElementById('vc-movie-reset');
     const movieIdInput = document.getElementById('vc-movie-id');
@@ -91,7 +105,18 @@
         users: [],
         candyProducts: [],
         rentals: [],
+        pagination: {
+            movies: null,
+            customers: null,
+            rentals: null
+        },
         onlyAvailable: false,
+        statsLoaded: false,
+        loaded: {
+            movies: false,
+            customers: false,
+            rentals: false
+        },
         selectedCustomerId: '',
         history: [],
         auth: {
@@ -99,6 +124,11 @@
             user: null
         }
     };
+
+    function listUrl(path) {
+        const separator = path.includes('?') ? '&' : '?';
+        return `${path}${separator}limit=${LIST_LIMIT}`;
+    }
 
     function hasSession() {
         return Boolean(state.auth.token);
@@ -132,11 +162,15 @@
         return sanitizeNextPage(params.get('next') || '');
     }
 
+    // GET /api/movies es publico: el catalogo se puede consultar sin sesion.
+    const PUBLIC_PAGES = ['videoclub-movies.html'];
+
     function enforceProtectedRoute() {
         const currentPage = getCurrentPageName();
         const isHub = currentPage === HUB_PAGE;
+        const isPublicPage = PUBLIC_PAGES.includes(currentPage);
 
-        if (!hasSession() && !isHub) {
+        if (!hasSession() && !isHub && !isPublicPage) {
             const loginUrl = `./${HUB_PAGE}?next=${encodeURIComponent(currentPage)}`;
             window.location.replace(loginUrl);
             return true;
@@ -152,6 +186,54 @@
     function setAuthStatus(message) {
         if (authStatus) {
             authStatus.textContent = message;
+        }
+    }
+
+    function setAuthError(message) {
+        if (!authError) {
+            return;
+        }
+
+        if (!message) {
+            authError.textContent = '';
+            authError.hidden = true;
+            return;
+        }
+
+        authError.textContent = message;
+        authError.hidden = false;
+    }
+
+    function setAuthBusy(busy) {
+        [authFormWrap, registerBtn, logoutBtn].forEach(function(element) {
+            if (!element) {
+                return;
+            }
+            element.querySelectorAll('button').forEach(function(button) {
+                button.disabled = busy;
+            });
+        });
+
+        if (authForm) {
+            authForm.querySelectorAll('input, select, textarea').forEach(function(field) {
+                field.disabled = busy;
+            });
+        }
+    }
+
+    function clearAuthForm() {
+        if (authEmailInput) {
+            authEmailInput.value = '';
+        }
+        if (authPasswordInput) {
+            authPasswordInput.value = '';
+            authPasswordInput.type = 'password';
+        }
+        if (authTogglePasswordBtn) {
+            authTogglePasswordBtn.classList.remove('is-visible');
+            authTogglePasswordBtn.setAttribute('aria-pressed', 'false');
+            authTogglePasswordBtn.setAttribute('aria-label', 'Mostrar contrasena');
+            authTogglePasswordBtn.setAttribute('title', 'Mostrar contrasena');
         }
     }
 
@@ -188,12 +270,34 @@
     function updateAuthUi() {
         const loggedIn = hasSession();
         const role = state.auth.user && state.auth.user.role ? state.auth.user.role : '';
+        const email = state.auth.user && state.auth.user.email ? state.auth.user.email : '';
+
         document.body.classList.toggle('vc-locked', !loggedIn);
 
         if (authRoleChip) {
-            authRoleChip.textContent = loggedIn
-                ? `${role.toUpperCase()} activo`
-                : 'Sin sesion';
+            authRoleChip.textContent = loggedIn ? `${role.toUpperCase()} activo` : 'Sin sesion';
+        }
+
+        if (authFormWrap) {
+            authFormWrap.hidden = loggedIn;
+        }
+        if (authSessionPanel) {
+            authSessionPanel.hidden = !loggedIn;
+        }
+        if (authSessionEmail) {
+            authSessionEmail.textContent = email || 'usuario';
+        }
+
+        setAuthError('');
+
+        // El CRUD de peliculas requiere admin: sin sesion se avisa y se bloquea el form.
+        if (movieCrudNotice) {
+            movieCrudNotice.hidden = loggedIn;
+        }
+        if (movieForm) {
+            movieForm.querySelectorAll('input, textarea, button').forEach(function(field) {
+                field.disabled = !loggedIn;
+            });
         }
 
         if (!loggedIn) {
@@ -201,7 +305,6 @@
             return;
         }
 
-        const email = state.auth.user && state.auth.user.email ? state.auth.user.email : 'usuario';
         if (isAdmin()) {
             setAuthStatus(`Sesion iniciada como admin: ${email}. CRUD y alquileres habilitados.`);
         } else {
@@ -336,23 +439,61 @@
     }
 
     function updateStats() {
-        const totalStock = state.movies.reduce(function(sum, movie) {
-            const normalized = normalizeMovie(movie);
-            return sum + normalized.availableCopies;
-        }, 0);
+        const loggedIn = hasSession();
 
-        if (statMovies) {
-            statMovies.textContent = String(state.movies.length);
+        if (statsEmptyNotice) {
+            // Solo se avisa si no hay nada cargado; el catalogo de peliculas ya es publico.
+            statsEmptyNotice.hidden = loggedIn || state.statsLoaded;
         }
-        if (statCustomers) {
-            statCustomers.textContent = String(state.customers.length);
-        }
-        if (statRentals) {
-            statRentals.textContent = String(state.rentals.length);
-        }
+
+        // Cada modulo sabe si se cargo: el catalogo es publico y puede venir sin sesion,
+        // mientras que clientes y alquileres siguen exigiendo token.
+        const setStat = function(valueEl, totalEl, shown, pagination, suffix, moduleLoaded) {
+            if (!valueEl) {
+                return;
+            }
+
+            if (!loggedIn && !moduleLoaded) {
+                valueEl.textContent = '—';
+                if (totalEl) {
+                    totalEl.textContent = 'Inicia sesion';
+                }
+                return;
+            }
+
+            valueEl.textContent = moduleLoaded ? String(shown) : '…';
+            if (totalEl) {
+                totalEl.textContent = moduleLoaded
+                    ? countLabel(shown, pagination, suffix)
+                    : 'Cargando resumen';
+            }
+        };
+
+        const moviesLoaded = state.loaded.movies;
+
         if (statStock) {
-            statStock.textContent = String(totalStock);
+            if (!loggedIn && !moviesLoaded) {
+                statStock.textContent = '—';
+            } else if (moviesLoaded) {
+                statStock.textContent = String(state.movies.reduce(function(sum, movie) {
+                    return sum + normalizeMovie(movie).availableCopies;
+                }, 0));
+            } else {
+                statStock.textContent = '…';
+            }
         }
+
+        if (statStockTotal) {
+            if (!loggedIn && !moviesLoaded) {
+                statStockTotal.textContent = 'Inicia sesion';
+            } else {
+                statStockTotal.textContent = moviesLoaded ? 'copias' : 'Cargando resumen';
+            }
+        }
+
+        setStat(statMovies, statMoviesTotal, state.movies.length, state.pagination.movies, 'catalogadas', moviesLoaded);
+        setStat(statCustomers, statCustomersTotal, state.customers.length, state.pagination.customers, 'registrados', state.loaded.customers);
+        setStat(statRentals, statRentalsTotal, state.rentals.length, state.pagination.rentals, 'pendientes', state.loaded.rentals);
     }
 
     async function apiRequest(method, path, body) {
@@ -363,6 +504,8 @@
                 'Content-Type': 'application/json'
             }
         };
+
+        const hadSession = hasSession();
 
         if (state.auth.token) {
             options.headers.Authorization = `Bearer ${state.auth.token}`;
@@ -376,6 +519,10 @@
         const text = await response.text();
         const parsed = parseJsonSafe(text);
 
+        if (response.status === 401 && hadSession) {
+            handleUnauthorized();
+        }
+
         return {
             method,
             path,
@@ -383,6 +530,33 @@
             ok: response.ok,
             data: parsed !== null ? parsed : text
         };
+    }
+
+    let unauthorizedNotified = false;
+
+    function handleUnauthorized() {
+        if (unauthorizedNotified) {
+            return;
+        }
+        unauthorizedNotified = true;
+
+        clearSession();
+        state.movies = [];
+        state.customers = [];
+        state.users = [];
+        state.candyProducts = [];
+        state.rentals = [];
+        state.pagination.movies = null;
+        state.pagination.customers = null;
+        state.pagination.rentals = null;
+        state.statsLoaded = false;
+        state.loaded.movies = false;
+        state.loaded.customers = false;
+        state.loaded.rentals = false;
+        state.selectedCustomerId = '';
+        clearAuthForm();
+        updateAuthUi();
+        setAuthError('Tu sesion expiro o el token ya no es valido. Inicia sesion de nuevo.');
     }
 
     async function runRequest(label, method, path, body) {
@@ -409,6 +583,25 @@
         return null;
     }
 
+    function readPagination(data) {
+        if (data && data.pagination && typeof data.pagination === 'object') {
+            return data.pagination;
+        }
+        return null;
+    }
+
+    function countLabel(shown, pagination, suffix) {
+        const total = pagination && Number.isFinite(Number(pagination.total_items))
+            ? Number(pagination.total_items)
+            : null;
+
+        if (total === null) {
+            return suffix;
+        }
+
+        return total === shown ? `${total} ${suffix}` : `${shown} de ${total} ${suffix}`;
+    }
+
     function selectedCustomer() {
         return state.customers.find(function(customer) {
             return getId(customer, ['id', 'customer_id']) === state.selectedCustomerId;
@@ -432,14 +625,21 @@
     }
 
     function renderCustomerSelect() {
-        if (!customerSelect || !rentalCustomerSelect) {
+        // En Clientes solo existe vc-customer-select; en Alquileres existen los dos.
+        // No exigir ambos o el select de Clientes nunca se puebla.
+        if (!customerSelect && !rentalCustomerSelect) {
             renderCustomerPill();
             return;
         }
 
         if (!state.customers.length) {
-            customerSelect.innerHTML = '<option value="">Sin clientes disponibles</option>';
-            rentalCustomerSelect.innerHTML = '<option value="">Sin clientes disponibles</option>';
+            const emptyOption = '<option value="">Sin clientes disponibles</option>';
+            if (customerSelect) {
+                customerSelect.innerHTML = emptyOption;
+            }
+            if (rentalCustomerSelect) {
+                rentalCustomerSelect.innerHTML = emptyOption;
+            }
             state.selectedCustomerId = '';
             renderCustomerPill();
             return;
@@ -455,12 +655,16 @@
         }).join('');
 
         const defaultSelected = !state.selectedCustomerId ? ' selected' : '';
+        const selectHtml = `<option value=""${defaultSelected}>Selecciona un cliente</option>${options}`;
 
-        customerSelect.innerHTML = `<option value=""${defaultSelected}>Selecciona un cliente</option>${options}`;
-        rentalCustomerSelect.innerHTML = `<option value=""${defaultSelected}>Selecciona un cliente</option>${options}`;
-
-        customerSelect.value = state.selectedCustomerId || '';
-        rentalCustomerSelect.value = state.selectedCustomerId || '';
+        if (customerSelect) {
+            customerSelect.innerHTML = selectHtml;
+            customerSelect.value = state.selectedCustomerId || '';
+        }
+        if (rentalCustomerSelect) {
+            rentalCustomerSelect.innerHTML = selectHtml;
+            rentalCustomerSelect.value = state.selectedCustomerId || '';
+        }
 
         renderCustomerPill();
     }
@@ -504,7 +708,7 @@
             const price = normalized.rentalPrice ? `USD ${escapeHtml(String(normalized.rentalPrice))}` : 'Precio pendiente';
             const actions = canOperate
                 ? `<div class="vc-card-actions"><button type="button" class="vc-rent-button" data-movie-id="${id}"${disabled}>Alquilar</button><button type="button" class="ghost" data-edit-movie="${id}">Editar</button></div>`
-                : '<p class="vc-movie-meta">Sesion client: solo lectura</p>';
+                : `<p class="vc-movie-meta">${hasSession() ? 'Sesion client: solo lectura' : 'Publico: solo lectura. Inicia sesion para operar.'}</p>`;
 
             return `<article class="vc-movie-item"><h4>${title}</h4><p class="vc-movie-meta">${director}</p><p class="vc-movie-meta">Genero: ${genre} · ${price}</p><span class="${stockClass}">${stockLabel}</span>${actions}</article>`;
         }).join('');
@@ -641,8 +845,10 @@
             const movie = state.movies.find(function(item) {
                 return getId(item, ['id', 'movie_id']) === String(movieId);
             });
-            const customerLabel = customer ? normalizeCustomer(customer).name : customerId;
-            const movieLabel = movie ? normalizeMovie(movie).title : movieId;
+            const customerLabel = rental.customer_name
+                || (customer ? normalizeCustomer(customer).name : customerId);
+            const movieLabel = rental.movie_title
+                || (movie ? normalizeMovie(movie).title : movieId);
             const dueDate = formatDisplayDate(rental.due_date);
 
             const action = isAdmin()
@@ -670,7 +876,7 @@
                 return getId(item, ['id', 'movie_id']) === String(movieId);
             });
             const status = rental.status || (rental.returned || rental.return_date ? 'returned' : 'active');
-            const movieLabel = movie ? normalizeMovie(movie).title : movieId;
+            const movieLabel = rental.movie_title || (movie ? normalizeMovie(movie).title : movieId);
             return `<tr><td>${id}</td><td>${escapeHtml(String(movieLabel))}</td><td>${escapeHtml(String(status))}</td></tr>`;
         }).join('');
     }
@@ -870,15 +1076,25 @@
         const releaseYear = movieReleaseYearInput.value.trim();
         const rentalPrice = movieRentalPriceInput.value.trim();
         const durationMinutes = movieDurationInput.value.trim();
-        const totalCopies = movieTotalCopiesInput.value.trim();
-        const availableCopies = movieAvailableCopiesInput.value.trim();
+        const totalCopiesRaw = movieTotalCopiesInput.value.trim();
+        const availableCopiesRaw = movieAvailableCopiesInput.value.trim();
         const description = movieDescriptionInput.value.trim();
 
-        if (!title || !rentalPrice || !totalCopies || availableCopies === '') {
+        // El backend solo exige title y rental_price; las copias son opcionales
+        // y por defecto valen 1/1. No bloquear el alta por ellas.
+        if (!title || !rentalPrice) {
             return null;
         }
 
-        if (Number(availableCopies) > Number(totalCopies)) {
+        const totalCopies = totalCopiesRaw === '' ? 1 : Number(totalCopiesRaw);
+        const availableCopies = availableCopiesRaw === '' ? totalCopies : Number(availableCopiesRaw);
+
+        if (totalCopies < 1) {
+            showError('Las copias totales deben ser al menos 1.');
+            return null;
+        }
+
+        if (availableCopies > totalCopies) {
             showError('Las copias disponibles no pueden superar las copias totales.');
             return null;
         }
@@ -886,8 +1102,8 @@
         const payload = {
             title,
             rental_price: Number(rentalPrice),
-            total_copies: Number(totalCopies),
-            available_copies: Number(availableCopies)
+            total_copies: totalCopies,
+            available_copies: availableCopies
         };
 
         if (director) {
@@ -989,13 +1205,14 @@
     }
 
     async function refreshMovies() {
-        if (!hasSession()) {
-            return;
-        }
-        const result = await runRequest('Cargar catalogo', 'GET', '/api/movies');
+        // GET /api/movies es publico: no exige sesion.
+        const result = await runRequest('Cargar catalogo', 'GET', listUrl('/api/movies'));
         const movies = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (movies) {
             state.movies = movies;
+            state.pagination.movies = readPagination(result.data);
+            state.statsLoaded = true;
+            state.loaded.movies = true;
             renderMovies();
             renderMoviesTable();
             updateStats();
@@ -1006,10 +1223,13 @@
         if (!hasSession()) {
             return;
         }
-        const result = await runRequest('Cargar clientes', 'GET', '/api/customers');
+        const result = await runRequest('Cargar clientes', 'GET', listUrl('/api/customers'));
         const customers = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (customers) {
             state.customers = customers;
+            state.pagination.customers = readPagination(result.data);
+            state.statsLoaded = true;
+            state.loaded.customers = true;
 
             renderCustomerSelect();
             renderCustomersTable();
@@ -1021,7 +1241,7 @@
         if (!hasSession()) {
             return;
         }
-        const result = await runRequest('Cargar usuarios', 'GET', '/api/users');
+        const result = await runRequest('Cargar usuarios', 'GET', listUrl('/api/users'));
         const users = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (users) {
             state.users = users;
@@ -1033,7 +1253,7 @@
         if (!hasSession()) {
             return;
         }
-        const result = await runRequest('Cargar candy bar', 'GET', '/api/candy-bar');
+        const result = await runRequest('Cargar candy bar', 'GET', listUrl('/api/candy-bar'));
         const products = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (products) {
             state.candyProducts = products;
@@ -1045,20 +1265,30 @@
         if (!hasSession()) {
             return;
         }
-        const result = await runRequest('Cargar alquileres activos', 'GET', '/api/rentals/active');
+        const result = await runRequest('Cargar alquileres activos', 'GET', listUrl('/api/rentals/active'));
         const rentals = result && result.ok ? unwrapArrayPayload(result.data) : null;
         if (rentals) {
             state.rentals = rentals;
+            state.pagination.rentals = readPagination(result.data);
+            state.statsLoaded = true;
+            state.loaded.rentals = true;
             renderRentals();
             updateStats();
         }
+    }
+
+    function shouldLoadMoviesModule() {
+        return Boolean(moviesGrid || moviesBody || rentalMovieSelect || statMovies || statStock);
     }
 
     async function refreshAll() {
         console.info('[VideoClub] Click en Actualizar datos');
 
         if (!hasSession()) {
-            showOutput({ loading: 'GET /health + GET /api', info: 'Sin sesion: ejecutando checks publicos.' });
+            showOutput({
+                loading: 'GET /health + GET /api + GET /api/movies',
+                info: 'Sin sesion: /health y /api/movies son publicos. GET /api figura como publico en la documentacion, pero el servidor exige token.'
+            });
 
             const publicChecks = await Promise.allSettled([
                 apiRequest('GET', '/health'),
@@ -1080,11 +1310,17 @@
                     api: apiResult
                 }
             });
+
+            // GET /api/movies es publico: el catalogo se puebla igual sin sesion.
+            if (shouldLoadMoviesModule()) {
+                await refreshMovies();
+            }
+
             return;
         }
 
         const shouldLoadCustomers = Boolean(customerSelect || rentalCustomerSelect || customersBody || historyBody || selectedCustomerPill || statCustomers);
-        const shouldLoadMovies = Boolean(moviesGrid || moviesBody || rentalMovieSelect || statMovies || statStock);
+        const shouldLoadMovies = shouldLoadMoviesModule();
         const shouldLoadRentals = Boolean(rentalsBody || rentalForm || historyBody || statRentals);
         const shouldLoadUsers = Boolean(usersBody || userForm);
         const shouldLoadCandyBar = Boolean(candyBody || candyForm);
@@ -1156,6 +1392,13 @@
         }
         const result = await runRequest('Registrar devolucion', 'PUT', `/api/rentals/${encodeURIComponent(rentalId)}/return`);
         if (result && result.ok) {
+            const lateFee = result.data && result.data.late_fee;
+            if (lateFee !== undefined && Number(lateFee) > 0) {
+                showOutput({
+                    aviso: `Devolucion registrada con recargo por mora de ${lateFee}.`,
+                    respuesta: result
+                });
+            }
             await refreshMovies();
             await refreshActiveRentals();
         }
@@ -1170,7 +1413,7 @@
         const result = await runRequest(
             'Cargar historial por cliente',
             'GET',
-            `/api/customers/${encodeURIComponent(state.selectedCustomerId)}/rentals`
+            listUrl(`/api/customers/${encodeURIComponent(state.selectedCustomerId)}/rentals`)
         );
 
         const rentals = result && result.ok ? unwrapArrayPayload(result.data) : null;
@@ -1381,19 +1624,52 @@
         }
     }
 
+    function describeAuthFailure(result, action) {
+        const apiError = result && result.data && result.data.error;
+
+        if (apiError) {
+            return apiError;
+        }
+
+        if (result && result.status === 401) {
+            return `No pudimos iniciar sesion: credenciales invalidas.`;
+        }
+
+        if (result && result.status === 409) {
+            return `Ese correo ya esta registrado. Inicia sesion en lugar de registrarlo.`;
+        }
+
+        if (result && result.status === 403) {
+            return `Tu cuenta no tiene permisos para ${action}.`;
+        }
+
+        return `No pudimos completar ${action}. Intenta de nuevo.`;
+    }
+
     async function loginWithCredentials(email, password) {
-        const result = await runRequest('Iniciar sesion', 'POST', '/api/auth/login', {
-            email,
-            password
-        });
+        setAuthError('');
+        setAuthBusy(true);
+
+        let result = null;
+        try {
+            result = await runRequest('Iniciar sesion', 'POST', '/api/auth/login', {
+                email,
+                password
+            });
+        } finally {
+            setAuthBusy(false);
+        }
 
         if (!result || !result.ok || !result.data || !result.data.token || !result.data.user) {
+            setAuthError(describeAuthFailure(result, 'el inicio de sesion'));
             return false;
         }
 
         state.auth.token = result.data.token;
         state.auth.user = result.data.user;
         saveSession();
+        unauthorizedNotified = false;
+        clearAuthForm();
         updateAuthUi();
         await refreshAll();
 
@@ -1411,17 +1687,26 @@
         const password = authPasswordInput ? authPasswordInput.value : '';
 
         if (!email || !password) {
-            showError('Completa correo y contrasena para registrarte.');
+            setAuthError('Completa correo y contrasena para registrarte.');
             return;
         }
 
-        const registerResult = await runRequest('Registrar usuario', 'POST', '/api/auth/register', {
-            email,
-            password,
-            role: 'client'
-        });
+        setAuthError('');
+        setAuthBusy(true);
+
+        let registerResult = null;
+        try {
+            registerResult = await runRequest('Registrar usuario', 'POST', '/api/auth/register', {
+                email,
+                password,
+                role: 'client'
+            });
+        } finally {
+            setAuthBusy(false);
+        }
 
         if (!registerResult || !registerResult.ok) {
+            setAuthError(describeAuthFailure(registerResult, 'el registro'));
             return;
         }
 
@@ -1435,7 +1720,7 @@
         const password = authPasswordInput ? authPasswordInput.value : '';
 
         if (!email || !password) {
-            showError('Completa correo y contrasena para iniciar sesion.');
+            setAuthError('Completa correo y contrasena para iniciar sesion.');
             return;
         }
 
@@ -1443,12 +1728,23 @@
     }
 
     function logout() {
+        unauthorizedNotified = false;
         clearSession();
+        clearAuthForm();
+        setAuthError('');
+        state.statsLoaded = false;
         state.movies = [];
         state.customers = [];
         state.users = [];
         state.candyProducts = [];
         state.rentals = [];
+        state.pagination.movies = null;
+        state.pagination.customers = null;
+        state.pagination.rentals = null;
+        state.statsLoaded = false;
+        state.loaded.movies = false;
+        state.loaded.customers = false;
+        state.loaded.rentals = false;
         state.selectedCustomerId = '';
         clearHistory();
         renderMovies();
@@ -1634,6 +1930,22 @@
     bindEvent(registerBtn, 'click', registerAndLogin);
     bindEvent(logoutBtn, 'click', logout);
 
+    bindEvent(authTogglePasswordBtn, 'click', function() {
+        if (!authPasswordInput || !authTogglePasswordBtn) {
+            return;
+        }
+
+        const showing = authPasswordInput.type === 'text';
+        const nextLabel = showing ? 'Mostrar contrasena' : 'Ocultar contrasena';
+
+        authPasswordInput.type = showing ? 'password' : 'text';
+        authTogglePasswordBtn.classList.toggle('is-visible', !showing);
+        authTogglePasswordBtn.setAttribute('aria-pressed', String(!showing));
+        authTogglePasswordBtn.setAttribute('aria-label', nextLabel);
+        authTogglePasswordBtn.setAttribute('title', nextLabel);
+        authPasswordInput.focus();
+    });
+
     resetMovieForm();
     resetCustomerForm();
     resetUserForm();
@@ -1651,9 +1963,6 @@
     }
 
     updateAuthUi();
-    if (hasSession()) {
-        refreshAll();
-    } else {
-        showOutput({ info: 'Inicia sesion para cargar datos de la API.' });
-    }
+    // refreshAll() ya distingue con/sin sesion: sin sesion carga los endpoints publicos.
+    refreshAll();
 });

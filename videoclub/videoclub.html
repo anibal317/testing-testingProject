@@ -10,7 +10,7 @@
     <header class="vc-header" data-testid="vc-header">
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
-            <ul>
+            <ul class="vc-nav-list">
                 <li><a href="../index.html">Home</a></li>
                 <li><a href="../articles.html">Articles</a></li>
                 <li><a href="../about.html">About</a></li>
@@ -50,66 +50,91 @@
                 </div>
                 <span class="vc-section-chip" data-testid="vc-auth-chip">Sesion</span>
             </div>
-            <form id="vc-auth-form" class="vc-stack-form" data-testid="vc-auth-form">
-                <div class="vc-two-column-form">
-                    <div>
-                        <label for="vc-auth-email">Correo</label>
-                        <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" required data-testid="vc-auth-email">
+
+            <div id="vc-auth-form-wrap" class="vc-auth-form-wrap">
+                <form id="vc-auth-form" class="vc-stack-form" data-testid="vc-auth-form">
+                    <div class="vc-two-column-form">
+                        <div>
+                            <label for="vc-auth-email">Correo</label>
+                            <input id="vc-auth-email" type="email" placeholder="usuario@dominio.com" autocomplete="username" required data-testid="vc-auth-email">
+                        </div>
+                        <div>
+                            <label for="vc-auth-password">Contrasena</label>
+                            <div class="vc-password-field">
+                                <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" autocomplete="current-password" required data-testid="vc-auth-password">
+                                <button type="button" id="vc-auth-toggle-password" class="ghost vc-password-toggle" data-testid="vc-auth-toggle-password" aria-label="Mostrar contrasena" aria-pressed="false" title="Mostrar contrasena">
+                                    <svg class="vc-eye-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <path d="M1.5 12S5.5 5 12 5s10.5 7 10.5 7-4 7-10.5 7S1.5 12 1.5 12z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                        <line class="vc-eye-slash" x1="4" y1="20" x2="20" y2="4"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <label for="vc-auth-password">Contrasena</label>
-                        <input id="vc-auth-password" type="password" placeholder="Minimo 6 caracteres" required data-testid="vc-auth-password">
+                    <p id="vc-auth-error" class="vc-auth-error" role="alert" data-testid="vc-auth-error" hidden></p>
+                    <div class="vc-button-row">
+                        <button type="submit" data-testid="vc-auth-submit">Iniciar sesion</button>
+                        <button type="button" id="vc-register-btn" class="ghost" data-testid="vc-register-btn">Registrar y entrar</button>
                     </div>
-                </div>
-                <div class="vc-button-row">
-                    <button type="submit" data-testid="vc-auth-submit">Iniciar sesion</button>
-                    <button type="button" id="vc-register-btn" class="ghost" data-testid="vc-register-btn">Registrar y entrar</button>
-                    <button type="button" id="vc-logout-btn" class="danger" data-testid="vc-logout-btn">Cerrar sesion</button>
-                </div>
-            </form>
-            <p id="vc-auth-status" class="vc-auth-status" data-testid="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
+                </form>
+            </div>
+
+            <div id="vc-auth-session" class="vc-auth-session" data-testid="vc-auth-session" hidden>
+                <span id="vc-auth-session-email" class="vc-auth-session-email" data-testid="vc-auth-session-email"></span>
+                <button type="button" id="vc-logout-btn" class="danger" data-testid="vc-logout-btn">Cerrar sesion</button>
+            </div>
+
+            <div class="vc-auth-footer">
+                <p id="vc-auth-status" class="vc-auth-status" data-testid="vc-auth-status">Debes iniciar sesion para consultar y operar el videoclub.</p>
+            </div>
         </section>
 
-        <section class="vc-card vc-control-card">
+        <section class="vc-card vc-control-card" data-testid="vc-control-card">
             <div class="vc-card-heading">
                 <div>
                     <h2>Centro de control</h2>
-                    <p class="vc-subtitle">Configura base URL y ejecuta verificaciones publicas de la API.</p>
+                    <p class="vc-subtitle">Configura la base URL y ejecuta verificaciones publicas de la API.</p>
                 </div>
                 <span class="vc-section-chip">Operativo</span>
             </div>
-            <div class="vc-two-column-form">
-                <div>
+            <div class="vc-control-grid">
+                <div class="vc-control-field">
                     <label for="vc-base-url">Base URL</label>
-                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required>
+                    <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
+                </div>
+                <div class="vc-control-actions">
+                    <button type="button" id="vc-health-check" class="ghost" data-testid="vc-health-check">Health check</button>
+                    <button type="button" id="vc-api-info" class="ghost" data-testid="vc-api-info">Info API</button>
                 </div>
             </div>
-            <div class="vc-button-row">
-                <button type="button" id="vc-health-check" class="ghost">Health check</button>
-                <button type="button" id="vc-api-info" class="ghost">Info API</button>
-            </div>
+        </section>
+
+        <section class="vc-empty-state" id="vc-stats-empty" data-testid="vc-stats-empty">
+            <p><strong>Los contadores estan en cero porque no hay sesion activa.</strong></p>
+            <p>La base de datos tiene registros: la API los entrega solo con un token valido. Inicia sesion en el panel de acceso para ver el resumen.</p>
         </section>
 
         <section class="vc-stats-grid">
             <article class="vc-stat-card">
                 <span class="vc-stat-label">Peliculas</span>
-                <strong id="vc-stat-movies">0</strong>
-                <small>catalogadas</small>
+                <strong id="vc-stat-movies">—</strong>
+                <small id="vc-stat-movies-total">Inicia sesion</small>
             </article>
             <article class="vc-stat-card">
                 <span class="vc-stat-label">Clientes</span>
-                <strong id="vc-stat-customers">0</strong>
-                <small>registrados</small>
+                <strong id="vc-stat-customers">—</strong>
+                <small id="vc-stat-customers-total">Inicia sesion</small>
             </article>
             <article class="vc-stat-card">
                 <span class="vc-stat-label">Alquileres activos</span>
-                <strong id="vc-stat-rentals">0</strong>
-                <small>pendientes</small>
+                <strong id="vc-stat-rentals">—</strong>
+                <small id="vc-stat-rentals-total">Inicia sesion</small>
             </article>
             <article class="vc-stat-card">
                 <span class="vc-stat-label">Stock disponible</span>
-                <strong id="vc-stat-stock">0</strong>
-                <small>copias</small>
+                <strong id="vc-stat-stock">—</strong>
+                <small id="vc-stat-stock-total">Inicia sesion</small>
             </article>
         </section>
 

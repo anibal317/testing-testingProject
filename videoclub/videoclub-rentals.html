@@ -10,7 +10,7 @@
     <header class="vc-header" data-testid="vc-header">
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
-            <ul>
+            <ul class="vc-nav-list">
                 <li><a href="videoclub.html">Video Club</a></li>
                 <li><a href="videoclub-rentals.html" class="active">Alquileres</a></li>
             </ul>
@@ -28,29 +28,40 @@
         </section>
 
         <section class="vc-card vc-control-card" data-testid="vc-control-card">
-            <div class="vc-two-column-form">
+            <div class="vc-card-heading">
                 <div>
+                    <h2 data-testid="vc-page-title">Modulo de alquileres</h2>
+                    <p class="vc-subtitle">Altas de alquiler y devoluciones del cliente activo.</p>
+                </div>
+                <span class="vc-section-chip">Alquileres</span>
+            </div>
+            <div class="vc-control-grid">
+                <div class="vc-control-field">
                     <label for="vc-base-url">Base URL</label>
                     <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
-                <div>
+                <div class="vc-control-field">
                     <label for="vc-customer-select">Cliente activo</label>
                     <select id="vc-customer-select" data-testid="vc-customer-select"><option value="">Cargando clientes...</option></select>
                 </div>
+                <div class="vc-control-actions">
+                    <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
+                    <button type="button" id="vc-load-history" class="ghost" data-testid="vc-load-history">Ver historial</button>
+                    <button type="button" id="vc-clear-history" class="ghost" data-testid="vc-clear-history">Limpiar historial</button>
+                </div>
             </div>
-            <div class="vc-button-row">
-                <button type="button" id="vc-refresh-all" data-testid="vc-refresh-all">Actualizar datos</button>
-                <button type="button" id="vc-load-history" class="ghost" data-testid="vc-load-history">Ver historial</button>
-                <button type="button" id="vc-clear-history" class="ghost" data-testid="vc-clear-history">Limpiar historial</button>
+            <div class="vc-card-footer">
+                <span id="vc-selected-customer-pill" class="vc-pill" data-testid="vc-selected-customer-pill">Cliente no seleccionado</span>
             </div>
-            <span id="vc-selected-customer-pill" class="vc-pill" data-testid="vc-selected-customer-pill">Cliente no seleccionado</span>
         </section>
 
         <section class="vc-card">
             <div class="vc-card-heading">
                 <div>
                     <h2>Gestion de alquileres</h2>
+                    <p class="vc-subtitle">Crea un alquiler y registra su devolucion.</p>
                 </div>
+                <span class="vc-section-chip">Operacion</span>
             </div>
             <form id="vc-rental-form" class="vc-stack-form vc-inline-form">
                 <div class="vc-two-column-form">
@@ -68,19 +79,20 @@
                     <input id="vc-rental-due-date" type="date" required>
                 </div>
                 <div class="vc-button-row">
-                    <button type="submit">Crear alquiler</button>
-                    <button type="button" id="vc-rental-fill-active" class="ghost">Usar cliente activo</button>
+                    <button type="submit" data-testid="vc-rental-submit">Crear alquiler</button>
+                    <button type="button" id="vc-rental-fill-active" class="ghost" data-testid="vc-rental-fill-active">Usar cliente activo</button>
                 </div>
             </form>
             <div class="vc-table-wrap">
-                <table>
+                <table data-testid="vc-rentals-table">
+                    <caption class="vc-table-caption">Alquileres activos</caption>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Cliente</th>
-                            <th>Pelicula</th>
-                            <th>Vence</th>
-                            <th>Accion</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Pelicula</th>
+                            <th scope="col">Vence</th>
+                            <th scope="col">Accion</th>
                         </tr>
                     </thead>
                     <tbody id="vc-rentals-body">
@@ -91,14 +103,21 @@
         </section>
 
         <section class="vc-card">
-            <h2>Historial del cliente</h2>
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Historial del cliente</h2>
+                    <p class="vc-subtitle">Alquileres registrados para el cliente activo.</p>
+                </div>
+                <span class="vc-section-chip">Historial</span>
+            </div>
             <div class="vc-table-wrap">
-                <table>
+                <table data-testid="vc-history-table">
+                    <caption class="vc-table-caption">Historial del cliente seleccionado</caption>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Pelicula</th>
-                            <th>Estado</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Pelicula</th>
+                            <th scope="col">Estado</th>
                         </tr>
                     </thead>
                     <tbody id="vc-history-body">
@@ -109,6 +128,13 @@
         </section>
 
         <section class="vc-card vc-response-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2>Actividad</h2>
+                    <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
+                </div>
+                <span class="vc-section-chip">API Log</span>
+            </div>
             <pre id="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>
