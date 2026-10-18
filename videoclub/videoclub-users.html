@@ -11,8 +11,8 @@
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
             <ul class="vc-nav-list">
-                <li data-testid="vc-nav-videoclub-link"><a href="videoclub.html">Video Club</a></li>
-                <li data-testid="vc-nav-users-link"><a href="videoclub-users.html" class="active">Usuarios</a></li>
+                <li><a href="videoclub.html" data-testid="vc-nav-videoclub-link">Video Club</a></li>
+                <li><a href="videoclub-users.html" class="active" data-testid="vc-nav-users-link">Usuarios</a></li>
             </ul>
         </nav>
     </header>
@@ -109,6 +109,23 @@
             <pre id="vc-output" data-testid="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>
+
+    <div class="vc-guard" id="vc-guard-modal" data-testid="vc-guard-modal" role="dialog" aria-modal="true"
+         aria-labelledby="vc-guard-title" aria-describedby="vc-guard-message" hidden>
+        <div class="vc-guard-dialog">
+            <h2 id="vc-guard-title" data-testid="vc-guard-title">Necesitas iniciar sesion</h2>
+            <p id="vc-guard-message" data-testid="vc-guard-message" class="vc-subtitle">
+                La seccion <strong data-testid="vc-guard-section">Usuarios</strong> requiere una sesion activa.
+                Te llevamos al panel de acceso para que puedas ingresar.
+            </p>
+            <p class="vc-guard-countdown" data-testid="vc-guard-countdown" aria-live="polite">
+                Cierre automatico en <span id="vc-guard-seconds" data-testid="vc-guard-seconds">8</span> s
+            </p>
+            <div class="vc-button-row">
+                <button type="button" id="vc-guard-close" data-testid="vc-guard-close">Cerrar e ir al acceso</button>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.12.4.min.js"></script>
     <script src="videoclub.js"></script>

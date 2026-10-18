@@ -19,6 +19,9 @@
     const logoutBtn = document.getElementById('vc-logout-btn');
     const authStatus = document.getElementById('vc-auth-status');
     const authRoleChip = document.getElementById('vc-auth-role');
+    const guardModal = document.getElementById('vc-guard-modal');
+    const guardClose = document.getElementById('vc-guard-close');
+    const guardSeconds = document.getElementById('vc-guard-seconds');
     const selectedCustomerPill = document.getElementById('vc-selected-customer-pill');
     const statMovies = document.getElementById('vc-stat-movies');
     const statCustomers = document.getElementById('vc-stat-customers');
@@ -150,7 +153,8 @@
             'videoclub-customers.html',
             'videoclub-rentals.html',
             'videoclub-users.html',
-            'videoclub-candybar.html'
+            'videoclub-candybar.html',
+            'videoclub-tabs.html'
         ];
 
         return validPages.includes(nextPage) ? nextPage : '';
@@ -162,7 +166,53 @@
     }
 
     // GET /api/movies es publico: el catalogo se puede consultar sin sesion.
-    const PUBLIC_PAGES = ['videoclub-movies.html'];
+    const PUBLIC_PAGES = ['videoclub-movies.html', 'videoclub-tabs.html'];
+
+    // Aviso modal para las paginas que requieren sesion: en lugar de redirigir
+    // en silencio, se muestra la advertencia y el redirect ocurre al cerrarla
+    // (boton Cerrar, tecla Escape o cuenta regresiva).
+    const GUARD_SECONDS = 8;
+    let guardTimer = null;
+
+    function goToLogin(nextPage) {
+        if (guardTimer) {
+            window.clearInterval(guardTimer);
+            guardTimer = null;
+        }
+
+        window.location.replace(`./${HUB_PAGE}?next=${encodeURIComponent(nextPage)}`);
+    }
+
+    function showGuardModal(nextPage) {
+        if (!guardModal) {
+            goToLogin(nextPage);
+            return;
+        }
+
+        let remaining = GUARD_SECONDS;
+
+        if (guardSeconds) {
+            guardSeconds.textContent = String(remaining);
+        }
+
+        guardModal.hidden = false;
+
+        if (guardClose) {
+            guardClose.focus();
+        }
+
+        guardTimer = window.setInterval(function() {
+            remaining -= 1;
+
+            if (guardSeconds) {
+                guardSeconds.textContent = String(remaining > 0 ? remaining : 0);
+            }
+
+            if (remaining <= 0) {
+                goToLogin(nextPage);
+            }
+        }, 1000);
+    }
 
     function enforceProtectedRoute() {
         const currentPage = getCurrentPageName();
@@ -170,8 +220,7 @@
         const isPublicPage = PUBLIC_PAGES.includes(currentPage);
 
         if (!hasSession() && !isHub && !isPublicPage) {
-            const loginUrl = `./${HUB_PAGE}?next=${encodeURIComponent(currentPage)}`;
-            window.location.replace(loginUrl);
+            showGuardModal(currentPage);
             return true;
         }
 
@@ -1894,6 +1943,17 @@
     bindEvent(authForm, 'submit', submitLogin);
     bindEvent(registerBtn, 'click', registerAndLogin);
     bindEvent(logoutBtn, 'click', logout);
+
+    bindEvent(guardClose, 'click', function() {
+        goToLogin(getCurrentPageName());
+    });
+
+    // Escape cierra el aviso y continua con el redirect.
+    bindEvent(document, 'keydown', function(event) {
+        if (event.key === 'Escape' && guardModal && !guardModal.hidden) {
+            goToLogin(getCurrentPageName());
+        }
+    });
 
     bindEvent(authTogglePasswordBtn, 'click', function() {
         if (!authPasswordInput || !authTogglePasswordBtn) {
