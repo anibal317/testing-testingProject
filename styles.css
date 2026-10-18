@@ -413,3 +413,90 @@ form button {
     }
 }
 
+/* Tabla simple con acciones por fila (pagina table.html) */
+.data-table-wrap {
+    margin-top: 1.5rem;
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.data-table th,
+.data-table td {
+    border: 1px solid #ddd;
+    padding: 0.65rem;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f3f3f3;
+}
+
+.row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.row-actions button {
+    padding: 0.35rem 0.7rem;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.btn-view {
+    background-color: #007bff;
+}
+
+.btn-edit {
+    background-color: #0f6f5c;
+}
+
+.btn-delete {
+    background-color: #b42318;
+}
+
+.btn-cancel {
+    background-color: #555;
+}
+
+.row-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.45);
+}
+
+.row-modal:not([hidden]) {
+    display: block;
+}
+
+.row-modal-content {
+    background-color: #fefefe;
+    margin: 8% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 460px;
+}
+
+.row-modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.row-modal-actions button {
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}

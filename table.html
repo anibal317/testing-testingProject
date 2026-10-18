@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechInfo Hub - Table</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="table" data-testid="page-table">
+    <header data-testid="header-main">
+        <nav data-testid="nav-main" data-qa="main-navigation">
+            <ul data-testid="nav-list">
+                <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
+                <li><a href="articles.html" data-testid="nav-articles-link">Articles</a></li>
+                <li><a href="about.html" data-testid="nav-about-link">About</a></li>
+                <li><a href="products.html" data-testid="nav-products-link">Products</a></li>
+                <li><a href="services.html" data-testid="nav-services-link">Services</a></li>
+                <li><a href="videoclub/videoclub.html" data-testid="nav-videoclub-link">Video Club</a></li>
+                <li><a href="videoclub/videoclub-tabs.html" data-testid="nav-tabs-link">Tabs</a></li>
+                <li><a href="blog.html" data-testid="nav-blog-link">Blog</a></li>
+                <li><a href="table.html" class="active" data-testid="nav-table-link">Table</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main data-testid="main-content">
+        <h1 data-testid="page-title">Tabla de datos</h1>
+        <p data-testid="table-intro">Tabla con datos ya cargados y acciones por fila: Ver, Editar y Borrar.</p>
+
+        <div class="data-table-wrap">
+            <table class="data-table" data-testid="data-table">
+                <caption data-testid="data-table-caption">Registros cargados</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Rol</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody data-testid="data-table-body">
+                    <tr data-testid="row-1">
+                        <td data-testid="row-1-id" data-field="id">1</td>
+                        <td data-testid="row-1-name" data-field="name">Ana Gomez</td>
+                        <td data-testid="row-1-email" data-field="email">ana@example.com</td>
+                        <td data-testid="row-1-role" data-field="role">Admin</td>
+                        <td>
+                            <div class="row-actions">
+                                <button type="button" class="btn-view" data-action="view" data-testid="btn-view-1" data-row="1">Ver</button>
+                                <button type="button" class="btn-edit" data-action="edit" data-testid="btn-edit-1" data-row="1">Editar</button>
+                                <button type="button" class="btn-delete" data-action="delete" data-testid="btn-delete-1" data-row="1">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-testid="row-2">
+                        <td data-testid="row-2-id" data-field="id">2</td>
+                        <td data-testid="row-2-name" data-field="name">Bruno Diaz</td>
+                        <td data-testid="row-2-email" data-field="email">bruno@example.com</td>
+                        <td data-testid="row-2-role" data-field="role">Editor</td>
+                        <td>
+                            <div class="row-actions">
+                                <button type="button" class="btn-view" data-action="view" data-testid="btn-view-2" data-row="2">Ver</button>
+                                <button type="button" class="btn-edit" data-action="edit" data-testid="btn-edit-2" data-row="2">Editar</button>
+                                <button type="button" class="btn-delete" data-action="delete" data-testid="btn-delete-2" data-row="2">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-testid="row-3">
+                        <td data-testid="row-3-id" data-field="id">3</td>
+                        <td data-testid="row-3-name" data-field="name">Carla Ferro</td>
+                        <td data-testid="row-3-email" data-field="email">carla@example.com</td>
+                        <td data-testid="row-3-role" data-field="role">Viewer</td>
+                        <td>
+                            <div class="row-actions">
+                                <button type="button" class="btn-view" data-action="view" data-testid="btn-view-3" data-row="3">Ver</button>
+                                <button type="button" class="btn-edit" data-action="edit" data-testid="btn-edit-3" data-row="3">Editar</button>
+                                <button type="button" class="btn-delete" data-action="delete" data-testid="btn-delete-3" data-row="3">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-testid="row-4">
+                        <td data-testid="row-4-id" data-field="id">4</td>
+                        <td data-testid="row-4-name" data-field="name">Diego Ibarra</td>
+                        <td data-testid="row-4-email" data-field="email">diego@example.com</td>
+                        <td data-testid="row-4-role" data-field="role">Editor</td>
+                        <td>
+                            <div class="row-actions">
+                                <button type="button" class="btn-view" data-action="view" data-testid="btn-view-4" data-row="4">Ver</button>
+                                <button type="button" class="btn-edit" data-action="edit" data-testid="btn-edit-4" data-row="4">Editar</button>
+                                <button type="button" class="btn-delete" data-action="delete" data-testid="btn-delete-4" data-row="4">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr data-testid="row-5">
+                        <td data-testid="row-5-id" data-field="id">5</td>
+                        <td data-testid="row-5-name" data-field="name">Elena Ruiz</td>
+                        <td data-testid="row-5-email" data-field="email">elena@example.com</td>
+                        <td data-testid="row-5-role" data-field="role">Viewer</td>
+                        <td>
+                            <div class="row-actions">
+                                <button type="button" class="btn-view" data-action="view" data-testid="btn-view-5" data-row="5">Ver</button>
+                                <button type="button" class="btn-edit" data-action="edit" data-testid="btn-edit-5" data-row="5">Editar</button>
+                                <button type="button" class="btn-delete" data-action="delete" data-testid="btn-delete-5" data-row="5">Borrar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <footer data-testid="footer-main">
+        <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
+        <a href="#" id="contact-link" data-testid="contact-link">Contact Us</a>
+    </footer>
+
+    <div class="row-modal" id="row-modal" data-testid="row-modal" role="dialog" aria-modal="true"
+         aria-labelledby="row-modal-title" hidden>
+        <div class="row-modal-content">
+            <h2 id="row-modal-title" data-testid="row-modal-title">Detalle del registro</h2>
+
+            <div data-testid="row-modal-view">
+                <p><strong>ID:</strong> <span data-testid="row-modal-id"></span></p>
+                <p><strong>Nombre:</strong> <span data-testid="row-modal-name"></span></p>
+                <p><strong>Email:</strong> <span data-testid="row-modal-email"></span></p>
+                <p><strong>Rol:</strong> <span data-testid="row-modal-role"></span></p>
+            </div>
+
+            <form id="row-edit-form" data-testid="row-edit-form" hidden>
+                <input type="hidden" id="row-edit-id" data-testid="row-edit-id">
+                <label for="row-edit-name" data-testid="label-row-edit-name">Nombre:</label>
+                <input type="text" id="row-edit-name" required data-testid="row-edit-name">
+                <label for="row-edit-email" data-testid="label-row-edit-email">Email:</label>
+                <input type="email" id="row-edit-email" required data-testid="row-edit-email">
+                <label for="row-edit-role" data-testid="label-row-edit-role">Rol:</label>
+                <input type="text" id="row-edit-role" data-testid="row-edit-role">
+            </form>
+
+            <p data-testid="row-modal-confirm" hidden></p>
+
+            <div class="row-modal-actions">
+                <button type="button" id="row-modal-save" class="btn-edit" data-testid="row-modal-save" hidden>Guardar</button>
+                <button type="button" id="row-modal-delete" class="btn-delete" data-testid="row-modal-delete" hidden>Eliminar</button>
+                <button type="button" id="row-modal-close" class="btn-cancel" data-testid="row-modal-close">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="table.js"></script>
+</body>
+</html>
