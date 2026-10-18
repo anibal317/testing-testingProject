@@ -11,20 +11,20 @@
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
             <ul class="vc-nav-list">
-                <li><a href="videoclub.html">Video Club</a></li>
-                <li><a href="videoclub-rentals.html" class="active">Alquileres</a></li>
+                <li data-testid="vc-nav-videoclub-link"><a href="videoclub.html">Video Club</a></li>
+                <li data-testid="vc-nav-rentals-link"><a href="videoclub-rentals.html" class="active">Alquileres</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="vc-main" data-testid="vc-main-content">
         <section class="vc-module-nav" data-testid="vc-module-nav">
-            <a href="videoclub.html">Resumen</a>
-            <a href="videoclub-movies.html">Peliculas</a>
-            <a href="videoclub-customers.html">Clientes</a>
-            <a href="videoclub-rentals.html" class="active">Alquileres</a>
-            <a href="videoclub-users.html">Usuarios</a>
-            <a href="videoclub-candybar.html">Candy Bar</a>
+            <a href="videoclub.html" data-testid="vc-nav-overview">Resumen</a>
+            <a href="videoclub-movies.html" data-testid="vc-nav-movies">Peliculas</a>
+            <a href="videoclub-customers.html" data-testid="vc-nav-customers">Clientes</a>
+            <a href="videoclub-rentals.html" class="active" data-testid="vc-nav-rentals">Alquileres</a>
+            <a href="videoclub-users.html" data-testid="vc-nav-users">Usuarios</a>
+            <a href="videoclub-candybar.html" data-testid="vc-nav-candybar">Candy Bar</a>
         </section>
 
         <section class="vc-card vc-control-card" data-testid="vc-control-card">
@@ -37,11 +37,11 @@
             </div>
             <div class="vc-control-grid">
                 <div class="vc-control-field">
-                    <label for="vc-base-url">Base URL</label>
+                    <label for="vc-base-url" data-testid="label-vc-base-url">Base URL</label>
                     <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
                 <div class="vc-control-field">
-                    <label for="vc-customer-select">Cliente activo</label>
+                    <label for="vc-customer-select" data-testid="label-vc-customer-select">Cliente activo</label>
                     <select id="vc-customer-select" data-testid="vc-customer-select"><option value="">Cargando clientes...</option></select>
                 </div>
                 <div class="vc-control-actions">
@@ -58,25 +58,25 @@
         <section class="vc-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>Gestion de alquileres</h2>
+                    <h2 data-testid="vc-rental-manage-heading">Gestion de alquileres</h2>
                     <p class="vc-subtitle">Crea un alquiler y registra su devolucion.</p>
                 </div>
                 <span class="vc-section-chip">Operacion</span>
             </div>
-            <form id="vc-rental-form" class="vc-stack-form vc-inline-form">
+            <form id="vc-rental-form" class="vc-stack-form vc-inline-form" data-testid="vc-rental-form">
                 <div class="vc-two-column-form">
                     <div>
-                        <label for="vc-rental-customer">Cliente</label>
-                        <select id="vc-rental-customer"><option value="">Selecciona un cliente</option></select>
+                        <label for="vc-rental-customer" data-testid="label-vc-rental-customer">Cliente</label>
+                        <select id="vc-rental-customer" data-testid="vc-rental-customer"><option value="">Selecciona un cliente</option></select>
                     </div>
                     <div>
-                        <label for="vc-rental-movie">Pelicula</label>
-                        <select id="vc-rental-movie"><option value="">Selecciona una pelicula</option></select>
+                        <label for="vc-rental-movie" data-testid="label-vc-rental-movie">Pelicula</label>
+                        <select id="vc-rental-movie" data-testid="vc-rental-movie"><option value="">Selecciona una pelicula</option></select>
                     </div>
                 </div>
                 <div>
-                    <label for="vc-rental-due-date">Fecha de devolucion</label>
-                    <input id="vc-rental-due-date" type="date" required>
+                    <label for="vc-rental-due-date" data-testid="label-vc-rental-due-date">Fecha de devolucion</label>
+                    <input id="vc-rental-due-date" type="date" required data-testid="vc-rental-due-date">
                 </div>
                 <div class="vc-button-row">
                     <button type="submit" data-testid="vc-rental-submit">Crear alquiler</button>
@@ -95,7 +95,7 @@
                             <th scope="col">Accion</th>
                         </tr>
                     </thead>
-                    <tbody id="vc-rentals-body">
+                    <tbody id="vc-rentals-body" data-testid="vc-rentals-body">
                         <tr><td colspan="5">Sin alquileres activos.</td></tr>
                     </tbody>
                 </table>
@@ -105,7 +105,7 @@
         <section class="vc-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>Historial del cliente</h2>
+                    <h2 data-testid="vc-customer-history-heading">Historial del cliente</h2>
                     <p class="vc-subtitle">Alquileres registrados para el cliente activo.</p>
                 </div>
                 <span class="vc-section-chip">Historial</span>
@@ -120,7 +120,7 @@
                             <th scope="col">Estado</th>
                         </tr>
                     </thead>
-                    <tbody id="vc-history-body">
+                    <tbody id="vc-history-body" data-testid="vc-history-body">
                         <tr><td colspan="3">Sin historial cargado.</td></tr>
                     </tbody>
                 </table>
@@ -130,12 +130,12 @@
         <section class="vc-card vc-response-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>Actividad</h2>
+                    <h2 data-testid="vc-activity-heading">Actividad</h2>
                     <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
                 </div>
                 <span class="vc-section-chip">API Log</span>
             </div>
-            <pre id="vc-output">Sin requests ejecutadas.</pre>
+            <pre id="vc-output" data-testid="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>
 

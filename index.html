@@ -11,12 +11,12 @@
         <nav data-testid="nav-main" data-qa="main-navigation">
             <ul data-testid="nav-list">
                 <li><a href="index.html" class="active" data-testid="nav-home-link">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="videoclub/videoclub.html">Video Club</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li data-testid="nav-articles-link"><a href="articles.html">Articles</a></li>
+                <li data-testid="nav-about-link"><a href="about.html">About</a></li>
+                <li data-testid="nav-products-link"><a href="products.html">Products</a></li>
+                <li data-testid="nav-services-link"><a href="services.html">Services</a></li>
+                <li data-testid="nav-videoclub-link"><a href="videoclub/videoclub.html">Video Club</a></li>
+                <li data-testid="nav-blog-link"><a href="blog.html">Blog</a></li>
             </ul>
             <form id="search-form" class="search-form" data-testid="search-form" data-qa="search-form">
                 <input type="text" placeholder="Buscar..." data-testid="search-input" aria-label="Buscar">
@@ -32,7 +32,7 @@
         </section>
 
         <section class="featured-articles" data-testid="featured-articles-section">
-            <h2>Featured Articles</h2>
+            <h2 data-testid="featured-articles-heading">Featured Articles</h2>
             <div class="article-grid" data-testid="article-grid">
                 <article data-testid="article-card-ai">
                     <h3>The Rise of AI in Everyday Life</h3>
@@ -53,7 +53,7 @@
         </section>
 
         <section class="tech-trends" data-testid="tech-trends-section">
-            <h2>Tendencias Tecnológicas</h2>
+            <h2 data-testid="tech-trends-heading">Tendencias Tecnológicas</h2>
             <ul>
                 <li>Inteligencia Artificial</li>
                 <li>Blockchain</li>
@@ -63,19 +63,19 @@
         </section>
 
         <section class="backend-section" data-testid="videoclub-cta">
-            <h2>Video Club</h2>
+            <h2 data-testid="videoclub-heading">Video Club</h2>
             <p>La gestion de peliculas, clientes y alquileres ahora vive en su propia pantalla dedicada.</p>
             <a href="videoclub/videoclub.html" class="read-more" data-testid="videoclub-link">Abrir Seccion Video Club</a>
         </section>
 
         <section class="backend-section" data-testid="external-cta">
-            <h2>External Page</h2>
+            <h2 data-testid="external-heading">External Page</h2>
             <p>Abre la vista externa en otra pestaña manteniendo el mismo estilo del sitio.</p>
             <a href="external.html" class="read-more" target="_blank" rel="noopener noreferrer" data-testid="external-link">Abrir pagina externa</a>
         </section>
 
         <section class="newsletter" data-testid="newsletter-section">
-            <h2>Subscribe to Our Newsletter</h2>
+            <h2 data-testid="newsletter-heading">Subscribe to Our Newsletter</h2>
             <form id="newsletter-form" data-testid="newsletter-form" data-qa="newsletter-form">
                 <input type="email" placeholder="Enter your email" required data-testid="newsletter-email" aria-label="Email para newsletter">
                 <button type="submit" data-testid="newsletter-submit">Subscribe</button>
@@ -91,16 +91,16 @@
 
     <div id="contact-modal" class="modal" data-testid="contact-modal" data-qa="contact-modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Us</h2>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required></textarea>
-                <button type="submit">Send</button>
+            <span class="close" data-testid="contact-modal-close">&times;</span>
+            <h2 data-testid="contact-heading">Contact Us</h2>
+            <form id="contact-form" data-testid="contact-form">
+                <label for="name" data-testid="label-name">Name:</label>
+                <input type="text" id="name" name="name" required data-testid="contact-name-input">
+                <label for="email" data-testid="label-email">Email:</label>
+                <input type="email" id="email" name="email" required data-testid="contact-email-input">
+                <label for="message" data-testid="label-message">Message:</label>
+                <textarea id="message" name="message" required data-testid="contact-message-input"></textarea>
+                <button type="submit" data-testid="contact-submit-btn">Send</button>
             </form>
         </div>
     </div>

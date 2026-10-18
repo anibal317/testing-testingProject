@@ -11,12 +11,12 @@
         <nav data-testid="nav-main" data-qa="main-navigation">
             <ul data-testid="nav-list">
                 <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="products.html">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="videoclub/videoclub.html">Video Club</a></li>
-                <li><a href="blog.html" class="active">Blog</a></li>
+                <li data-testid="nav-articles-link"><a href="articles.html">Articles</a></li>
+                <li data-testid="nav-about-link"><a href="about.html">About</a></li>
+                <li data-testid="nav-products-link"><a href="products.html">Products</a></li>
+                <li data-testid="nav-services-link"><a href="services.html">Services</a></li>
+                <li data-testid="nav-videoclub-link"><a href="videoclub/videoclub.html">Video Club</a></li>
+                <li data-testid="nav-blog-link"><a href="blog.html" class="active">Blog</a></li>
             </ul>
         </nav>
     </header>
@@ -25,19 +25,19 @@
         <h1 data-testid="page-title">TechInfo Hub Blog</h1>
         <section class="blog-posts" data-testid="blog-posts">
             <article class="blog-post" data-testid="blog-post-ai">
-                <h2>The Future of Artificial Intelligence</h2>
+                <h2 data-testid="blog-title-ai">The Future of Artificial Intelligence</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-15">May 15, 2023</time> by John Doe</p>
                 <p>Artificial Intelligence is rapidly evolving, transforming industries and our daily lives...</p>
                 <a href="#" class="read-more" data-testid="read-more-ai-post">Read More</a>
             </article>
             <article class="blog-post" data-testid="blog-post-5g">
-                <h2>5G Technology: A Game Changer</h2>
+                <h2 data-testid="blog-title-5g">5G Technology: A Game Changer</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-10">May 10, 2023</time> by Jane Smith</p>
                 <p>5G is set to revolutionize mobile connectivity, offering unprecedented speeds and low latency...</p>
                 <a href="#" class="read-more" data-testid="read-more-5g-post">Read More</a>
             </article>
             <article class="blog-post" data-testid="blog-post-cybersecurity">
-                <h2>Cybersecurity in the Age of IoT</h2>
+                <h2 data-testid="blog-title-cybersecurity">Cybersecurity in the Age of IoT</h2>
                 <p class="post-meta">Posted on <time datetime="2023-05-05">May 5, 2023</time> by Mike Johnson</p>
                 <p>As IoT devices become more prevalent, the need for robust cybersecurity measures increases...</p>
                 <a href="#" class="read-more" data-testid="read-more-cybersecurity-post">Read More</a>
@@ -52,21 +52,21 @@
 
     <footer>
         <p>&copy; 2023 TechInfo Hub. All rights reserved.</p>
-        <a href="#" id="contact-link">Contact Us</a>
+        <a href="#" id="contact-link" data-testid="contact-link">Contact Us</a>
     </footer>
 
     <div id="contact-modal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Us</h2>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required></textarea>
-                <button type="submit">Send</button>
+            <span class="close" data-testid="contact-modal-close">&times;</span>
+            <h2 data-testid="contact-heading">Contact Us</h2>
+            <form id="contact-form" data-testid="contact-form">
+                <label for="name" data-testid="label-name">Name:</label>
+                <input type="text" id="name" name="name" required data-testid="contact-name-input">
+                <label for="email" data-testid="label-email">Email:</label>
+                <input type="email" id="email" name="email" required data-testid="contact-email-input">
+                <label for="message" data-testid="label-message">Message:</label>
+                <textarea id="message" name="message" required data-testid="contact-message-input"></textarea>
+                <button type="submit" data-testid="contact-submit-btn">Send</button>
             </form>
         </div>
     </div>

@@ -11,20 +11,20 @@
         <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
             <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
             <ul class="vc-nav-list">
-                <li><a href="videoclub.html">Video Club</a></li>
-                <li><a href="videoclub-users.html" class="active">Usuarios</a></li>
+                <li data-testid="vc-nav-videoclub-link"><a href="videoclub.html">Video Club</a></li>
+                <li data-testid="vc-nav-users-link"><a href="videoclub-users.html" class="active">Usuarios</a></li>
             </ul>
         </nav>
     </header>
 
     <main class="vc-main" data-testid="vc-main-content">
         <section class="vc-module-nav" data-testid="vc-module-nav">
-            <a href="videoclub.html">Resumen</a>
-            <a href="videoclub-movies.html">Peliculas</a>
-            <a href="videoclub-customers.html">Clientes</a>
-            <a href="videoclub-rentals.html">Alquileres</a>
-            <a href="videoclub-users.html" class="active">Usuarios</a>
-            <a href="videoclub-candybar.html">Candy Bar</a>
+            <a href="videoclub.html" data-testid="vc-nav-overview">Resumen</a>
+            <a href="videoclub-movies.html" data-testid="vc-nav-movies">Peliculas</a>
+            <a href="videoclub-customers.html" data-testid="vc-nav-customers">Clientes</a>
+            <a href="videoclub-rentals.html" data-testid="vc-nav-rentals">Alquileres</a>
+            <a href="videoclub-users.html" class="active" data-testid="vc-nav-users">Usuarios</a>
+            <a href="videoclub-candybar.html" data-testid="vc-nav-candybar">Candy Bar</a>
         </section>
 
         <section class="vc-card vc-control-card" data-testid="vc-control-card">
@@ -37,7 +37,7 @@
             </div>
             <div class="vc-control-grid">
                 <div class="vc-control-field">
-                    <label for="vc-base-url">Base URL</label>
+                    <label for="vc-base-url" data-testid="label-vc-base-url">Base URL</label>
                     <input id="vc-base-url" type="url" value="https://be-testing-project.vercel.app" required data-testid="vc-base-url">
                 </div>
                 <div class="vc-control-actions">
@@ -50,29 +50,29 @@
         <section class="vc-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>CRUD de usuarios</h2>
+                    <h2 data-testid="vc-user-crud-heading">CRUD de usuarios</h2>
                     <p class="vc-subtitle">Completa los campos y guarda el registro.</p>
                 </div>
-                <span id="vc-user-form-mode" class="vc-section-chip">Alta</span>
+                <span id="vc-user-form-mode" data-testid="vc-user-form-mode" class="vc-section-chip">Alta</span>
             </div>
-            <form id="vc-user-form" class="vc-stack-form">
-                <input id="vc-user-id" type="hidden">
+            <form id="vc-user-form" class="vc-stack-form" data-testid="vc-user-form">
+                <input id="vc-user-id" type="hidden" data-testid="vc-user-id">
                 <div class="vc-two-column-form">
                     <div>
-                        <label for="vc-user-email">Correo</label>
-                        <input id="vc-user-email" type="email" required>
+                        <label for="vc-user-email" data-testid="label-vc-user-email">Correo</label>
+                        <input id="vc-user-email" type="email" required data-testid="vc-user-email">
                     </div>
                     <div>
-                        <label for="vc-user-role">Rol</label>
-                        <select id="vc-user-role">
+                        <label for="vc-user-role" data-testid="label-vc-user-role">Rol</label>
+                        <select id="vc-user-role" data-testid="vc-user-role">
                             <option value="client">client</option>
                             <option value="admin">admin</option>
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label for="vc-user-password">Contrasena</label>
-                    <input id="vc-user-password" type="password" placeholder="Opcional en edicion">
+                    <label for="vc-user-password" data-testid="label-vc-user-password">Contrasena</label>
+                    <input id="vc-user-password" type="password" placeholder="Opcional en edicion" data-testid="vc-user-password">
                 </div>
                 <div class="vc-button-row">
                     <button type="submit" data-testid="vc-user-submit">Guardar usuario</button>
@@ -90,7 +90,7 @@
                             <th scope="col">Acciones</th>
                         </tr>
                     </thead>
-                    <tbody id="vc-users-body">
+                    <tbody id="vc-users-body" data-testid="vc-users-body">
                         <tr><td colspan="4">Sin usuarios cargados.</td></tr>
                     </tbody>
                 </table>
@@ -100,12 +100,12 @@
         <section class="vc-card vc-response-card">
             <div class="vc-card-heading">
                 <div>
-                    <h2>Actividad</h2>
+                    <h2 data-testid="vc-activity-heading">Actividad</h2>
                     <p class="vc-subtitle">Respuesta cruda de la API para soporte y pruebas.</p>
                 </div>
                 <span class="vc-section-chip">API Log</span>
             </div>
-            <pre id="vc-output">Sin requests ejecutadas.</pre>
+            <pre id="vc-output" data-testid="vc-output">Sin requests ejecutadas.</pre>
         </section>
     </main>
 

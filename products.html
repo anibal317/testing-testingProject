@@ -11,12 +11,12 @@
         <nav data-testid="nav-main" data-qa="main-navigation">
             <ul data-testid="nav-list">
                 <li><a href="index.html" data-testid="nav-home-link">Home</a></li>
-                <li><a href="articles.html">Articles</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="products.html" class="active">Products</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="videoclub/videoclub.html">Video Club</a></li>
-                <li><a href="blog.html">Blog</a></li>
+                <li data-testid="nav-articles-link"><a href="articles.html">Articles</a></li>
+                <li data-testid="nav-about-link"><a href="about.html">About</a></li>
+                <li data-testid="nav-products-link"><a href="products.html" class="active">Products</a></li>
+                <li data-testid="nav-services-link"><a href="services.html">Services</a></li>
+                <li data-testid="nav-videoclub-link"><a href="videoclub/videoclub.html">Video Club</a></li>
+                <li data-testid="nav-blog-link"><a href="blog.html">Blog</a></li>
             </ul>
         </nav>
     </header>
@@ -53,16 +53,16 @@
 
     <div id="contact-modal" class="modal" data-testid="contact-modal" data-qa="contact-modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Contact Us</h2>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="message">Message:</label>
-                <textarea id="message" name="message" required></textarea>
-                <button type="submit">Send</button>
+            <span class="close" data-testid="contact-modal-close">&times;</span>
+            <h2 data-testid="contact-heading">Contact Us</h2>
+            <form id="contact-form" data-testid="contact-form">
+                <label for="name" data-testid="label-name">Name:</label>
+                <input type="text" id="name" name="name" required data-testid="contact-name-input">
+                <label for="email" data-testid="label-email">Email:</label>
+                <input type="email" id="email" name="email" required data-testid="contact-email-input">
+                <label for="message" data-testid="label-message">Message:</label>
+                <textarea id="message" name="message" required data-testid="contact-message-input"></textarea>
+                <button type="submit" data-testid="contact-submit-btn">Send</button>
             </form>
         </div>
     </div>
