@@ -74,7 +74,6 @@
     const rentalDueDateInput = document.getElementById('vc-rental-due-date');
     const rentalFillActiveBtn = document.getElementById('vc-rental-fill-active');
 
-    const moviesGrid = document.getElementById('vc-movies-grid');
     const moviesBody = document.getElementById('vc-movies-body');
     const rentalsBody = document.getElementById('vc-rentals-body');
     const historyBody = document.getElementById('vc-history-body');
@@ -680,38 +679,6 @@
         return matchesText && matchesStock;
     }
 
-    function renderMovies() {
-        if (!moviesGrid) {
-            return;
-        }
-
-        const visibleMovies = state.movies.filter(movieMatchesFilter);
-
-        if (!visibleMovies.length) {
-            moviesGrid.innerHTML = '<p class="vc-placeholder">No hay resultados para ese filtro.</p>';
-            return;
-        }
-
-        moviesGrid.innerHTML = visibleMovies.map(function(movie) {
-            const normalized = normalizeMovie(movie);
-            const id = normalized.id;
-            const title = escapeHtml(normalized.title);
-            const genre = escapeHtml(normalized.genre);
-            const stock = normalized.availableCopies;
-            const stockLabel = stock > 0 ? `${stock} disponibles` : 'Sin stock';
-            const stockClass = stock > 0 ? 'vc-stock-badge' : 'vc-stock-badge out';
-            const canOperate = isAdmin();
-            const disabled = stock > 0 && canOperate ? '' : ' disabled';
-            const director = normalized.director ? `Dir. ${escapeHtml(normalized.director)}` : 'Director no informado';
-            const price = normalized.rentalPrice ? `USD ${escapeHtml(String(normalized.rentalPrice))}` : 'Precio pendiente';
-            const actions = canOperate
-                ? `<div class="vc-card-actions"><button type="button" class="vc-rent-button" data-movie-id="${id}"${disabled}>Alquilar</button><button type="button" class="ghost" data-edit-movie="${id}">Editar</button></div>`
-                : `<p class="vc-movie-meta">${hasSession() ? 'Sesion client: solo lectura' : 'Publico: solo lectura. Inicia sesion para operar.'}</p>`;
-
-            return `<article class="vc-movie-item"><h4>${title}</h4><p class="vc-movie-meta">${director}</p><p class="vc-movie-meta">Genero: ${genre} · ${price}</p><span class="${stockClass}">${stockLabel}</span>${actions}</article>`;
-        }).join('');
-    }
-
     function renderMoviesTable() {
         if (!moviesBody && !rentalMovieSelect) {
             return;
@@ -743,14 +710,24 @@
             return;
         }
 
-        moviesBody.innerHTML = sortedMovies.map(function(movie) {
+        const visibleMovies = sortedMovies.filter(movieMatchesFilter);
+
+        if (!visibleMovies.length) {
+            moviesBody.innerHTML = '<tr><td colspan="6">No hay resultados para ese filtro.</td></tr>';
+            return;
+        }
+
+        moviesBody.innerHTML = visibleMovies.map(function(movie) {
             const normalized = normalizeMovie(movie);
+            const id = escapeHtml(normalized.id);
             const copiesLabel = `${normalized.availableCopies}/${normalized.totalCopies}`;
             const priceLabel = normalized.rentalPrice ? `USD ${normalized.rentalPrice}` : '-';
-            const actionCol = isAdmin()
-                ? `<div class="vc-card-actions"><button type="button" class="ghost" data-edit-movie="${escapeHtml(normalized.id)}">Editar</button><button type="button" class="danger" data-delete-movie="${escapeHtml(normalized.id)}">Eliminar</button></div>`
+            const canOperate = isAdmin();
+            const rentDisabled = normalized.availableCopies > 0 ? '' : ' disabled';
+            const actionCol = canOperate
+                ? `<div class="vc-card-actions"><button type="button" class="vc-rent-button" data-movie-id="${id}"${rentDisabled}>Alquilar</button><button type="button" class="ghost" data-edit-movie="${id}">Editar</button><button type="button" class="danger" data-delete-movie="${id}">Eliminar</button></div>`
                 : '<span>Solo lectura</span>';
-            return `<tr><td>${escapeHtml(normalized.id)}</td><td>${escapeHtml(normalized.title)}</td><td>${escapeHtml(normalized.genre)}</td><td>${escapeHtml(copiesLabel)}</td><td>${escapeHtml(priceLabel)}</td><td>${actionCol}</td></tr>`;
+            return `<tr><td>${id}</td><td>${escapeHtml(normalized.title)}</td><td>${escapeHtml(normalized.genre)}</td><td>${escapeHtml(copiesLabel)}</td><td>${escapeHtml(priceLabel)}</td><td>${actionCol}</td></tr>`;
         }).join('');
     }
 
@@ -1211,7 +1188,6 @@
             state.pagination.movies = readPagination(result.data);
             state.statsLoaded = true;
             state.loaded.movies = true;
-            renderMovies();
             renderMoviesTable();
             updateStats();
         }
@@ -1276,7 +1252,7 @@
     }
 
     function shouldLoadMoviesModule() {
-        return Boolean(moviesGrid || moviesBody || rentalMovieSelect || statMovies || statStock);
+        return Boolean(moviesBody || rentalMovieSelect || statMovies || statStock);
     }
 
     async function refreshAll() {
@@ -1745,7 +1721,6 @@
         state.loaded.rentals = false;
         state.selectedCustomerId = '';
         clearHistory();
-        renderMovies();
         renderMoviesTable();
         renderCustomersTable();
         renderUsersTable();
@@ -1807,17 +1782,17 @@
         }
     });
 
-    bindEvent(searchInput, 'input', renderMovies);
+    bindEvent(searchInput, 'input', renderMoviesTable);
 
     bindEvent(onlyAvailableBtn, 'click', function() {
         state.onlyAvailable = !state.onlyAvailable;
         // aria-pressed tiene que reflejar el estado: quedo fijo en "false" desde el HTML.
         onlyAvailableBtn.setAttribute('aria-pressed', String(state.onlyAvailable));
         onlyAvailableBtn.textContent = state.onlyAvailable ? 'Mostrando disponibles' : 'Solo disponibles';
-        renderMovies();
+        renderMoviesTable();
     });
 
-    bindEvent(moviesGrid, 'click', function(event) {
+    bindEvent(moviesBody, 'click', function(event) {
         const rentButton = event.target.closest('[data-movie-id]');
         if (rentButton) {
             const movieId = rentButton.getAttribute('data-movie-id');
@@ -1827,16 +1802,6 @@
             return;
         }
 
-        const editButton = event.target.closest('[data-edit-movie]');
-        if (editButton) {
-            const movieId = editButton.getAttribute('data-edit-movie');
-            if (movieId) {
-                fillMovieForm(movieId);
-            }
-        }
-    });
-
-    bindEvent(moviesBody, 'click', function(event) {
         const editButton = event.target.closest('[data-edit-movie]');
         if (editButton) {
             const movieId = editButton.getAttribute('data-edit-movie');

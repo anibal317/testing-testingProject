@@ -426,8 +426,8 @@ body.vc-locked .vc-response-card {
     opacity: 0.45;
 }
 
-/* En la pagina de peliculas el catalogo es publico: no se atenua.
-   Solo el CRUD (vc-layout-side) queda marcado como bloqueado. */
+/* En la pagina de peliculas el listado (tabla) es publico: la columna principal
+   no se atenua. Solo el CRUD (vc-layout-side) queda marcado como bloqueado. */
 body[data-page="videoclub-movies"].vc-locked .vc-layout {
     opacity: 1;
 }
@@ -606,44 +606,6 @@ button:disabled {
     margin-bottom: 1rem;
 }
 
-.vc-movie-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-    gap: 0.65rem;
-}
-
-.vc-movie-item {
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    background: linear-gradient(180deg, #ffffff 0%, #f5fafb 100%);
-    padding: 0.85rem;
-    box-shadow: var(--shadow-soft);
-}
-
-.vc-movie-item h4 {
-    margin: 0 0 0.45rem;
-}
-
-.vc-movie-meta {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    margin-bottom: 0.7rem;
-}
-
-.vc-stock-badge {
-    display: inline-block;
-    border-radius: 999px;
-    padding: 0.2rem 0.55rem;
-    font-size: 0.78rem;
-    background: #d8f1e5;
-    color: #12553e;
-}
-
-.vc-stock-badge.out {
-    background: #fde2e0;
-    color: #7c2218;
-}
-
 .vc-rent-button {
     margin-top: 0.45rem;
 }
@@ -658,11 +620,6 @@ button:disabled {
 .vc-card-actions button {
     width: auto;
     flex: 1 1 120px;
-}
-
-.vc-placeholder {
-    margin: 0;
-    color: var(--text-muted);
 }
 
 .vc-table-wrap {
