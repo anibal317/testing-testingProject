@@ -63,7 +63,66 @@
 
             <section class="vc-tabpanel" role="tabpanel" id="panel-rentals" data-testid="tabpanel-rentals"
                      aria-labelledby="tab-rentals" tabindex="0" hidden>
-                <p>3 alquileres activos</p>
+                <p data-testid="rentals-summary"><strong data-testid="rentals-count">3</strong> alquileres activos</p>
+
+                <div class="vc-table-wrap">
+                    <table data-testid="rentals-table">
+                        <caption class="vc-table-caption">Listado de alquileres</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Pelicula</th>
+                                <th scope="col">Vence</th>
+                            </tr>
+                        </thead>
+                        <tbody data-testid="rentals-body">
+                            <tr data-testid="rental-row-1">
+                                <td data-testid="rental-row-1-id" data-field="id">1</td>
+                                <td data-testid="rental-row-1-customer" data-field="customer">Ana Gomez</td>
+                                <td data-testid="rental-row-1-movie" data-field="movie">Avatar</td>
+                                <td data-testid="rental-row-1-due" data-field="due">2026-10-25</td>
+                            </tr>
+                            <tr data-testid="rental-row-2">
+                                <td data-testid="rental-row-2-id" data-field="id">2</td>
+                                <td data-testid="rental-row-2-customer" data-field="customer">Bruno Diaz</td>
+                                <td data-testid="rental-row-2-movie" data-field="movie">Titanic</td>
+                                <td data-testid="rental-row-2-due" data-field="due">2026-10-28</td>
+                            </tr>
+                            <tr data-testid="rental-row-3">
+                                <td data-testid="rental-row-3-id" data-field="id">3</td>
+                                <td data-testid="rental-row-3-customer" data-field="customer">Carla Ferro</td>
+                                <td data-testid="rental-row-3-movie" data-field="movie">Matrix</td>
+                                <td data-testid="rental-row-3-due" data-field="due">2026-11-02</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    <form id="rental-add-form" data-testid="rental-add-form">
+                                        <div class="vc-two-column-form">
+                                            <div>
+                                                <label for="rental-add-customer" data-testid="label-rental-add-customer">Cliente</label>
+                                                <input type="text" id="rental-add-customer" required data-testid="rental-add-customer">
+                                            </div>
+                                            <div>
+                                                <label for="rental-add-movie" data-testid="label-rental-add-movie">Pelicula</label>
+                                                <input type="text" id="rental-add-movie" required data-testid="rental-add-movie">
+                                            </div>
+                                            <div>
+                                                <label for="rental-add-due" data-testid="label-rental-add-due">Vence</label>
+                                                <input type="date" id="rental-add-due" required data-testid="rental-add-due">
+                                            </div>
+                                        </div>
+                                        <div class="vc-button-row">
+                                            <button type="submit" data-testid="rental-add-submit">Agregar alquiler</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </section>
         </section>
     </main>

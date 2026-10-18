@@ -737,6 +737,9 @@ tbody tr:hover {
 }
 
 .vc-tab {
+    /* El stylesheet base define `button { width: 100% }`: sin esto cada
+       tab ocupa todo el ancho y la fila de tabs se apila en vertical. */
+    width: auto;
     background: transparent;
     color: var(--text-muted);
     border: 1px solid transparent;

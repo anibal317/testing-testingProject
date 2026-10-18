@@ -133,6 +133,48 @@
         }
     });
 
+    // ---- Tabla de alquileres con formulario embebido (tab Alquileres) ----
+    var rentalsForm = document.getElementById('rental-add-form');
+    var rentalsBody = document.querySelector('[data-testid="rentals-body"]');
+    var rentalsCount = document.querySelector('[data-testid="rentals-count"]');
+
+    if (rentalsForm && rentalsBody) {
+        rentalsForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            if (!rentalsForm.reportValidity()) {
+                return;
+            }
+
+            var customer = document.getElementById('rental-add-customer').value.trim();
+            var movie = document.getElementById('rental-add-movie').value.trim();
+            var due = document.getElementById('rental-add-due').value;
+            var id = String(rentalsBody.querySelectorAll('tr').length + 1);
+
+            var row = document.createElement('tr');
+            row.setAttribute('data-testid', 'rental-row-' + id);
+            row.innerHTML = '<td data-field="id"></td>'
+                + '<td data-field="customer"></td>'
+                + '<td data-field="movie"></td>'
+                + '<td data-field="due"></td>';
+            // textContent y no innerHTML: los valores vienen del usuario.
+            row.querySelector('[data-field="id"]').textContent = id;
+            row.querySelector('[data-field="customer"]').textContent = customer;
+            row.querySelector('[data-field="movie"]').textContent = movie;
+            row.querySelector('[data-field="due"]').textContent = due;
+            row.querySelectorAll('td').forEach(function (cell) {
+                cell.setAttribute('data-testid', 'rental-row-' + id + '-' + cell.getAttribute('data-field'));
+            });
+            rentalsBody.appendChild(row);
+
+            if (rentalsCount) {
+                rentalsCount.textContent = String(rentalsBody.querySelectorAll('tr').length);
+            }
+
+            rentalsForm.reset();
+        });
+    }
+
     // Estado inicial: el tab de la URL o, por defecto, el primero.
     activate(tabFromUrl() || tabs[0], { focus: false, syncUrl: false });
 })();
