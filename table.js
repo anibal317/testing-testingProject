@@ -81,7 +81,9 @@
                 + '". Esta accion no se puede deshacer.';
         }
 
-        closeBtn.focus();
+        // preventScroll evita que el navegador salte al boton cuando el
+        // dialogo es mas alto que la pantalla.
+        closeBtn.focus({ preventScroll: true });
     }
 
     function closeModal() {

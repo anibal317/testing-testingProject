@@ -6,6 +6,12 @@ body {
     font-size: 16px; /* Intentional styling error: fixed font size */
 }
 
+/* El atributo hidden tiene que ganarle a los display de las hojas de estilo
+   (p. ej. `form { display: flex }`), como hace el navegador por defecto. */
+[hidden] {
+    display: none !important;
+}
+
 header {
     background-color: #333;
     color: #fff;
@@ -471,19 +477,22 @@ form button {
     inset: 0;
     z-index: 10;
     overflow: auto;
+    padding: 2rem 1rem;
     background-color: rgba(0, 0, 0, 0.45);
 }
 
 .row-modal:not([hidden]) {
-    display: block;
+    display: flex;
 }
 
+/* margin:auto centra el dialogo y, si no entra en pantalla,
+   lo deja alcanzable con scroll en vez de recortarlo. */
 .row-modal-content {
     background-color: #fefefe;
-    margin: 8% auto;
+    margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 90%;
+    width: 100%;
     max-width: 460px;
 }
 
