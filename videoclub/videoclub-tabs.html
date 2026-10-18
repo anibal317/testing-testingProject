@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Club - Tabs</title>
+    <link rel="stylesheet" href="videoclub.css">
+</head>
+<body data-page="videoclub-tabs" data-testid="page-videoclub-tabs">
+    <header class="vc-header" data-testid="vc-header">
+        <nav class="vc-nav" data-testid="vc-nav" data-qa="videoclub-nav">
+            <a href="../index.html" class="vc-logo" data-testid="vc-logo">TechInfo Hub</a>
+            <ul class="vc-nav-list">
+                <li data-testid="vc-nav-videoclub-link"><a href="videoclub.html">Video Club</a></li>
+                <li data-testid="vc-nav-tabs-link"><a href="videoclub-tabs.html" class="active">Tabs</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="vc-main" data-testid="vc-main-content">
+        <section class="vc-module-nav" data-testid="vc-module-nav">
+            <a href="videoclub.html" data-testid="vc-nav-overview">Resumen</a>
+            <a href="videoclub-movies.html" data-testid="vc-nav-movies">Peliculas</a>
+            <a href="videoclub-customers.html" data-testid="vc-nav-customers">Clientes</a>
+            <a href="videoclub-rentals.html" data-testid="vc-nav-rentals">Alquileres</a>
+            <a href="videoclub-users.html" data-testid="vc-nav-users">Usuarios</a>
+            <a href="videoclub-candybar.html" data-testid="vc-nav-candybar">Candy Bar</a>
+            <a href="videoclub-tabs.html" class="active" data-testid="vc-nav-tabs">Tabs</a>
+        </section>
+
+        <section class="vc-card" data-testid="vc-tabs-card">
+            <div class="vc-card-heading">
+                <div>
+                    <h2 data-testid="vc-page-title">Detalle de la pelicula</h2>
+                    <p class="vc-subtitle">Patron WAI-ARIA Tabs con selectores estables. Cambia con el mouse o con las flechas del teclado.</p>
+                </div>
+                <span class="vc-section-chip" data-testid="vc-tabs-chip">Tabs</span>
+            </div>
+
+            <div class="vc-tabs" data-testid="tabs-nav" role="tablist" aria-label="Detalle de la pelicula">
+                <button class="vc-tab" type="button" role="tab" id="tab-info" data-testid="tab-info"
+                        aria-controls="panel-info" aria-selected="true" tabindex="0">Info</button>
+                <button class="vc-tab" type="button" role="tab" id="tab-cast" data-testid="tab-cast"
+                        aria-controls="panel-cast" aria-selected="false" tabindex="-1">Reparto</button>
+                <button class="vc-tab" type="button" role="tab" id="tab-rentals" data-testid="tab-rentals"
+                        aria-controls="panel-rentals" aria-selected="false" tabindex="-1">Alquileres</button>
+            </div>
+
+            <section class="vc-tabpanel" role="tabpanel" id="panel-info" data-testid="tabpanel-info"
+                     aria-labelledby="tab-info" tabindex="0">
+                <h3>Avatar</h3>
+                <p>Genero: Sci-Fi · USD 3000.00</p>
+            </section>
+
+            <section class="vc-tabpanel" role="tabpanel" id="panel-cast" data-testid="tabpanel-cast"
+                     aria-labelledby="tab-cast" tabindex="0" hidden>
+                <ul>
+                    <li>Sam Worthington</li>
+                    <li>Zoe Saldana</li>
+                    <li>Sigourney Weaver</li>
+                </ul>
+            </section>
+
+            <section class="vc-tabpanel" role="tabpanel" id="panel-rentals" data-testid="tabpanel-rentals"
+                     aria-labelledby="tab-rentals" tabindex="0" hidden>
+                <p>3 alquileres activos</p>
+            </section>
+        </section>
+    </main>
+
+    <script src="videoclub-tabs.js"></script>
+</body>
+</html>
