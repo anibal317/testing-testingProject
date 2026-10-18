@@ -204,21 +204,23 @@
         authError.hidden = false;
     }
 
-    function setAuthBusy(busy) {
-        [authFormWrap, registerBtn, logoutBtn].forEach(function(element) {
-            if (!element) {
-                return;
-            }
-            element.querySelectorAll('button').forEach(function(button) {
-                button.disabled = busy;
-            });
-        });
-
-        if (authForm) {
-            authForm.querySelectorAll('input, select, textarea').forEach(function(field) {
-                field.disabled = busy;
-            });
+    // Deshabilita (o habilita) campos de formulario.
+    // Con `selector` aplica sobre los descendientes; sin `selector`, sobre el elemento mismo.
+    function setFieldsDisabled(target, disabled, selector) {
+        if (!target) {
+            return;
         }
+
+        const fields = selector ? target.querySelectorAll(selector) : [target];
+        fields.forEach(function(field) {
+            field.disabled = disabled;
+        });
+    }
+
+    function setAuthBusy(busy) {
+        // authFormWrap contiene correo, contrasena, toggle, submit y registrar.
+        setFieldsDisabled(authFormWrap, busy, 'input, select, textarea, button');
+        setFieldsDisabled(logoutBtn, busy);
     }
 
     function clearAuthForm() {
@@ -294,11 +296,7 @@
         if (movieCrudNotice) {
             movieCrudNotice.hidden = loggedIn;
         }
-        if (movieForm) {
-            movieForm.querySelectorAll('input, textarea, button').forEach(function(field) {
-                field.disabled = !loggedIn;
-            });
-        }
+        setFieldsDisabled(movieForm, !loggedIn, 'input, textarea, button');
 
         if (!loggedIn) {
             setAuthStatus('Debes iniciar sesion para consultar y operar el videoclub.');
