@@ -1811,6 +1811,8 @@
 
     bindEvent(onlyAvailableBtn, 'click', function() {
         state.onlyAvailable = !state.onlyAvailable;
+        // aria-pressed tiene que reflejar el estado: quedo fijo en "false" desde el HTML.
+        onlyAvailableBtn.setAttribute('aria-pressed', String(state.onlyAvailable));
         onlyAvailableBtn.textContent = state.onlyAvailable ? 'Mostrando disponibles' : 'Solo disponibles';
         renderMovies();
     });
