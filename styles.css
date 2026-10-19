@@ -448,7 +448,10 @@ form button {
     gap: 0.4rem;
 }
 
-.row-actions button {
+/* El boton Add New esta fuera de <form>, asi que no hereda `form button`:
+   mismo estilo que los botones de accion de la tabla. */
+.row-actions button,
+.btn-add {
     padding: 0.35rem 0.7rem;
     border: none;
     cursor: pointer;
