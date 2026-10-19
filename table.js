@@ -1,6 +1,7 @@
 /* Tabla simple con datos ya cargados y acciones por fila.
-   Un unico modal con tres modos: ver (detalle), editar (formulario) y
-   borrar (confirmacion). Sin API: todo sale del HTML. */
+   Un unico modal con cuatro modos: ver (detalle), editar (formulario),
+   borrar (confirmacion) y nuevo (alta desde el boton Add New).
+   Sin API: todo sale del HTML. */
 (function () {
     'use strict';
 
@@ -51,16 +52,19 @@
         var isView = mode === 'view';
         var isEdit = mode === 'edit';
         var isDelete = mode === 'delete';
+        // Mismo formulario que editar, pero en blanco y sin fila activa.
+        var isAdd = mode === 'add';
 
         viewBlock.hidden = !isView;
-        editForm.hidden = !isEdit;
+        editForm.hidden = !(isEdit || isAdd);
         confirmBlock.hidden = !isDelete;
-        saveBtn.hidden = !isEdit;
+        saveBtn.hidden = !(isEdit || isAdd);
         deleteBtn.hidden = !isDelete;
 
         modalTitle.textContent = isView
             ? 'Detalle del registro'
-            : (isEdit ? 'Editar registro' : 'Borrar registro');
+            : (isEdit ? 'Editar registro'
+            : (isAdd ? 'Nuevo registro' : 'Borrar registro'));
 
         if (isView) {
             viewId.textContent = field(row, 'id');
@@ -69,11 +73,11 @@
             viewRole.textContent = field(row, 'role');
         }
 
-        if (isEdit) {
-            editId.value = field(row, 'id');
-            editName.value = field(row, 'name');
-            editEmail.value = field(row, 'email');
-            editRole.value = field(row, 'role');
+        if (isEdit || isAdd) {
+            editId.value = isEdit ? field(row, 'id') : '';
+            editName.value = isEdit ? field(row, 'name') : '';
+            editEmail.value = isEdit ? field(row, 'email') : '';
+            editRole.value = isEdit ? field(row, 'role') : '';
         }
 
         if (isDelete) {
@@ -111,14 +115,54 @@
 
     closeBtn.addEventListener('click', closeModal);
 
+    // "Add New" abre el mismo modal en modo alta.
+    var addBtn = document.getElementById('btn-add-new');
+    if (addBtn) {
+        addBtn.addEventListener('click', function () {
+            openModal('add', null);
+        });
+    }
+
     saveBtn.addEventListener('click', function () {
-        if (!activeRow || !editForm.reportValidity()) {
+        if (!editForm.reportValidity()) {
             return;
         }
 
-        setField(activeRow, 'name', editName.value);
-        setField(activeRow, 'email', editEmail.value);
-        setField(activeRow, 'role', editRole.value);
+        var name = editName.value;
+        var email = editEmail.value;
+        var role = editRole.value;
+
+        if (modal.getAttribute('data-mode') === 'add') {
+            // Siguiente ID libre: contar filas no sirve, porque las bajas
+            // dejan huecos.
+            var maxId = 0;
+            tableBody.querySelectorAll('tr').forEach(function (r) {
+                var n = parseInt(r.getAttribute('data-testid').replace(/^row-/, ''), 10);
+                if (n > maxId) {
+                    maxId = n;
+                }
+            });
+
+            var id = String(maxId + 1);
+            var row = document.createElement('tr');
+            row.setAttribute('data-testid', 'row-' + id);
+            row.innerHTML = '<td data-field="id"></td><td data-field="name"></td>'
+                + '<td data-field="email"></td><td data-field="role"></td>';
+            // textContent y no innerHTML: los valores vienen del usuario.
+            row.querySelector('[data-field="id"]').textContent = id;
+            row.querySelector('[data-field="name"]').textContent = name;
+            row.querySelector('[data-field="email"]').textContent = email;
+            row.querySelector('[data-field="role"]').textContent = role;
+            row.querySelectorAll('td').forEach(function (cell) {
+                cell.setAttribute('data-testid', 'row-' + id + '-' + cell.getAttribute('data-field'));
+            });
+            tableBody.appendChild(row);
+        } else if (activeRow) {
+            setField(activeRow, 'name', name);
+            setField(activeRow, 'email', email);
+            setField(activeRow, 'role', role);
+        }
+
         closeModal();
     });
 

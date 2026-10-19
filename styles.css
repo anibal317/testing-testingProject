@@ -455,6 +455,12 @@ form button {
     color: #fff;
 }
 
+.table-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
 .btn-view {
     background-color: #007bff;
 }
@@ -469,6 +475,10 @@ form button {
 
 .btn-cancel {
     background-color: #555;
+}
+
+.btn-add {
+    background-color: #0f6f5c;
 }
 
 .row-modal {

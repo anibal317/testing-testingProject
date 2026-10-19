@@ -25,7 +25,11 @@
 
     <main data-testid="main-content">
         <h1 data-testid="page-title">Tabla de datos</h1>
-        <p data-testid="table-intro">Tabla con datos ya cargados y acciones por fila: Ver, Editar y Borrar.</p>
+        <p data-testid="table-intro">Tabla con datos ya cargados y acciones por fila: Ver, Editar y Borrar. Usá Add New para crear un registro.</p>
+
+        <div class="table-toolbar">
+            <button type="button" id="btn-add-new" class="btn-add" data-testid="btn-add-new">Add New</button>
+        </div>
 
         <div class="data-table-wrap">
             <table class="data-table" data-testid="data-table">
